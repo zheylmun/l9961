@@ -5,7 +5,7 @@
 #![deny(warnings)]
 #![no_std]
 
-use registers::{Cfg3Act, ChipID, Registers};
+use registers::{Cfg1FiltersCycles, Cfg3Act, ChipID, Registers};
 
 pub mod registers;
 
@@ -55,5 +55,18 @@ where
     /// Write a new value to the Cfg3Act register
     pub fn write_cfg3_act(&mut self, new_config: Cfg3Act) -> Result<(), I2C::Error> {
         self.write_register(Registers::Cfg3Act, *new_config)
+    }
+
+    /// Read the Cfg1FiltersCycles register
+    pub fn read_cfg1_filters_cycles(&mut self) -> Result<Cfg1FiltersCycles, I2C::Error> {
+        Ok(self.read_register(Registers::Cfg1FiltersCycles)?.into())
+    }
+
+    /// Write a new value to the Cfg1FiltersCycles register
+    pub fn write_cfg1_filters_cycles(
+        &mut self,
+        new_config: Cfg1FiltersCycles,
+    ) -> Result<(), I2C::Error> {
+        self.write_register(Registers::Cfg1FiltersCycles, *new_config)
     }
 }

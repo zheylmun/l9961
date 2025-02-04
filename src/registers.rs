@@ -17,4 +17,6 @@ pub enum Registers {
     ChipID = 0x00,
     /// The chip revision register
     Cfg3Act = 0x01,
+    /// The configuration register for the filters and cycles
+    Cfg1FiltersCycles = 0x02,
 }
