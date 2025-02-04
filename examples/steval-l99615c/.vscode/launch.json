@@ -1,0 +1,305 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'steval_l99615c'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=steval-l99615c"
+                ],
+                "filter": {
+                    "name": "steval_l99615c",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'bitfield'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=bitfield",
+                    "--package=steval-l99615c"
+                ],
+                "filter": {
+                    "name": "bitfield",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'bitfield'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=bitfield",
+                    "--package=steval-l99615c"
+                ],
+                "filter": {
+                    "name": "bitfield",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'blocking_l99615c'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=blocking_l99615c",
+                    "--package=steval-l99615c"
+                ],
+                "filter": {
+                    "name": "blocking_l99615c",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'blocking_l99615c'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=blocking_l99615c",
+                    "--package=steval-l99615c"
+                ],
+                "filter": {
+                    "name": "blocking_l99615c",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'format'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=format",
+                    "--package=steval-l99615c"
+                ],
+                "filter": {
+                    "name": "format",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'format'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=format",
+                    "--package=steval-l99615c"
+                ],
+                "filter": {
+                    "name": "format",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'hello'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=hello",
+                    "--package=steval-l99615c"
+                ],
+                "filter": {
+                    "name": "hello",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'hello'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=hello",
+                    "--package=steval-l99615c"
+                ],
+                "filter": {
+                    "name": "hello",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'levels'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=levels",
+                    "--package=steval-l99615c"
+                ],
+                "filter": {
+                    "name": "levels",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'levels'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=levels",
+                    "--package=steval-l99615c"
+                ],
+                "filter": {
+                    "name": "levels",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'overflow'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=overflow",
+                    "--package=steval-l99615c"
+                ],
+                "filter": {
+                    "name": "overflow",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'overflow'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=overflow",
+                    "--package=steval-l99615c"
+                ],
+                "filter": {
+                    "name": "overflow",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'panic'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=panic",
+                    "--package=steval-l99615c"
+                ],
+                "filter": {
+                    "name": "panic",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'panic'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=panic",
+                    "--package=steval-l99615c"
+                ],
+                "filter": {
+                    "name": "panic",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug integration test 'integration'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--test=integration",
+                    "--package=steval-l99615c"
+                ],
+                "filter": {
+                    "name": "integration",
+                    "kind": "test"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
