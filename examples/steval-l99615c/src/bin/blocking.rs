@@ -36,5 +36,9 @@ fn main() -> ! {
     let filters = l9961.read_cfg1_filters_cycles().unwrap();
     defmt::info!("{}", filters);
 
+    // Read the Device Address Register
+    let device_address = l9961.read_device_address().unwrap();
+    defmt::info!("{}", device_address);
+
     functions::exit()
 }

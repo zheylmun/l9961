@@ -10,6 +10,9 @@ pub use cfg1_filters_cycles::Cfg1FiltersCycles;
 mod cfg3_act;
 pub use cfg3_act::Cfg3Act;
 
+mod dev_addr;
+pub use dev_addr::DevAddr;
+
 /// The registers of the L9961 chip represented as their addresses
 #[repr(u8)]
 pub enum Registers {
@@ -19,4 +22,6 @@ pub enum Registers {
     Cfg3Act = 0x01,
     /// The configuration register for the filters and cycles
     Cfg1FiltersCycles = 0x02,
+    /// The device address register
+    DevAddr = 0x03,
 }
