@@ -4,7 +4,7 @@
 
 use cortex_m_rt::entry;
 use l9961::L9961;
-use steval_l99615c as _;
+use steval_l99615c as functions;
 use stm32g0xx_hal::{
     i2c::{Config, I2cExt},
     prelude::*,
@@ -23,20 +23,18 @@ fn main() -> ! {
         .i2c(sda, scl, Config::with_timing(0x2020_151b), &mut rcc);
 
     let mut l9961 = L9961::new(i2c, 0x49);
-    let id = l9961.read_chip_id().unwrap();
-    defmt::println!(
-        "Chip ID:\n  Metal Id: {}\n  Silicon Id: {}",
-        id.metal_id(),
-        id.silicon_id()
-    );
-    defmt::println!("{}", id);
-    let mut cfg3_act = l9961.read_cfg3_act().unwrap();
-    defmt::println!("{}", cfg3_act);
-    cfg3_act.set_cell_1_balance_enabled(false);
-    defmt::println!("Activating Cell 1 Balancing");
-    l9961.write_cfg3_act(cfg3_act).unwrap();
-    let cfg3_act = l9961.read_cfg3_act().unwrap();
-    defmt::println!("{}", cfg3_act);
 
-    loop {}
+    // Read the chip ID
+    let id = l9961.read_chip_id().unwrap();
+    defmt::info!("{}", id);
+
+    // Read the Cfg3Act register
+    let cfg3_act = l9961.read_cfg3_act().unwrap();
+    defmt::info!("{}", cfg3_act);
+
+    // Read the Cfg1FiltersCycles register
+    let filters = l9961.read_cfg1_filters_cycles().unwrap();
+    defmt::info!("{}", filters);
+
+    functions::exit()
 }
