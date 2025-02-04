@@ -4,6 +4,9 @@
 mod chip_id;
 pub use chip_id::ChipID;
 
+mod cfg1_filters_cycles;
+pub use cfg1_filters_cycles::Cfg1FiltersCycles;
+
 mod cfg3_act;
 pub use cfg3_act::Cfg3Act;
 

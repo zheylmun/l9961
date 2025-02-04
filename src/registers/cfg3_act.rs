@@ -1,6 +1,6 @@
 use core::ops::Deref;
 
-/// Configuration 3 Active register
+/// Configuration 3 Activation register
 /// Contains the configuration for the activation of the balancing,
 /// charge, and discharge FETs
 pub struct Cfg3Act(u16);

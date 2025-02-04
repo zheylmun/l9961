@@ -68,7 +68,6 @@ dependencies = [
  "defmt",
  "embedded-hal",
  "embedded-hal-async",
- "l9961",
  "maybe-async-cfg",
 ]
 

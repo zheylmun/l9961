@@ -3,7 +3,7 @@
     "rust-analyzer": {
       "initialization_options": {
         "cargo": {
-          "features": ["defmt", "embedded-hal", "embedded-hal-async"]
+          "features": ["defmt"]
         },
         "check": {
           "allTargets": false,
