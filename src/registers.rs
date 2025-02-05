@@ -13,6 +13,9 @@ pub use cfg2_enables::Cfg2Enables;
 mod cfg3_act;
 pub use cfg3_act::Cfg3Act;
 
+mod csa_gain_factor;
+pub use csa_gain_factor::CsaGainFactor;
+
 mod dev_addr;
 pub use dev_addr::DevAddr;
 
@@ -29,4 +32,6 @@ pub enum Registers {
     DevAddr = 0x03,
     /// The configuration register for enables
     Cfg2Enables = 0x04,
+    /// The configuration register for the CSA gain factor
+    CsaGainFactor = 0x05,
 }

@@ -5,7 +5,9 @@
 #![deny(warnings)]
 #![no_std]
 
-use registers::{Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, DevAddr, Registers};
+use registers::{
+    Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, DevAddr, Registers,
+};
 
 pub mod registers;
 
@@ -88,5 +90,15 @@ where
     /// Write a new value to the Cfg2Enables register
     pub fn write_cfg2_enables(&mut self, new_config: Cfg2Enables) -> Result<(), I2C::Error> {
         self.write_register(Registers::Cfg2Enables, *new_config)
+    }
+
+    /// Read the csa gain factor register
+    pub fn read_csa_gain_factor(&mut self) -> Result<CsaGainFactor, I2C::Error> {
+        Ok(self.read_register(Registers::CsaGainFactor)?.into())
+    }
+
+    /// Write a new value to the csa gain factor register
+    pub fn write_csa_gain_factor(&mut self, new_config: CsaGainFactor) -> Result<(), I2C::Error> {
+        self.write_register(Registers::CsaGainFactor, *new_config)
     }
 }

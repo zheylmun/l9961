@@ -44,6 +44,10 @@ fn main() -> ! {
     let cfg2_enables = l9961.read_cfg2_enables().unwrap();
     defmt::info!("{}", cfg2_enables);
 
+    // Read the CSA Gain Factor register
+    let csa_gain_factor = l9961.read_csa_gain_factor().unwrap();
+    defmt::info!("{}", csa_gain_factor);
+
 
     functions::exit()
 }
