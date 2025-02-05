@@ -7,6 +7,9 @@ pub use chip_id::ChipID;
 mod cfg1_filters_cycles;
 pub use cfg1_filters_cycles::Cfg1FiltersCycles;
 
+mod cfg2_enables;
+pub use cfg2_enables::Cfg2Enables;
+
 mod cfg3_act;
 pub use cfg3_act::Cfg3Act;
 
@@ -24,4 +27,6 @@ pub enum Registers {
     Cfg1FiltersCycles = 0x02,
     /// The device address register
     DevAddr = 0x03,
+    /// The configuration register for enables
+    Cfg2Enables = 0x04,
 }

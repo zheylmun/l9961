@@ -40,5 +40,10 @@ fn main() -> ! {
     let device_address = l9961.read_device_address().unwrap();
     defmt::info!("{}", device_address);
 
+    // Read the Cfg2Enables register
+    let cfg2_enables = l9961.read_cfg2_enables().unwrap();
+    defmt::info!("{}", cfg2_enables);
+
+
     functions::exit()
 }

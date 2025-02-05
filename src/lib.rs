@@ -5,7 +5,7 @@
 #![deny(warnings)]
 #![no_std]
 
-use registers::{Cfg1FiltersCycles, Cfg3Act, ChipID, DevAddr, Registers};
+use registers::{Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, DevAddr, Registers};
 
 pub mod registers;
 
@@ -78,5 +78,15 @@ where
     /// Write a new value to the Device Address Register
     pub fn write_device_address(&mut self, new_config: DevAddr) -> Result<(), I2C::Error> {
         self.write_register(Registers::DevAddr, *new_config)
+    }
+
+    /// Read the Cfg2Enables register
+    pub fn read_cfg2_enables(&mut self) -> Result<Cfg2Enables, I2C::Error> {
+        Ok(self.read_register(Registers::Cfg2Enables)?.into())
+    }
+
+    /// Write a new value to the Cfg2Enables register
+    pub fn write_cfg2_enables(&mut self, new_config: Cfg2Enables) -> Result<(), I2C::Error> {
+        self.write_register(Registers::Cfg2Enables, *new_config)
     }
 }
