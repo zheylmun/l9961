@@ -19,6 +19,9 @@ pub use csa_gain_factor::CsaGainFactor;
 mod dev_addr;
 pub use dev_addr::DevAddr;
 
+mod vcell_ov_th;
+pub use vcell_ov_th::VCellOvTh;
+
 /// The registers of the L9961 chip represented as their addresses
 #[repr(u8)]
 pub enum Registers {
@@ -34,4 +37,6 @@ pub enum Registers {
     Cfg2Enables = 0x04,
     /// The configuration register for the CSA gain factor
     CsaGainFactor = 0x05,
+    /// The configuration register for the VCELL overvoltage threshold
+    VCellOvTh = 0x06,
 }

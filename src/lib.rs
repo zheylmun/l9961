@@ -6,7 +6,7 @@
 #![no_std]
 
 use registers::{
-    Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, DevAddr, Registers,
+    Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, DevAddr, Registers, VCellOvTh,
 };
 
 pub mod registers;
@@ -100,5 +100,15 @@ where
     /// Write a new value to the csa gain factor register
     pub fn write_csa_gain_factor(&mut self, new_config: CsaGainFactor) -> Result<(), I2C::Error> {
         self.write_register(Registers::CsaGainFactor, *new_config)
+    }
+
+    /// Read the VCell Ov Threshold register
+    pub fn read_vcell_ov_th(&mut self) -> Result<VCellOvTh, I2C::Error> {
+        Ok(self.read_register(Registers::VCellOvTh)?.into())
+    }
+
+    /// Write a new value to the VCellOv Threshold register
+    pub fn write_vcell_ov_th(&mut self, new_config: VCellOvTh) -> Result<(), I2C::Error> {
+        self.write_register(Registers::VCellOvTh, *new_config)
     }
 }

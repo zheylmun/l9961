@@ -48,6 +48,9 @@ fn main() -> ! {
     let csa_gain_factor = l9961.read_csa_gain_factor().unwrap();
     defmt::info!("{}", csa_gain_factor);
 
+    // Read the VCellOvTh register
+    let vcell_ov_th = l9961.read_vcell_ov_th().unwrap();
+    defmt::info!("VCell OV Threshold: {}", vcell_ov_th);
 
     functions::exit()
 }
