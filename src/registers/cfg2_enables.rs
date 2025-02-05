@@ -16,7 +16,12 @@ const CHG_HS_LS: u16 = 0x1000;
 const CRC_EN: u16 = 0x2000;
 
 /// Register CFG2_ENABLES
-/// Used to configure the filter and cycle times for the voltage and current measurements
+/// Used to enable or disable features such as VCELL_EN (cell voltage monitoring),
+/// VB (battery pack voltage) monitoring, NTC (cell temperature monitoring),
+/// CSA (Current Sense ADC), CC_AC (Coulomb Counting), OVC (Overcurrent Protection),
+/// SC (Short Circuit Protection), and CRC (Cyclic Redundancy Check for I2C data integrity)
+/// Additionally, the register configures the charge and discharge FET drivers for use with
+/// high side or low side FETs
 pub struct Cfg2Enables(u16);
 
 impl Cfg2Enables {
@@ -55,6 +60,7 @@ impl Cfg2Enables {
                 | (crc_en as u16) << 13,
         )
     }
+
     /// Get the VCELL_EN_1 flag
     #[inline]
     pub const fn get_vcell_en_1(&self) -> bool {
@@ -133,79 +139,87 @@ impl Cfg2Enables {
         (self.0 & NTC_EN) != 0
     }
 
-    /// Set the NTC_EN flag
+    /// Set the cell temperature  flag
     #[inline]
     pub const fn set_ntc_en(&mut self, value: bool) {
         self.0 = self.0 & !NTC_EN | ((value as u16) << 6);
     }
 
-    /// Get the CSA_EN flag
+    /// Get the current sense adc enable status
     #[inline]
     pub const fn get_csa_en(&self) -> bool {
         (self.0 & CSA_EN) != 0
     }
 
-    /// Set the CSA_EN flag
+    /// Set the current sense adc enable status
     #[inline]
     pub const fn set_csa_en(&mut self, value: bool) {
         self.0 = self.0 & !CSA_EN | ((value as u16) << 7);
     }
 
-    /// Get the CC_ACC_EN flag
+    /// Get the couloumb counting enable status
     #[inline]
     pub const fn get_cc_acc_en(&self) -> bool {
         (self.0 & CC_ACC_EN) != 0
     }
 
-    /// Set the CC_ACC_EN flag
+    /// Set the couloumb counting enable status
     #[inline]
     pub const fn set_cc_acc_en(&mut self, value: bool) {
         self.0 = self.0 & !CC_ACC_EN | ((value as u16) << 8);
     }
 
-    /// Get the OVC_EN flag
+    /// Get the overcurrent protection enable status
     #[inline]
     pub const fn get_ovc_en(&self) -> bool {
         (self.0 & OVC_EN) != 0
     }
 
-    /// Set the OVC_EN flag
+    /// Set the overcurrent protection enable statua
     #[inline]
     pub const fn set_ovc_en(&mut self, value: bool) {
         self.0 = self.0 & !OVC_EN | ((value as u16) << 9);
     }
 
-    /// Get the SC_EN flag
+    /// Get the enable status of the short circuit protection
     #[inline]
     pub const fn get_sc_en(&self) -> bool {
         (self.0 & SC_EN) != 0
     }
 
-    /// Set the SC_EN flag
+    /// Enable or disable short circuit protection
     #[inline]
     pub const fn set_sc_en(&mut self, value: bool) {
         self.0 = self.0 & !SC_EN | ((value as u16) << 10);
     }
 
-    /// Get the DCHG_HS_LS flag
+    /// Get the Discahrge FET configuration
+    /// - True configured for High Side FET
+    /// - False configured for Low Side FET
     #[inline]
     pub const fn get_dchg_hs_ls(&self) -> bool {
         (self.0 & DCHG_HS_LS) != 0
     }
 
-    /// Set the DCHG_HS_LS flag
+    /// Set the discharge FET configuration
+    /// - True configured for High Side FET
+    /// - False configured for Low Side FET
     #[inline]
     pub const fn set_dchg_hs_ls(&mut self, value: bool) {
         self.0 = self.0 & !DCHG_HS_LS | ((value as u16) << 11);
     }
 
-    /// Get the CHG_HS_LS flag
+    /// Get the charge FET configuration
+    /// - True configured for High Side FET
+    /// - False configured for Low Side FET
     #[inline]
     pub const fn get_chg_hs_ls(&self) -> bool {
         (self.0 & CHG_HS_LS) != 0
     }
 
-    /// Set the CHG_HS_LS flag
+    /// Set the charge FET configuration
+    /// - True configured for High Side FET
+    /// - False configured for Low Side FET
     #[inline]
     pub const fn set_chg_hs_ls(&mut self, value: bool) {
         self.0 = self.0 & !CHG_HS_LS | ((value as u16) << 12);

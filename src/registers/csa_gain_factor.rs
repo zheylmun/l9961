@@ -1,6 +1,6 @@
 use core::ops::Deref;
 
-/// The device address register
+/// Current sense ADC gain factor configuration register
 pub struct CsaGainFactor(u16);
 
 impl Deref for CsaGainFactor {

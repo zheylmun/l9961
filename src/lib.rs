@@ -93,12 +93,12 @@ where
         self.write_register(Registers::Cfg2Enables, *new_config)
     }
 
-    /// Read the csa gain factor register
+    /// Read the CSA (Current Sense ADC) gain factor register
     pub fn read_csa_gain_factor(&mut self) -> Result<CsaGainFactor, I2C::Error> {
         Ok(self.read_register(Registers::CsaGainFactor)?.into())
     }
 
-    /// Write a new value to the csa gain factor register
+    /// Write a new value to the CSA (Current Sense ADC) gain factor register
     pub fn write_csa_gain_factor(&mut self, new_config: CsaGainFactor) -> Result<(), I2C::Error> {
         self.write_register(Registers::CsaGainFactor, *new_config)
     }
