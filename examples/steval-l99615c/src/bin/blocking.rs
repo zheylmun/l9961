@@ -68,5 +68,9 @@ fn main() -> ! {
     let vb_ov_th = l9961.read_vb_ov_th().unwrap();
     defmt::info!("{}", vb_ov_th);
 
+    // Read the VBUvTh register
+    let vb_uv_th = l9961.read_vb_uv_th().unwrap();
+    defmt::info!("{}", vb_uv_th);
+
     functions::exit()
 }
