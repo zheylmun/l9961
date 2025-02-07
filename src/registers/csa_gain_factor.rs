@@ -1,6 +1,7 @@
 use core::ops::Deref;
 
 /// Current sense ADC gain factor configuration register
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct CsaGainFactor(u16);
 
 impl Deref for CsaGainFactor {

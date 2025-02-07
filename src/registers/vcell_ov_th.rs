@@ -1,6 +1,7 @@
 use core::ops::Deref;
 
 /// Cell overvoltage monitoring threshold configuration register
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct VCellOvTh(u16);
 
 impl VCellOvTh {
@@ -48,7 +49,7 @@ impl defmt::Format for VCellOvTh {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "VCELL_OV_TH: {{\n  VCELL_OV_TH: {},\n  NCELL_OV_CNT_TH: {}\n}}",
+            "VCELL_OV_TH: {{\n  CELL_OV_TH: {},\n  NCELL_OV_CNT_TH: {}\n}}",
             self.get_vcell_ov_th(),
             self.get_ncell_ov_cnt_th()
         )

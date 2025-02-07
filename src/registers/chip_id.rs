@@ -1,6 +1,7 @@
 use core::ops::Deref;
 
 /// The Chip ID register
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct ChipID(u16);
 
 impl ChipID {

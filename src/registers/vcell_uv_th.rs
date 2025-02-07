@@ -1,6 +1,7 @@
 use core::ops::Deref;
 
 /// Cell undervoltage monitoring threshold configuration register
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct VCellUvTh(u16);
 
 impl VCellUvTh {

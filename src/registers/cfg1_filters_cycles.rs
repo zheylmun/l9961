@@ -54,8 +54,8 @@ pub enum TSCFilter {
     /// 64 us
     T64us = 0b001,
     /// 128 us
-    T128s = 0b010,
-    /// 256s
+    T128us = 0b010,
+    /// 256us
     T256us = 0b011,
     /// 512 us
     T512us = 0b100,
@@ -67,7 +67,7 @@ impl From<u16> for TSCFilter {
         match value {
             0b000 => TSCFilter::T32us,
             0b001 => TSCFilter::T64us,
-            0b010 => TSCFilter::T128s,
+            0b010 => TSCFilter::T128us,
             0b011 => TSCFilter::T256us,
             0b100 => TSCFilter::T512us,
             _ => panic!("Invalid T_SC_FILTER"),
@@ -82,7 +82,7 @@ impl defmt::Format for TSCFilter {
         match self {
             TSCFilter::T32us => defmt::write!(f, "32 us"),
             TSCFilter::T64us => defmt::write!(f, "64 us"),
-            TSCFilter::T128s => defmt::write!(f, "128 us"),
+            TSCFilter::T128us => defmt::write!(f, "128 us"),
             TSCFilter::T256us => defmt::write!(f, "256 us"),
             TSCFilter::T512us => defmt::write!(f, "512 us"),
         }
@@ -156,6 +156,7 @@ impl defmt::Format for TMeasCycle {
 
 /// Registers CFG1_FILTERS_CYCLES
 /// Used to configure the filter and cycle times for the voltage and current measurements
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct Cfg1FiltersCycles(u16);
 
 impl Cfg1FiltersCycles {

@@ -3,6 +3,7 @@ use core::ops::Deref;
 use defmt::debug_assert;
 
 /// The device address register
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct DevAddr(u16);
 
 impl DevAddr {

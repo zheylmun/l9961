@@ -22,6 +22,7 @@ const CRC_EN: u16 = 0x2000;
 /// SC (Short Circuit Protection), and CRC (Cyclic Redundancy Check for I2C data integrity)
 /// Additionally, the register configures the charge and discharge FET drivers for use with
 /// high side or low side FETs
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct Cfg2Enables(u16);
 
 impl Cfg2Enables {
