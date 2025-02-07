@@ -64,5 +64,9 @@ fn main() -> ! {
     let vcell_bal_uv_delta_th = l9961.read_vcell_bal_uv_delta_th().unwrap();
     defmt::info!("{}", vcell_bal_uv_delta_th);
 
+    // Read the VBOvTh register
+    let vb_ov_th = l9961.read_vb_ov_th().unwrap();
+    defmt::info!("{}", vb_ov_th);
+
     functions::exit()
 }

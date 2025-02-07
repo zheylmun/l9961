@@ -6,7 +6,7 @@
 #![no_std]
 
 use registers::{
-    Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, DevAddr, Registers,
+    Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, DevAddr, Registers, VBOvTh,
     VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs, VCellUvTh,
 };
 
@@ -147,5 +147,15 @@ where
         new_config: VCellBalUvDeltaTh,
     ) -> Result<(), I2C::Error> {
         self.write_register(Registers::VCellBalUvDeltaTh, *new_config)
+    }
+
+    /// Read the VBOvTh register
+    pub fn read_vb_ov_th(&mut self) -> Result<VBOvTh, I2C::Error> {
+        Ok(self.read_register(Registers::VBOvTh)?.into())
+    }
+
+    /// Write a new value to the VBOvTh register
+    pub fn write_vb_ov_th(&mut self, new_config: VBOvTh) -> Result<(), I2C::Error> {
+        self.write_register(Registers::VBOvTh, *new_config)
     }
 }
