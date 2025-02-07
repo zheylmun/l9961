@@ -6,8 +6,8 @@
 #![no_std]
 
 use registers::{
-    Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, DevAddr, Registers, VCellOvTh,
-    VCellSevereDeltaThrs, VCellUvTh,
+    Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, DevAddr, Registers,
+    VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs, VCellUvTh,
 };
 
 pub mod registers;
@@ -134,5 +134,18 @@ where
         new_config: VCellSevereDeltaThrs,
     ) -> Result<(), I2C::Error> {
         self.write_register(Registers::VCellSevereDeltaThrs, *new_config)
+    }
+
+    /// Read the VCellBalUvDeltaTh register
+    pub fn read_vcell_bal_uv_delta_th(&mut self) -> Result<VCellBalUvDeltaTh, I2C::Error> {
+        Ok(self.read_register(Registers::VCellBalUvDeltaTh)?.into())
+    }
+
+    /// Write a new value to the VCellBalUvDeltaTh register
+    pub fn write_vcell_bal_uv_delta_th(
+        &mut self,
+        new_config: VCellBalUvDeltaTh,
+    ) -> Result<(), I2C::Error> {
+        self.write_register(Registers::VCellBalUvDeltaTh, *new_config)
     }
 }

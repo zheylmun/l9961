@@ -60,5 +60,9 @@ fn main() -> ! {
     let vcell_severe_delta_thrs = l9961.read_vcell_severe_delta_thrs().unwrap();
     defmt::info!("{}", vcell_severe_delta_thrs);
 
+    // Read the VCellBalUvDeltaTh register
+    let vcell_bal_uv_delta_th = l9961.read_vcell_bal_uv_delta_th().unwrap();
+    defmt::info!("{}", vcell_bal_uv_delta_th);
+
     functions::exit()
 }

@@ -19,6 +19,9 @@ pub use csa_gain_factor::CsaGainFactor;
 mod dev_addr;
 pub use dev_addr::DevAddr;
 
+mod vcell_bal_uv_delta_th;
+pub use vcell_bal_uv_delta_th::VCellBalUvDeltaTh;
+
 mod vcell_ov_th;
 pub use vcell_ov_th::VCellOvTh;
 
@@ -49,4 +52,6 @@ pub enum Registers {
     VCellUvTh = 0x07,
     /// The configuration register for the VCELL severe undervoltage and overvoltage thresholds
     VCellSevereDeltaThrs = 0x08,
+    /// The configuration register for the VCELL balancing undervoltage delta threshold
+    VCellBalUvDeltaTh = 0x09,
 }
