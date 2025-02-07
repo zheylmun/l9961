@@ -56,5 +56,9 @@ fn main() -> ! {
     let vcell_uv_th = l9961.read_vcell_uv_th().unwrap();
     defmt::info!("VCell Undervoltage Threshold: {}", vcell_uv_th);
 
+    // Read the VCellSevereDeltaThrs register
+    let vcell_severe_delta_thrs = l9961.read_vcell_severe_delta_thrs().unwrap();
+    defmt::info!("{}", vcell_severe_delta_thrs);
+
     functions::exit()
 }

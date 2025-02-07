@@ -22,6 +22,9 @@ pub use dev_addr::DevAddr;
 mod vcell_ov_th;
 pub use vcell_ov_th::VCellOvTh;
 
+mod vcell_severe_delta_thrs;
+pub use vcell_severe_delta_thrs::VCellSevereDeltaThrs;
+
 mod vcell_uv_th;
 pub use vcell_uv_th::VCellUvTh;
 
@@ -44,4 +47,6 @@ pub enum Registers {
     VCellOvTh = 0x06,
     /// The configuration register for the VCELL undervoltage threshold
     VCellUvTh = 0x07,
+    /// The configuration register for the VCELL severe undervoltage and overvoltage thresholds
+    VCellSevereDeltaThrs = 0x08,
 }

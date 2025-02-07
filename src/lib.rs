@@ -7,7 +7,7 @@
 
 use registers::{
     Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, DevAddr, Registers, VCellOvTh,
-    VCellUvTh,
+    VCellSevereDeltaThrs, VCellUvTh,
 };
 
 pub mod registers;
@@ -121,5 +121,18 @@ where
     /// Write a new value to the VCellUv Threshold register
     pub fn write_vcell_uv_th(&mut self, new_config: VCellUvTh) -> Result<(), I2C::Error> {
         self.write_register(Registers::VCellUvTh, *new_config)
+    }
+
+    /// Read the VCellSevereDeltaThrs register
+    pub fn read_vcell_severe_delta_thrs(&mut self) -> Result<VCellSevereDeltaThrs, I2C::Error> {
+        Ok(self.read_register(Registers::VCellSevereDeltaThrs)?.into())
+    }
+
+    /// Write a new value to the VCellSevereDeltaThrs register
+    pub fn write_vcell_severe_delta_thrs(
+        &mut self,
+        new_config: VCellSevereDeltaThrs,
+    ) -> Result<(), I2C::Error> {
+        self.write_register(Registers::VCellSevereDeltaThrs, *new_config)
     }
 }
