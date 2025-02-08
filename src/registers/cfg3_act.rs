@@ -1,10 +1,5 @@
 use core::ops::Deref;
 
-/// Configuration 3 Activation register
-/// Contains the configuration for the activation of the balancing,
-/// charge, and discharge FETs
-pub struct Cfg3Act(u16);
-
 const CELL_1_BAL_EN: u16 = 1 << 0;
 const CELL_2_BAL_EN: u16 = 1 << 1;
 const CELL_3_BAL_EN: u16 = 1 << 2;
@@ -12,6 +7,12 @@ const CELL_4_BAL_EN: u16 = 1 << 3;
 const CELL_5_BAL_EN: u16 = 1 << 4;
 const CHG_EN: u16 = 1 << 5;
 const DISCHG_EN: u16 = 1 << 6;
+
+/// Configuration 3 Activation register
+/// Contains the configuration for the activation of the balancing,
+/// charge, and discharge FETs
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct Cfg3Act(u16);
 
 impl Cfg3Act {
     /// Create a new Cfg3Act object
