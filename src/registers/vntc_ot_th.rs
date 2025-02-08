@@ -14,6 +14,10 @@ impl VNTCOTTh {
     /// Set the the programmable over temp fault threshold (12bit)
     #[inline]
     pub const fn set_ntc_ot_th(&mut self, ntc_ot_th: u16) {
+        debug_assert!(
+            ntc_ot_th & 0x0FFF == ntc_ot_th,
+            "Invalid ntc overtemp threshold value"
+        );
         self.0 = self.0 & 0xF000 | (ntc_ot_th as u16);
     }
 

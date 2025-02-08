@@ -43,6 +43,9 @@ pub use vcell_uv_th::VCellUvTh;
 mod vntc_ot_th;
 pub use vntc_ot_th::VNTCOTTh;
 
+mod vntc_ut_th;
+pub use vntc_ut_th::VNTCUTTh;
+
 /// The registers of the L9961 chip represented as their addresses
 #[repr(u8)]
 pub enum Registers {
@@ -74,4 +77,6 @@ pub enum Registers {
     VBSumMaxDiffTh = 0x0C,
     /// The configuration register for the VNTC over temperature threshold
     VNTCOTTh = 0x0D,
+    /// The configuration register for the VNTC under temperature threshold
+    VNTCUTTh = 0x0E,
 }
