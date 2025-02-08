@@ -6,9 +6,9 @@
 #![no_std]
 
 use registers::{
-    Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, DevAddr, Registers, VBOvTh,
-    VBSumMaxDiffTh, VBUvTh, VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs, VCellUvTh,
-    VNTCOTTh, VNTCSevereOTTh, VNTCUTTh,
+    Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, DevAddr, OvCThresholds,
+    Registers, VBOvTh, VBSumMaxDiffTh, VBUvTh, VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs,
+    VCellUvTh, VNTCOTTh, VNTCSevereOTTh, VNTCUTTh,
 };
 
 pub mod registers;
@@ -214,5 +214,15 @@ where
         new_config: VNTCSevereOTTh,
     ) -> Result<(), I2C::Error> {
         self.write_register(Registers::VNTCSevereOTTh, *new_config)
+    }
+
+    /// Read the OVC_THRESHOLDS register
+    pub fn read_ovc_thresholds(&mut self) -> Result<OvCThresholds, I2C::Error> {
+        Ok(self.read_register(Registers::OvCThresholds)?.into())
+    }
+
+    /// Write a new value to the OVC_THRESHOLDS register
+    pub fn write_ovc_thresholds(&mut self, new_config: OvCThresholds) -> Result<(), I2C::Error> {
+        self.write_register(Registers::OvCThresholds, *new_config)
     }
 }

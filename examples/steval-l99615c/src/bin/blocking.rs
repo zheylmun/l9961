@@ -88,5 +88,9 @@ fn main() -> ! {
     let vntc_severe_ot_th = l9961.read_vntc_severe_ot_th().unwrap();
     defmt::info!("{}", vntc_severe_ot_th);
 
+    // Read the OvCTHresholds register
+    let ovc_thresholds = l9961.read_ovc_thresholds().unwrap();
+    defmt::info!("{}", ovc_thresholds);
+
     functions::exit()
 }

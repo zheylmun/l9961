@@ -7,6 +7,7 @@ mod cfg3_act;
 mod chip_id;
 mod csa_gain_factor;
 mod dev_addr;
+mod ovc_thresholds;
 mod vb_ov_th;
 mod vb_sum_max_diff_th;
 mod vb_uv_th;
@@ -24,6 +25,7 @@ pub use cfg3_act::Cfg3Act;
 pub use chip_id::ChipID;
 pub use csa_gain_factor::CsaGainFactor;
 pub use dev_addr::DevAddr;
+pub use ovc_thresholds::OvCThresholds;
 pub use vb_ov_th::VBOvTh;
 pub use vb_sum_max_diff_th::VBSumMaxDiffTh;
 pub use vb_uv_th::VBUvTh;
@@ -70,4 +72,6 @@ pub enum Registers {
     VNTCUTTh = 0x0E,
     /// Configuration register for the VNTC severe overtemperature threshold
     VNTCSevereOTTh = 0x0F,
+    /// Configuration register for overcurrent protection
+    OvCThresholds = 0x10,
 }
