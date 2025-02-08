@@ -79,4 +79,6 @@ pub enum Registers {
     VNTCOTTh = 0x0D,
     /// The configuration register for the VNTC under temperature threshold
     VNTCUTTh = 0x0E,
+    /// The configuration register for the VNTC severe overtemperature threshold
+    VNTCSevereOTTh = 0x0F,
 }

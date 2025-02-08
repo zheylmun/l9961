@@ -84,5 +84,9 @@ fn main() -> ! {
     let vntc_ut_th = l9961.read_vntc_ut_th().unwrap();
     defmt::info!("{}", vntc_ut_th);
 
+    // Read the VNTCSevereOTTh register
+    let vntc_severe_ot_th = l9961.read_vntc_severe_ot_th().unwrap();
+    defmt::info!("{}", vntc_severe_ot_th);
+
     functions::exit()
 }
