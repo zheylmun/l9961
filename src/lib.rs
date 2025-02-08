@@ -7,7 +7,7 @@
 
 use registers::{
     Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, DevAddr, Registers, VBOvTh,
-    VBUvTh, VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs, VCellUvTh,
+    VBSumMaxDiffTh, VBUvTh, VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs, VCellUvTh,
 };
 
 pub mod registers;
@@ -167,5 +167,18 @@ where
     /// Write a new value to the VBUvTh register
     pub fn write_vb_uv_th(&mut self, new_config: VBUvTh) -> Result<(), I2C::Error> {
         self.write_register(Registers::VBUvTh, *new_config)
+    }
+
+    /// Read the VBSumMaxDiffTh register
+    pub fn read_vb_sum_max_diff_th(&mut self) -> Result<VBSumMaxDiffTh, I2C::Error> {
+        Ok(self.read_register(Registers::VBSumMaxDiffTh)?.into())
+    }
+
+    /// Write a new value to the VBSumMaxDiffTh register
+    pub fn write_vb_sum_max_diff_th(
+        &mut self,
+        new_config: VBSumMaxDiffTh,
+    ) -> Result<(), I2C::Error> {
+        self.write_register(Registers::VBSumMaxDiffTh, *new_config)
     }
 }

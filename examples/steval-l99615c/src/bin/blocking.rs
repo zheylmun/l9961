@@ -72,5 +72,9 @@ fn main() -> ! {
     let vb_uv_th = l9961.read_vb_uv_th().unwrap();
     defmt::info!("{}", vb_uv_th);
 
+    // Read the VBSumMaxDiffTh register
+    let vb_sum_max_diff_th = l9961.read_vb_sum_max_diff_th().unwrap();
+    defmt::info!("{}", vb_sum_max_diff_th);
+
     functions::exit()
 }

@@ -25,6 +25,9 @@ pub use vb_ov_th::VBOvTh;
 mod vb_uv_th;
 pub use vb_uv_th::VBUvTh;
 
+mod vb_sum_max_diff_th;
+pub use vb_sum_max_diff_th::VBSumMaxDiffTh;
+
 mod vcell_bal_uv_delta_th;
 pub use vcell_bal_uv_delta_th::VCellBalUvDeltaTh;
 
@@ -64,4 +67,6 @@ pub enum Registers {
     VBOvTh = 0x0A,
     /// The configuration register for the VBAT undervoltage threshold
     VBUvTh = 0x0B,
+    /// The configuration register for the VBAT sum max diff threshold
+    VBSumMaxDiffTh = 0x0C,
 }
