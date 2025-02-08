@@ -8,6 +8,7 @@ mod chip_id;
 mod csa_gain_factor;
 mod dev_addr;
 mod ovc_thresholds;
+mod persistent_ovc_thresholds;
 mod vb_ov_th;
 mod vb_sum_max_diff_th;
 mod vb_uv_th;
@@ -26,6 +27,7 @@ pub use chip_id::ChipID;
 pub use csa_gain_factor::CsaGainFactor;
 pub use dev_addr::DevAddr;
 pub use ovc_thresholds::OvCThresholds;
+pub use persistent_ovc_thresholds::PersistentOvCThresholds;
 pub use vb_ov_th::VBOvTh;
 pub use vb_sum_max_diff_th::VBSumMaxDiffTh;
 pub use vb_uv_th::VBUvTh;
@@ -74,4 +76,6 @@ pub enum Registers {
     VNTCSevereOTTh = 0x0F,
     /// Configuration register for overcurrent protection
     OvCThresholds = 0x10,
+    /// Configuration register for persistent overcurrent protection
+    PersistentOvCThresholds = 0x11,
 }

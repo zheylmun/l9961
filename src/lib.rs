@@ -7,8 +7,8 @@
 
 use registers::{
     Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, DevAddr, OvCThresholds,
-    Registers, VBOvTh, VBSumMaxDiffTh, VBUvTh, VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs,
-    VCellUvTh, VNTCOTTh, VNTCSevereOTTh, VNTCUTTh,
+    PersistentOvCThresholds, Registers, VBOvTh, VBSumMaxDiffTh, VBUvTh, VCellBalUvDeltaTh,
+    VCellOvTh, VCellSevereDeltaThrs, VCellUvTh, VNTCOTTh, VNTCSevereOTTh, VNTCUTTh,
 };
 
 pub mod registers;
@@ -224,5 +224,22 @@ where
     /// Write a new value to the OVC_THRESHOLDS register
     pub fn write_ovc_thresholds(&mut self, new_config: OvCThresholds) -> Result<(), I2C::Error> {
         self.write_register(Registers::OvCThresholds, *new_config)
+    }
+
+    /// Read the PERSISTENT_OVC_THRESHOLDS register
+    pub fn read_persistent_ovc_thresholds(
+        &mut self,
+    ) -> Result<PersistentOvCThresholds, I2C::Error> {
+        Ok(self
+            .read_register(Registers::PersistentOvCThresholds)?
+            .into())
+    }
+
+    /// Write a new value to the PERSISTENT_OVC_THRESHOLDS register
+    pub fn write_persistent_ovc_thresholds(
+        &mut self,
+        new_config: PersistentOvCThresholds,
+    ) -> Result<(), I2C::Error> {
+        self.write_register(Registers::PersistentOvCThresholds, *new_config)
     }
 }

@@ -92,5 +92,9 @@ fn main() -> ! {
     let ovc_thresholds = l9961.read_ovc_thresholds().unwrap();
     defmt::info!("{}", ovc_thresholds);
 
+    // Read the PersistentOvCThresholds register
+    let persistent_ovc_thresholds = l9961.read_persistent_ovc_thresholds().unwrap();
+    defmt::info!("{}", persistent_ovc_thresholds);
+
     functions::exit()
 }
