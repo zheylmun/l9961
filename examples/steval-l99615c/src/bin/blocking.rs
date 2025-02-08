@@ -76,5 +76,9 @@ fn main() -> ! {
     let vb_sum_max_diff_th = l9961.read_vb_sum_max_diff_th().unwrap();
     defmt::info!("{}", vb_sum_max_diff_th);
 
+    // Read the VNTCOTTh register
+    let vntc_ot_th = l9961.read_vntc_ot_th().unwrap();
+    defmt::info!("{}", vntc_ot_th);
+
     functions::exit()
 }

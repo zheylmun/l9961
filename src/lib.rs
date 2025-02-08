@@ -8,6 +8,7 @@
 use registers::{
     Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, DevAddr, Registers, VBOvTh,
     VBSumMaxDiffTh, VBUvTh, VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs, VCellUvTh,
+    VNTCOTTh,
 };
 
 pub mod registers;
@@ -180,5 +181,15 @@ where
         new_config: VBSumMaxDiffTh,
     ) -> Result<(), I2C::Error> {
         self.write_register(Registers::VBSumMaxDiffTh, *new_config)
+    }
+
+    /// Read the VNTCOTTh register
+    pub fn read_vntc_ot_th(&mut self) -> Result<VNTCOTTh, I2C::Error> {
+        Ok(self.read_register(Registers::VNTCOTTh)?.into())
+    }
+
+    /// Write a new value to the VNTCOTTh register
+    pub fn write_vntc_ot_th(&mut self, new_config: VNTCOTTh) -> Result<(), I2C::Error> {
+        self.write_register(Registers::VNTCOTTh, *new_config)
     }
 }
