@@ -7,8 +7,9 @@
 
 use registers::{
     Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, DevAddr, OvCThresholds,
-    PersistentOvCThresholds, Registers, VBOvTh, VBSumMaxDiffTh, VBUvTh, VCellBalUvDeltaTh,
-    VCellOvTh, VCellSevereDeltaThrs, VCellUvTh, VNTCOTTh, VNTCSevereOTTh, VNTCUTTh,
+    PersistentOvCThresholds, Registers, SCThreshold, VBOvTh, VBSumMaxDiffTh, VBUvTh,
+    VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs, VCellUvTh, VNTCOTTh, VNTCSevereOTTh,
+    VNTCUTTh,
 };
 
 pub mod registers;
@@ -80,8 +81,11 @@ where
     }
 
     /// Write a new value to the Device Address Register
+    /// Note that this will also update the internal I2C address of the `L9961` driver upon success
     pub fn write_device_address(&mut self, new_config: DevAddr) -> Result<(), I2C::Error> {
-        self.write_register(Registers::DevAddr, *new_config)
+        self.write_register(Registers::DevAddr, *new_config)?;
+        self.address = new_config.get_device_address();
+        Ok(())
     }
 
     /// Read the Cfg2Enables register
@@ -241,5 +245,15 @@ where
         new_config: PersistentOvCThresholds,
     ) -> Result<(), I2C::Error> {
         self.write_register(Registers::PersistentOvCThresholds, *new_config)
+    }
+
+    /// Read the SC_THRESHOLD register
+    pub fn read_sc_threshold(&mut self) -> Result<SCThreshold, I2C::Error> {
+        Ok(self.read_register(Registers::SCThreshold)?.into())
+    }
+
+    /// Write the SC_THRESHOLD register
+    pub fn write_sc_threshold(&mut self, new_config: SCThreshold) -> Result<(), I2C::Error> {
+        self.write_register(Registers::SCThreshold, *new_config)
     }
 }

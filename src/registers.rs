@@ -9,6 +9,7 @@ mod csa_gain_factor;
 mod dev_addr;
 mod ovc_thresholds;
 mod persistent_ovc_thresholds;
+mod sc_threshold;
 mod vb_ov_th;
 mod vb_sum_max_diff_th;
 mod vb_uv_th;
@@ -28,6 +29,7 @@ pub use csa_gain_factor::CsaGainFactor;
 pub use dev_addr::DevAddr;
 pub use ovc_thresholds::OvCThresholds;
 pub use persistent_ovc_thresholds::PersistentOvCThresholds;
+pub use sc_threshold::SCThreshold;
 pub use vb_ov_th::VBOvTh;
 pub use vb_sum_max_diff_th::VBSumMaxDiffTh;
 pub use vb_uv_th::VBUvTh;
@@ -78,4 +80,6 @@ pub enum Registers {
     OvCThresholds = 0x10,
     /// Configuration register for persistent overcurrent protection
     PersistentOvCThresholds = 0x11,
+    /// Configuration register for short circuit threshold protection
+    SCThreshold = 0x12,
 }

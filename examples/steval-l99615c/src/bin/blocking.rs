@@ -96,5 +96,9 @@ fn main() -> ! {
     let persistent_ovc_thresholds = l9961.read_persistent_ovc_thresholds().unwrap();
     defmt::info!("{}", persistent_ovc_thresholds);
 
+    // Read the SCThreshold register
+    let sc_threshold = l9961.read_sc_threshold().unwrap();
+    defmt::info!("{}", sc_threshold);
+
     functions::exit()
 }
