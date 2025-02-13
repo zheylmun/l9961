@@ -107,8 +107,12 @@ fn main() -> ! {
     l9961.write_to_prdrv_bal_mask(masking).unwrap();
     let to_prdrv_bal_mask = l9961.read_to_prdrv_bal_mask().unwrap();
     defmt::info!("{}", to_prdrv_bal_mask);
+
+    // Read the to_fuse_rst_msk register
     let to_fuse_rst_mask = l9961.read_to_fuse_rst_msk().unwrap();
     defmt::info!("{}", to_fuse_rst_mask);
-
+    // Read the to_faultn_msk register
+    let to_faultn = l9961.read_to_faultn_msk().unwrap();
+    defmt::info!("{}", to_faultn);
     functions::exit()
 }

@@ -1,7 +1,7 @@
 use super::{
     Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, DevAddr, OvCThresholds,
-    PersistentOvCThresholds, Registers, SCThreshold, ToFuseRstMask, ToPrdrvBalMask, VBOvTh,
-    VBSumMaxDiffTh, VBUvTh, VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs, VCellUvTh,
+    PersistentOvCThresholds, Registers, SCThreshold, ToFaultnMsk, ToFuseRstMask, ToPrdrvBalMask,
+    VBOvTh, VBSumMaxDiffTh, VBUvTh, VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs, VCellUvTh,
     VNTCOTTh, VNTCSevereOTTh, VNTCUTTh,
 };
 
@@ -262,5 +262,17 @@ where
     /// Write the TO_FUSE_RST_MSK register
     pub fn write_to_fuse_rst_msk(&mut self, new_config: ToFuseRstMask) -> Result<(), I2C::Error> {
         self.write_register(Registers::ToFuseRstMask, new_config.bits())
+    }
+
+    /// Read the TO_FAULTN_MSK register
+    pub fn read_to_faultn_msk(&mut self) -> Result<ToFaultnMsk, I2C::Error> {
+        Ok(ToFaultnMsk::from_bits_truncate(
+            self.read_register(Registers::ToFaultnMsk)?,
+        ))
+    }
+
+    /// Write the TO_FAULTN_MSK register
+    pub fn write_to_faultn_msk(&mut self, new_config: ToFaultnMsk) -> Result<(), I2C::Error> {
+        self.write_register(Registers::ToFaultnMsk, new_config.bits())
     }
 }

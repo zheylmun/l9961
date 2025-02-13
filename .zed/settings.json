@@ -2,7 +2,6 @@
   "lsp": {
     "rust-analyzer": {
       "initialization_options": {
-        "linkedProjects": ["examples/steval-l99615c/Cargo.toml"],
         "cargo": {
           "features": ["defmt"]
         },

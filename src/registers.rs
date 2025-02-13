@@ -10,6 +10,7 @@ mod dev_addr;
 mod ovc_thresholds;
 mod persistent_ovc_thresholds;
 mod sc_threshold;
+mod to_faultn_msk;
 mod to_fuse_rst_msk;
 mod to_prdrv_bal_mask;
 mod vb_ov_th;
@@ -30,9 +31,9 @@ pub use self::{
     cfg1_filters_cycles::Cfg1FiltersCycles, cfg2_enables::Cfg2Enables, cfg3_act::Cfg3Act,
     chip_id::ChipID, csa_gain_factor::CsaGainFactor, dev_addr::DevAddr,
     ovc_thresholds::OvCThresholds, persistent_ovc_thresholds::PersistentOvCThresholds,
-    sc_threshold::SCThreshold, to_fuse_rst_msk::ToFuseRstMask, to_prdrv_bal_mask::ToPrdrvBalMask,
-    vb_ov_th::VBOvTh, vb_sum_max_diff_th::VBSumMaxDiffTh, vb_uv_th::VBUvTh,
-    vcell_bal_uv_delta_th::VCellBalUvDeltaTh, vcell_ov_th::VCellOvTh,
+    sc_threshold::SCThreshold, to_faultn_msk::ToFaultnMsk, to_fuse_rst_msk::ToFuseRstMask,
+    to_prdrv_bal_mask::ToPrdrvBalMask, vb_ov_th::VBOvTh, vb_sum_max_diff_th::VBSumMaxDiffTh,
+    vb_uv_th::VBUvTh, vcell_bal_uv_delta_th::VCellBalUvDeltaTh, vcell_ov_th::VCellOvTh,
     vcell_severe_delta_thrs::VCellSevereDeltaThrs, vcell_uv_th::VCellUvTh, vntc_ot_th::VNTCOTTh,
     vntc_severe_ot_th::VNTCSevereOTTh, vntc_ut_th::VNTCUTTh,
 };
@@ -82,4 +83,6 @@ pub enum Registers {
     ToPrdrvBalMask = 0x13,
     /// Configuration register for the TO_FUSE_RST_MSK
     ToFuseRstMask = 0x14,
+    /// Configuration register for the TO_FAULTN_MSK
+    ToFaultnMsk = 0x15,
 }
