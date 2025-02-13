@@ -22,26 +22,19 @@ mod vntc_ot_th;
 mod vntc_severe_ot_th;
 mod vntc_ut_th;
 
-pub use cfg1_filters_cycles::Cfg1FiltersCycles;
-pub use cfg2_enables::Cfg2Enables;
-pub use cfg3_act::Cfg3Act;
-pub use chip_id::ChipID;
-pub use csa_gain_factor::CsaGainFactor;
-pub use dev_addr::DevAddr;
-pub use ovc_thresholds::OvCThresholds;
-pub use persistent_ovc_thresholds::PersistentOvCThresholds;
-pub use sc_threshold::SCThreshold;
-pub use to_prdrv_bal_mask::ToPrdrvBalMask;
-pub use vb_ov_th::VBOvTh;
-pub use vb_sum_max_diff_th::VBSumMaxDiffTh;
-pub use vb_uv_th::VBUvTh;
-pub use vcell_bal_uv_delta_th::VCellBalUvDeltaTh;
-pub use vcell_ov_th::VCellOvTh;
-pub use vcell_severe_delta_thrs::VCellSevereDeltaThrs;
-pub use vcell_uv_th::VCellUvTh;
-pub use vntc_ot_th::VNTCOTTh;
-pub use vntc_severe_ot_th::VNTCSevereOTTh;
-pub use vntc_ut_th::VNTCUTTh;
+#[cfg(feature = "blocking")]
+mod blocking;
+
+pub use self::{
+    cfg1_filters_cycles::Cfg1FiltersCycles, cfg2_enables::Cfg2Enables, cfg3_act::Cfg3Act,
+    chip_id::ChipID, csa_gain_factor::CsaGainFactor, dev_addr::DevAddr,
+    ovc_thresholds::OvCThresholds, persistent_ovc_thresholds::PersistentOvCThresholds,
+    sc_threshold::SCThreshold, to_fuse_rst_msk::ToFuseRstMask, to_prdrv_bal_mask::ToPrdrvBalMask,
+    vb_ov_th::VBOvTh, vb_sum_max_diff_th::VBSumMaxDiffTh, vb_uv_th::VBUvTh,
+    vcell_bal_uv_delta_th::VCellBalUvDeltaTh, vcell_ov_th::VCellOvTh,
+    vcell_severe_delta_thrs::VCellSevereDeltaThrs, vcell_uv_th::VCellUvTh, vntc_ot_th::VNTCOTTh,
+    vntc_severe_ot_th::VNTCSevereOTTh, vntc_ut_th::VNTCUTTh,
+};
 
 /// The registers of the L9961 chip represented as their addresses
 #[repr(u8)]
