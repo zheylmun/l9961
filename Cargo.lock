@@ -65,6 +65,7 @@ dependencies = [
 name = "l9961"
 version = "0.1.0"
 dependencies = [
+ "bitflags 1.3.2",
  "defmt",
  "embedded-hal",
  "embedded-hal-async",

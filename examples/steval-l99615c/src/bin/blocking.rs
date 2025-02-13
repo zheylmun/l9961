@@ -3,7 +3,7 @@
 #![no_std]
 
 use cortex_m_rt::entry;
-use l9961::L9961;
+use l9961::{registers::ToPrdrvBalMask, L9961};
 use steval_l99615c as functions;
 use stm32g0xx_hal::{
     i2c::{Config, I2cExt},
@@ -96,9 +96,13 @@ fn main() -> ! {
     let persistent_ovc_thresholds = l9961.read_persistent_ovc_thresholds().unwrap();
     defmt::info!("{}", persistent_ovc_thresholds);
 
-    // Read the SCThreshold register
-    let sc_threshold = l9961.read_sc_threshold().unwrap();
-    defmt::info!("{}", sc_threshold);
-
+    let masking = ToPrdrvBalMask::CELL_UV_PRDRV_MSK | ToPrdrvBalMask::CELL_SEVERE_UV_PRDRV_MSK;
+    l9961.write_to_prdrv_bal_mask(masking).unwrap();
+    let to_prdrv_bal_mask = l9961.read_to_prdrv_bal_mask().unwrap();
+    defmt::info!("{}", to_prdrv_bal_mask);
+    let masking = ToPrdrvBalMask::empty();
+    l9961.write_to_prdrv_bal_mask(masking).unwrap();
+    let to_prdrv_bal_mask = l9961.read_to_prdrv_bal_mask().unwrap();
+    defmt::info!("{}", to_prdrv_bal_mask);
     functions::exit()
 }

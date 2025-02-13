@@ -7,9 +7,9 @@
 
 use registers::{
     Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, DevAddr, OvCThresholds,
-    PersistentOvCThresholds, Registers, SCThreshold, VBOvTh, VBSumMaxDiffTh, VBUvTh,
-    VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs, VCellUvTh, VNTCOTTh, VNTCSevereOTTh,
-    VNTCUTTh,
+    PersistentOvCThresholds, Registers, SCThreshold, ToPrdrvBalMask, VBOvTh, VBSumMaxDiffTh,
+    VBUvTh, VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs, VCellUvTh, VNTCOTTh,
+    VNTCSevereOTTh, VNTCUTTh,
 };
 
 pub mod registers;
@@ -255,5 +255,20 @@ where
     /// Write the SC_THRESHOLD register
     pub fn write_sc_threshold(&mut self, new_config: SCThreshold) -> Result<(), I2C::Error> {
         self.write_register(Registers::SCThreshold, *new_config)
+    }
+
+    /// Read the TO_PRDRV_BAL_MASK register
+    pub fn read_to_prdrv_bal_mask(&mut self) -> Result<ToPrdrvBalMask, I2C::Error> {
+        Ok(ToPrdrvBalMask::from_bits_truncate(
+            self.read_register(Registers::ToPrdrvBalMask)?,
+        ))
+    }
+
+    /// Write the TO_PRDRV_BAL_MASK register
+    pub fn write_to_prdrv_bal_mask(
+        &mut self,
+        new_config: ToPrdrvBalMask,
+    ) -> Result<(), I2C::Error> {
+        self.write_register(Registers::ToPrdrvBalMask, new_config.bits())
     }
 }

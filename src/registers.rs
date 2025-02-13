@@ -10,6 +10,7 @@ mod dev_addr;
 mod ovc_thresholds;
 mod persistent_ovc_thresholds;
 mod sc_threshold;
+mod to_prdrv_bal_mask;
 mod vb_ov_th;
 mod vb_sum_max_diff_th;
 mod vb_uv_th;
@@ -30,6 +31,7 @@ pub use dev_addr::DevAddr;
 pub use ovc_thresholds::OvCThresholds;
 pub use persistent_ovc_thresholds::PersistentOvCThresholds;
 pub use sc_threshold::SCThreshold;
+pub use to_prdrv_bal_mask::ToPrdrvBalMask;
 pub use vb_ov_th::VBOvTh;
 pub use vb_sum_max_diff_th::VBSumMaxDiffTh;
 pub use vb_uv_th::VBUvTh;
@@ -82,4 +84,6 @@ pub enum Registers {
     PersistentOvCThresholds = 0x11,
     /// Configuration register for short circuit threshold protection
     SCThreshold = 0x12,
+    /// Configuration register for the TO_PRDRV_BAL_MASK
+    ToPrdrvBalMask = 0x13,
 }
