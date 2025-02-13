@@ -22,7 +22,7 @@ fn main() -> ! {
         .I2C2
         .i2c(sda, scl, Config::with_timing(0x2020_151b), &mut rcc);
 
-    let mut l9961 = L9961::new(i2c, 0x49);
+    let mut l9961 = L9961::new_blocking(i2c, 0x49);
 
     // Read the chip ID
     let id = l9961.read_chip_id().unwrap();
@@ -96,6 +96,9 @@ fn main() -> ! {
     let persistent_ovc_thresholds = l9961.read_persistent_ovc_thresholds().unwrap();
     defmt::info!("{}", persistent_ovc_thresholds);
 
+    // Test this new bitmask a bit more than the others
+    let to_prdrv_bal_mask = l9961.read_to_prdrv_bal_mask().unwrap();
+    defmt::info!("{}", to_prdrv_bal_mask);
     let masking = ToPrdrvBalMask::CELL_UV_PRDRV_MSK | ToPrdrvBalMask::CELL_SEVERE_UV_PRDRV_MSK;
     l9961.write_to_prdrv_bal_mask(masking).unwrap();
     let to_prdrv_bal_mask = l9961.read_to_prdrv_bal_mask().unwrap();

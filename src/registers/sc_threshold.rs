@@ -18,6 +18,7 @@ impl SCThreshold {
         debug_assert!(sc_th & 0x000F == sc_th, "Invalid SC_TH value");
         self.0 = self.0 & 0xFFF0 | (sc_th as u16);
     }
+
     /// Get the programmable persistent short circuit threshold (4 bit)
     #[inline]
     pub const fn get_sc_persist_th(&self) -> u8 {

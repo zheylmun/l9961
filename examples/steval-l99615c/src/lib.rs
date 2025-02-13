@@ -31,6 +31,7 @@ pub fn exit() -> ! {
 /// with an error. This seems better than the default, which is to spin in a
 /// loop.
 #[cortex_m_rt::exception]
+#[allow(non_snake_case)]
 unsafe fn HardFault(_frame: &cortex_m_rt::ExceptionFrame) -> ! {
     loop {
         debug::exit(debug::EXIT_FAILURE);
