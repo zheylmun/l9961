@@ -1,8 +1,8 @@
 use super::{
     Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, DevAddr, OvCThresholds,
-    PersistentOvCThresholds, Registers, SCThreshold, ToPrdrvBalMask, VBOvTh, VBSumMaxDiffTh,
-    VBUvTh, VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs, VCellUvTh, VNTCOTTh,
-    VNTCSevereOTTh, VNTCUTTh,
+    PersistentOvCThresholds, Registers, SCThreshold, ToFuseRstMask, ToPrdrvBalMask, VBOvTh,
+    VBSumMaxDiffTh, VBUvTh, VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs, VCellUvTh,
+    VNTCOTTh, VNTCSevereOTTh, VNTCUTTh,
 };
 
 use crate::L9961;
@@ -250,5 +250,17 @@ where
         new_config: ToPrdrvBalMask,
     ) -> Result<(), I2C::Error> {
         self.write_register(Registers::ToPrdrvBalMask, new_config.bits())
+    }
+
+    /// Read the TO_FUSE_RST_MSK register
+    pub fn read_to_fuse_rst_msk(&mut self) -> Result<ToFuseRstMask, I2C::Error> {
+        Ok(ToFuseRstMask::from_bits_truncate(
+            self.read_register(Registers::ToFuseRstMask)?,
+        ))
+    }
+
+    /// Write the TO_FUSE_RST_MSK register
+    pub fn write_to_fuse_rst_msk(&mut self, new_config: ToFuseRstMask) -> Result<(), I2C::Error> {
+        self.write_register(Registers::ToFuseRstMask, new_config.bits())
     }
 }

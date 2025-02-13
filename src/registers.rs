@@ -10,6 +10,7 @@ mod dev_addr;
 mod ovc_thresholds;
 mod persistent_ovc_thresholds;
 mod sc_threshold;
+mod to_fuse_rst_msk;
 mod to_prdrv_bal_mask;
 mod vb_ov_th;
 mod vb_sum_max_diff_th;
@@ -79,4 +80,6 @@ pub enum Registers {
     SCThreshold = 0x12,
     /// Configuration register for the TO_PRDRV_BAL_MASK
     ToPrdrvBalMask = 0x13,
+    /// Configuration register for the TO_FUSE_RST_MSK
+    ToFuseRstMask = 0x14,
 }
