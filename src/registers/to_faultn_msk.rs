@@ -4,7 +4,7 @@ use bitflags::bitflags;
 use defmt::bitflags;
 
 bitflags! {
-    /// Programmable mask register for whether faults assert the on the PRDRV and balance FET outputs
+    /// Programmable mask register for whether faults assert the on the FAULTN output
     pub struct ToFaultnMsk:u16 {
         /// Mask for the CELL_UF_FAULTN_MSK bit
         const CELL_UF_FAULTN_MSK = 0x0001;

@@ -1,8 +1,8 @@
 use super::{
-    Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, DevAddr, OvCThresholds,
-    PersistentOvCThresholds, Registers, SCThreshold, ToFaultnMsk, ToFuseRstMask, ToPrdrvBalMask,
-    VBOvTh, VBSumMaxDiffTh, VBUvTh, VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs, VCellUvTh,
-    VNTCOTTh, VNTCSevereOTTh, VNTCUTTh,
+    Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, CurrMsk, DevAddr,
+    OvCThresholds, PersistentOvCThresholds, Registers, SCThreshold, ToFaultnMsk, ToFuseRstMask,
+    ToPrdrvBalMask, VBOvTh, VBSumMaxDiffTh, VBUvTh, VCellBalUvDeltaTh, VCellOvTh,
+    VCellSevereDeltaThrs, VCellUvTh, VNTCOTTh, VNTCSevereOTTh, VNTCUTTh,
 };
 
 use crate::L9961;
@@ -274,5 +274,17 @@ where
     /// Write the TO_FAULTN_MSK register
     pub fn write_to_faultn_msk(&mut self, new_config: ToFaultnMsk) -> Result<(), I2C::Error> {
         self.write_register(Registers::ToFaultnMsk, new_config.bits())
+    }
+
+    /// Read the CURR_MSK register
+    pub fn read_curr_msk(&mut self) -> Result<CurrMsk, I2C::Error> {
+        Ok(CurrMsk::from_bits_truncate(
+            self.read_register(Registers::CurrMsk)?,
+        ))
+    }
+
+    /// Write the CURR_MSK register
+    pub fn write_curr_msk(&mut self, new_config: CurrMsk) -> Result<(), I2C::Error> {
+        self.write_register(Registers::CurrMsk, new_config.bits())
     }
 }

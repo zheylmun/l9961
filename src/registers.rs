@@ -6,6 +6,7 @@ mod cfg2_enables;
 mod cfg3_act;
 mod chip_id;
 mod csa_gain_factor;
+mod curr_msk;
 mod dev_addr;
 mod ovc_thresholds;
 mod persistent_ovc_thresholds;
@@ -29,7 +30,7 @@ mod blocking;
 
 pub use self::{
     cfg1_filters_cycles::Cfg1FiltersCycles, cfg2_enables::Cfg2Enables, cfg3_act::Cfg3Act,
-    chip_id::ChipID, csa_gain_factor::CsaGainFactor, dev_addr::DevAddr,
+    chip_id::ChipID, csa_gain_factor::CsaGainFactor, curr_msk::CurrMsk, dev_addr::DevAddr,
     ovc_thresholds::OvCThresholds, persistent_ovc_thresholds::PersistentOvCThresholds,
     sc_threshold::SCThreshold, to_faultn_msk::ToFaultnMsk, to_fuse_rst_msk::ToFuseRstMask,
     to_prdrv_bal_mask::ToPrdrvBalMask, vb_ov_th::VBOvTh, vb_sum_max_diff_th::VBSumMaxDiffTh,
@@ -85,4 +86,6 @@ pub enum Registers {
     ToFuseRstMask = 0x14,
     /// Configuration register for the TO_FAULTN_MSK
     ToFaultnMsk = 0x15,
+    /// Configuration register for the CURR_MASK
+    CurrMsk = 0x16,
 }
