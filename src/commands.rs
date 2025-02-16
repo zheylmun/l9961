@@ -11,8 +11,8 @@ const NVM_WRITE_READ_CODE_CMD_UPLOAD: u16 = 0xAAAA;
 /// NVM command value to load configuration from NVM
 const NVM_WRITE_READ_CODE_CMD_DOWNLOAD: u16 = 0x5555;
 
-/// Register value for GO2SHIP command
-const GO2SHIP: u16 = 0x2000;
+/// Register value for GO2 commands
+const CMD_VAL: u16 = 0x2000;
 
 #[cfg(not(feature = "async"))]
 impl<I2C> L9961<I2C>
@@ -31,7 +31,23 @@ where
 
     /// Send the GO2SHIP command to the device
     pub fn go_2_ship(&mut self) -> Result<(), I2C::Error> {
-        self.write_register(Registers::VCell1, GO2SHIP)
+        self.write_register(Registers::VCell1, CMD_VAL)
+    }
+
+    /// Send the GO2STBY command to the device
+    pub fn go_2_stby(&mut self) -> Result<(), I2C::Error> {
+        self.write_register(Registers::VCell2, CMD_VAL)
+    }
+
+    /// Arm the fuse trigger
+    pub fn fuse_trig_arm(&mut self) -> Result<(), I2C::Error> {
+        self.write_register(Registers::VCell3, CMD_VAL)
+    }
+
+    /// Fire the fuse trigger if arm state has not expired
+    /// **WARNING** this will blow the fuse and permanently disconnect the battery
+    pub fn fuse_trig_fire(&mut self) -> Result<(), I2C::Error> {
+        self.write_register(Registers::VCell4, CMD_VAL)
     }
 }
 
