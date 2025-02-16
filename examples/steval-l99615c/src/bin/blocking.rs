@@ -143,5 +143,8 @@ fn main() -> ! {
         defmt::info!("{}", cell_voltage);
     }
 
+    let vcell_sum = l9961.read_vcellsum().unwrap();
+    defmt::info!("{}", vcell_sum);
+
     functions::exit()
 }

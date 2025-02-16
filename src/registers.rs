@@ -23,6 +23,7 @@ mod vcell_bal_uv_delta_th;
 mod vcell_ov_th;
 mod vcell_severe_delta_thrs;
 mod vcell_uv_th;
+mod vcellsum;
 mod vntc_ot_th;
 mod vntc_severe_ot_th;
 mod vntc_ut_th;
@@ -120,4 +121,6 @@ pub enum Registers {
     VCell4 = 0x24,
     /// VCELL5 Register
     VCell5 = 0x25,
+    /// VCELLSUM Register
+    VCellSum = 0x26,
 }

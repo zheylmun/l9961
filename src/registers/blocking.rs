@@ -1,8 +1,9 @@
 use super::{
-    vcell::VCell, Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, CurrMsk, DevAddr,
-    OvCThresholds, PersistentOvCThresholds, Registers, SCThreshold, ToFaultnMsk, ToFuseRstMask,
-    ToPrdrvBalMask, VBOvTh, VBSumMaxDiffTh, VBUvTh, VCell1Faults, VCellBalUvDeltaTh, VCellOvTh,
-    VCellSevereDeltaThrs, VCellUvTh, VNTCOTTh, VNTCSevereOTTh, VNTCUTTh,
+    vcell::VCell, vcellsum::VCellSum, Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID,
+    CsaGainFactor, CurrMsk, DevAddr, OvCThresholds, PersistentOvCThresholds, Registers,
+    SCThreshold, ToFaultnMsk, ToFuseRstMask, ToPrdrvBalMask, VBOvTh, VBSumMaxDiffTh, VBUvTh,
+    VCell1Faults, VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs, VCellUvTh, VNTCOTTh,
+    VNTCSevereOTTh, VNTCUTTh,
 };
 
 use crate::L9961;
@@ -384,5 +385,10 @@ where
             _ => panic!("Attempt to read non-existent cell"),
         };
         Ok(VCell::new(cell, measurement))
+    }
+
+    /// Read the VCellSum measurement register
+    pub fn read_vcellsum(&mut self) -> Result<VCellSum, I2C::Error> {
+        Ok(self.read_register(Registers::VCellSum)?.into())
     }
 }
