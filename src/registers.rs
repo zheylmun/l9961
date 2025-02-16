@@ -17,6 +17,7 @@ mod to_prdrv_bal_mask;
 mod vb_ov_th;
 mod vb_sum_max_diff_th;
 mod vb_uv_th;
+mod vcell;
 mod vcell_1_faults;
 mod vcell_bal_uv_delta_th;
 mod vcell_ov_th;
@@ -109,4 +110,14 @@ pub enum Registers {
     Nvm1 = 0x1F,
     /// NVM2 Register
     Nvm2 = 0x20,
+    /// VCELL1 Register
+    VCell1 = 0x21,
+    /// VCELL2 Register
+    VCell2 = 0x22,
+    /// VCELL3 Register
+    VCell3 = 0x23,
+    /// VCELL4 Register
+    VCell4 = 0x24,
+    /// VCELL5 Register
+    VCell5 = 0x25,
 }

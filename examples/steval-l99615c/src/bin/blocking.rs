@@ -136,6 +136,12 @@ fn main() -> ! {
     let crc_faults = l9961.read_vcell_1_faults().unwrap();
     defmt::info!("{}", crc_faults);
 
+    // Read the cell voltages
+
+    for i in 1..=5 {
+        let cell_voltage = l9961.read_vcell(i).unwrap();
+        defmt::info!("{}", cell_voltage);
+    }
 
     functions::exit()
 }

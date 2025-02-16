@@ -1,7 +1,7 @@
 use super::{
-    Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, CurrMsk, DevAddr,
+    vcell::VCell, Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, CurrMsk, DevAddr,
     OvCThresholds, PersistentOvCThresholds, Registers, SCThreshold, ToFaultnMsk, ToFuseRstMask,
-    ToPrdrvBalMask, VBOvTh, VBSumMaxDiffTh, VBUvTh, VCell1, VCellBalUvDeltaTh, VCellOvTh,
+    ToPrdrvBalMask, VBOvTh, VBSumMaxDiffTh, VBUvTh, VCell1Faults, VCellBalUvDeltaTh, VCellOvTh,
     VCellSevereDeltaThrs, VCellUvTh, VNTCOTTh, VNTCSevereOTTh, VNTCUTTh,
 };
 
@@ -371,5 +371,18 @@ where
     /// Read the faults from the VCell 1 register
     pub fn read_vcell_1_faults(&mut self) -> Result<VCell1Faults, I2C::Error> {
         Ok(self.read_register(Registers::VCell1)?.into())
+    }
+
+    /// Read one of the 5 VCell registers (1 indexed per device)
+    pub fn read_vcell(&mut self, cell: u8) -> Result<VCell, I2C::Error> {
+        let measurement = match cell {
+            1 => self.read_register(Registers::VCell1)?,
+            2 => self.read_register(Registers::VCell2)?,
+            3 => self.read_register(Registers::VCell3)?,
+            4 => self.read_register(Registers::VCell4)?,
+            5 => self.read_register(Registers::VCell5)?,
+            _ => panic!("Attempt to read non-existent cell"),
+        };
+        Ok(VCell::new(cell, measurement))
     }
 }
