@@ -25,7 +25,7 @@ cortex-m-semihosting = "0.5"
 defmt = "0.3"
 defmt-rtt = "0.4"
 embedded-hal = "1"
-l9961 = { path = "../../", features = ["blocking","defmt"] }
+l9961 = { path = "../../", features = ["defmt"] }
 panic-probe = { version = "0.3", features = ["print-defmt"] }
 
 [dev-dependencies]

@@ -15,13 +15,13 @@ pub struct L9961<I2C> {
     address: u8,
 }
 
-#[cfg(feature = "blocking")]
+#[cfg(not(feature = "async"))]
 impl<I2C> L9961<I2C>
 where
     I2C: embedded_hal::i2c::I2c,
 {
     /// Create a new instance of the ST L9961 driver for the given blocking I2C bus and address.
-    pub fn new_blocking(i2c: I2C, address: u8) -> Self {
+    pub fn new(i2c: I2C, address: u8) -> Self {
         Self { i2c, address }
     }
 }
@@ -29,7 +29,7 @@ where
 #[cfg(feature = "async")]
 impl<I2C: embedded_hal_async::i2c::I2c> L9961<I2C> {
     /// Create a new instance of the ST L9961 driver for the given async I2C bus and address.
-    pub fn new_async(i2c: I2C, address: u8) -> Self {
+    pub fn new(i2c: I2C, address: u8) -> Self {
         Self { i2c, address }
     }
 }

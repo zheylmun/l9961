@@ -22,7 +22,7 @@ fn main() -> ! {
         .I2C2
         .i2c(sda, scl, Config::with_timing(0x2020_151b), &mut rcc);
 
-    let mut l9961 = L9961::new_blocking(i2c, 0x49);
+    let mut l9961 = L9961::new(i2c, 0x49);
 
     // Read the chip ID
     let id = l9961.read_chip_id().unwrap();
@@ -111,5 +111,20 @@ fn main() -> ! {
     defmt::info!("{}", to_fuse_rst_mask);
     let to_faultn_mask = l9961.read_to_faultn_msk().unwrap();
     defmt::info!("{}", to_faultn_mask);
+
+    let manufacturer_name_msb = l9961.read_manufacturer_name_msb().unwrap();
+    let manufacturer_name_lsb = l9961.read_manufacturer_name_lsb().unwrap();
+    let manufacturer_name = (manufacturer_name_msb as u32) << 16 | manufacturer_name_lsb as u32;
+    defmt::info!("Manufacturer Name: {:#010x}", manufacturer_name);
+
+    let manufacturing_date = l9961.read_manufacturing_date().unwrap();
+    defmt::info!("Manufacturing Date: {}", manufacturing_date);
+
+    let first_usage_date = l9961.read_first_usage_date().unwrap();
+    defmt::info!("First Usage Date: {}", first_usage_date);
+
+    let serial_number_msb = l9961.read_serial_number_msb().unwrap();
+    defmt::info!("Serial Number MSB: {}", serial_number_msb);
+
     functions::exit()
 }

@@ -25,7 +25,7 @@ mod vntc_ot_th;
 mod vntc_severe_ot_th;
 mod vntc_ut_th;
 
-#[cfg(feature = "blocking")]
+#[cfg(not(feature = "async"))]
 mod blocking;
 
 pub use self::{
