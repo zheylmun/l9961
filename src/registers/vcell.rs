@@ -6,16 +6,23 @@ use core::ops::Deref;
 pub struct VCell(u16);
 
 impl VCell {
+    /// Create a new VCell register value
     #[inline]
-    pub const fn new(cell: u8, measurement: u16) -> Self {
+    pub(super) fn new(cell: u8, measurement: u16) -> Self {
         debug_assert!(cell > 0 && cell < 6);
         VCell(((cell as u16) << 12) | (measurement & 0x0FFF))
     }
 
-    /// Get the Programmable cell overvoltage fault threshold (8bit)
+    /// Get the cell voltage measurement code
     #[inline]
     pub const fn get_vcell_meas(&self) -> u16 {
         (self.0 & 0x0FFF) as u16
+    }
+
+    /// Get the cell voltage measurement in mV
+    #[inline]
+    pub const fn get_vcell_meas_mv(&self) -> u16 {
+        122 * self.get_vcell_meas() / 100
     }
 
     /// Get the cell number
@@ -38,10 +45,10 @@ impl defmt::Format for VCell {
         let cell = self.get_cell();
         defmt::write!(
             f,
-            "VCELL{}: {{\n  VCELL{}_MEAS: {},\n}}",
+            "VCELL{}: {{\n  VCELL{} : {}mv,\n}}",
             cell,
             cell,
-            self.get_vcell_meas()
+            self.get_vcell_meas_mv()
         )
     }
 }
