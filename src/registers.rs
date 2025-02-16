@@ -88,4 +88,20 @@ pub enum Registers {
     ToFaultnMsk = 0x15,
     /// Configuration register for the CURR_MASK
     CurrMsk = 0x16,
+    /// Manufacturer Name MSB Register
+    ManufacturerNameMsb = 0x17,
+    /// Manufacturer Name LSB Register
+    ManufacturerNameLsb = 0x18,
+    /// Manufacturing Date Register
+    ManufacturingDate = 0x19,
+    /// First usage date register
+    FirstUsageDate = 0x1A,
+    /// Serial Number MSB Register
+    SerialNumberMsb = 0x1B,
+    /// Serial Number LSB Register
+    SerialNumberLsb = 0x1C,
+    /// Device Name MSB Register
+    DeviceNameMsb = 0x1D,
+    /// Device Name LSB Register
+    DeviceNameLsb = 0x1E,
 }

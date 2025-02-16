@@ -287,4 +287,89 @@ where
     pub fn write_curr_msk(&mut self, new_config: CurrMsk) -> Result<(), I2C::Error> {
         self.write_register(Registers::CurrMsk, new_config.bits())
     }
+
+    /// Read the Manufacturer Name msb
+    pub fn read_manufacturer_name_msb(&mut self) -> Result<u16, I2C::Error> {
+        Ok(self.read_register(Registers::ManufacturerNameMsb)?)
+    }
+
+    /// Write the Manufacturer Name msb
+    pub fn write_manufacturer_name_msb(&mut self, value: u16) -> Result<(), I2C::Error> {
+        self.write_register(Registers::ManufacturerNameMsb, value)
+    }
+
+    /// Read the Manufacturer Name Lsb
+    pub fn read_manufacturer_name_lsb(&mut self) -> Result<u16, I2C::Error> {
+        Ok(self.read_register(Registers::ManufacturerNameLsb)?)
+    }
+
+    /// Write the Manufacturer Name lsb
+    pub fn write_manufacturer_name_lsb(&mut self, value: u16) -> Result<(), I2C::Error> {
+        self.write_register(Registers::ManufacturerNameLsb, value)
+    }
+
+    /// Read the Manufacturing Date Register
+    pub fn read_manufacturing_date(&mut self) -> Result<u16, I2C::Error> {
+        Ok(self.read_register(Registers::ManufacturingDate)?)
+    }
+
+    /// Write the Manufacturing date register
+    pub fn write_manufacturing_date(&mut self, value: u16) -> Result<(), I2C::Error> {
+        self.write_register(Registers::ManufacturingDate, value)
+    }
+
+    /// Read the First Usage Date Register
+    pub fn read_first_usage_date(&mut self) -> Result<u16, I2C::Error> {
+        Ok(self.read_register(Registers::FirstUsageDate)?)
+    }
+
+    /// Write the First Usage Date Register
+    pub fn write_first_usage_date(&mut self, value: u16) -> Result<(), I2C::Error> {
+        self.write_register(Registers::FirstUsageDate, value)
+    }
+
+    /// Read the Serial Number MSB Register
+    pub fn read_serial_number_msb(&mut self) -> Result<u16, I2C::Error> {
+        Ok(self.read_register(Registers::SerialNumberMsb)?)
+    }
+
+    /// Write the Serial Number MSB Register
+    pub fn write_serial_number_msb(&mut self, value: u16) -> Result<(), I2C::Error> {
+        self.write_register(Registers::SerialNumberMsb, value)
+    }
+
+    /// Read the Serial Number LSB Register
+    pub fn read_serial_number_lsb(&mut self) -> Result<u16, I2C::Error> {
+        Ok(self.read_register(Registers::SerialNumberLsb)?)
+    }
+
+    /// Write the Serial Number LSB Register
+    pub fn write_serial_number_lsb(&mut self, value: u16) -> Result<(), I2C::Error> {
+        self.write_register(Registers::SerialNumberLsb, value)
+    }
+
+    /// Read the device name MSB register
+    pub fn read_device_name_msb(&mut self) -> Result<u16, I2C::Error> {
+        Ok(self.read_register(Registers::DeviceNameMsb)?)
+    }
+
+    /// Write the device name MSB register
+    pub fn write_device_name_msb(&mut self, value: u16) -> Result<(), I2C::Error> {
+        self.write_register(Registers::DeviceNameMsb, value)
+    }
+
+    /// Read the device name LSB register
+    pub fn read_device_name_lsb(&mut self) -> Result<u16, I2C::Error> {
+        Ok(self.read_register(Registers::DeviceNameLsb)?)
+    }
+
+    /// Write the device name LSB register
+    pub fn write_device_name_lsb(&mut self, value: u16) -> Result<(), I2C::Error> {
+        self.write_register(Registers::DeviceNameLsb, value)
+    }
+
+    /// Read the VCell 1 register
+    pub fn read_vcell_1(&mut self) -> Result<u16, I2C::Error> {
+        Ok(self.read_register(Registers::VCell1)?)
+    }
 }
