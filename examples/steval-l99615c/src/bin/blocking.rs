@@ -24,6 +24,8 @@ fn main() -> ! {
 
     let mut l9961 = L9961::new(i2c, 0x49);
 
+    l9961.download_configuration_from_nvm().unwrap();
+
     // Read the chip ID
     let id = l9961.read_chip_id().unwrap();
     defmt::info!("{}", id);

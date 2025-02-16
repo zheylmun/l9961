@@ -1,5 +1,5 @@
 //! # Registers
-//! Definitions for the registers of the L9961 chip
+//! Definitions and read/write functions for the registers of the L9961 chip
 
 mod cfg1_filters_cycles;
 mod cfg2_enables;
@@ -104,4 +104,8 @@ pub enum Registers {
     DeviceNameMsb = 0x1D,
     /// Device Name LSB Register
     DeviceNameLsb = 0x1E,
+    /// NVM1 Register
+    Nvm1 = 0x1F,
+    /// NVM2 Register
+    Nvm2 = 0x20,
 }

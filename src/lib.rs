@@ -5,6 +5,7 @@
 #![deny(warnings)]
 #![no_std]
 
+pub mod commands;
 pub mod registers;
 
 /// L9961 Industrial BMS Driver
