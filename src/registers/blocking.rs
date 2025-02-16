@@ -1,7 +1,7 @@
 use super::{
     Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, CurrMsk, DevAddr,
     OvCThresholds, PersistentOvCThresholds, Registers, SCThreshold, ToFaultnMsk, ToFuseRstMask,
-    ToPrdrvBalMask, VBOvTh, VBSumMaxDiffTh, VBUvTh, VCellBalUvDeltaTh, VCellOvTh,
+    ToPrdrvBalMask, VBOvTh, VBSumMaxDiffTh, VBUvTh, VCell1, VCellBalUvDeltaTh, VCellOvTh,
     VCellSevereDeltaThrs, VCellUvTh, VNTCOTTh, VNTCSevereOTTh, VNTCUTTh,
 };
 
@@ -368,8 +368,8 @@ where
         self.write_register(Registers::DeviceNameLsb, value)
     }
 
-    /// Read the VCell 1 register
-    pub fn read_vcell_1(&mut self) -> Result<u16, I2C::Error> {
-        Ok(self.read_register(Registers::VCell1)?)
+    /// Read the faults from the VCell 1 register
+    pub fn read_vcell_1_faults(&mut self) -> Result<VCell1Faults, I2C::Error> {
+        Ok(self.read_register(Registers::VCell1)?.into())
     }
 }

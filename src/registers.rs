@@ -17,6 +17,7 @@ mod to_prdrv_bal_mask;
 mod vb_ov_th;
 mod vb_sum_max_diff_th;
 mod vb_uv_th;
+mod vcell_1_faults;
 mod vcell_bal_uv_delta_th;
 mod vcell_ov_th;
 mod vcell_severe_delta_thrs;
@@ -34,9 +35,9 @@ pub use self::{
     ovc_thresholds::OvCThresholds, persistent_ovc_thresholds::PersistentOvCThresholds,
     sc_threshold::SCThreshold, to_faultn_msk::ToFaultnMsk, to_fuse_rst_msk::ToFuseRstMask,
     to_prdrv_bal_mask::ToPrdrvBalMask, vb_ov_th::VBOvTh, vb_sum_max_diff_th::VBSumMaxDiffTh,
-    vb_uv_th::VBUvTh, vcell_bal_uv_delta_th::VCellBalUvDeltaTh, vcell_ov_th::VCellOvTh,
-    vcell_severe_delta_thrs::VCellSevereDeltaThrs, vcell_uv_th::VCellUvTh, vntc_ot_th::VNTCOTTh,
-    vntc_severe_ot_th::VNTCSevereOTTh, vntc_ut_th::VNTCUTTh,
+    vb_uv_th::VBUvTh, vcell_1_faults::VCell1Faults, vcell_bal_uv_delta_th::VCellBalUvDeltaTh,
+    vcell_ov_th::VCellOvTh, vcell_severe_delta_thrs::VCellSevereDeltaThrs, vcell_uv_th::VCellUvTh,
+    vntc_ot_th::VNTCOTTh, vntc_severe_ot_th::VNTCSevereOTTh, vntc_ut_th::VNTCUTTh,
 };
 
 /// The registers of the L9961 chip represented as their addresses

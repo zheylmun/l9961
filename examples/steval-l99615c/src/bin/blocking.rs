@@ -126,7 +126,16 @@ fn main() -> ! {
     defmt::info!("First Usage Date: {}", first_usage_date);
 
     let serial_number_msb = l9961.read_serial_number_msb().unwrap();
-    defmt::info!("Serial Number MSB: {}", serial_number_msb);
+    let serial_number_lsb = l9961.read_serial_number_lsb().unwrap();
+    defmt::info!(
+        "Serial Number: {}",
+        ((serial_number_msb as u32) << 16) | serial_number_lsb as u32
+    );
+
+    // Check for NVM CRC Faults
+    let crc_faults = l9961.read_vcell_1_faults().unwrap();
+    defmt::info!("{}", crc_faults);
+
 
     functions::exit()
 }
