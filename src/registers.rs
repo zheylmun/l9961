@@ -9,6 +9,7 @@ mod chip_id;
 mod csa_gain_factor;
 mod curr_msk;
 mod dev_addr;
+mod diag_curr;
 mod diag_ov_ot_ut;
 mod diag_uv;
 mod die_temp;
@@ -40,8 +41,8 @@ mod blocking;
 pub use self::{
     cc_acc_lsb_cntr::CCAccLsbCntr, cfg1_filters_cycles::Cfg1FiltersCycles,
     cfg2_enables::Cfg2Enables, cfg3_act::Cfg3Act, chip_id::ChipID, csa_gain_factor::CsaGainFactor,
-    curr_msk::CurrMsk, dev_addr::DevAddr, diag_ov_ot_ut::DiagOvOtUt, diag_uv::DiagUv,
-    die_temp::DieTemp, ntc_gpio::NtcGpio, ovc_thresholds::OvCThresholds,
+    curr_msk::CurrMsk, dev_addr::DevAddr, diag_curr::DiagCurr, diag_ov_ot_ut::DiagOvOtUt,
+    diag_uv::DiagUv, die_temp::DieTemp, ntc_gpio::NtcGpio, ovc_thresholds::OvCThresholds,
     persistent_ovc_thresholds::PersistentOvCThresholds, sc_threshold::SCThreshold,
     to_faultn_msk::ToFaultnMsk, to_fuse_rst_msk::ToFuseRstMask, to_prdrv_bal_mask::ToPrdrvBalMask,
     vb::VB, vb_ov_th::VBOvTh, vb_sum_max_diff_th::VBSumMaxDiffTh, vb_uv_th::VBUvTh, vcell::VCell,
@@ -138,13 +139,15 @@ pub enum Registers {
     /// Die Temp Register
     DieTemp = 0x29,
     /// DIAG_OV_OT_UT Register
-    DiagOvOtUt,
+    DiagOvOtUt = 0x2A,
     /// DIAG_UV Register
-    DiagUv,
+    DiagUv = 0x2B,
     /// CC_INST_MEAS Register
-    CCInstMeas,
+    CCInstMeas = 0x2C,
     /// CC_ACC_MSB Register
-    CCAccMsb,
+    CCAccMsb = 0x2D,
     /// CC_ACC_LSB_CNTR Register
-    CCAccLsbCntr,
+    CCAccLsbCntr = 0x2E,
+    /// DIAG_CURR Register
+    DiagCurr = 0x2F,
 }

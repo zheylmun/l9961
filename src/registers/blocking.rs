@@ -1,7 +1,7 @@
 use super::{
-    Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, CurrMsk, DevAddr, DiagOvOtUt,
-    DiagUv, DieTemp, NtcGpio, OvCThresholds, PersistentOvCThresholds, Registers, SCThreshold,
-    ToFaultnMsk, ToFuseRstMask, ToPrdrvBalMask, VBOvTh, VBSumMaxDiffTh, VBUvTh, VCell,
+    Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, CurrMsk, DevAddr, DiagCurr,
+    DiagOvOtUt, DiagUv, DieTemp, NtcGpio, OvCThresholds, PersistentOvCThresholds, Registers,
+    SCThreshold, ToFaultnMsk, ToFuseRstMask, ToPrdrvBalMask, VBOvTh, VBSumMaxDiffTh, VBUvTh, VCell,
     VCell1Faults, VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs, VCellSum, VCellUvTh,
     VNTCOTTh, VNTCSevereOTTh, VNTCUTTh, VB,
 };
@@ -449,5 +449,17 @@ where
     /// Read the CC_ACC_LSB_CNTR register
     pub fn read_cc_acc_lsb_cntr(&mut self) -> Result<u16, I2C::Error> {
         Ok(self.read_register(Registers::CCAccLsbCntr)?)
+    }
+
+    /// Read the DIAG_CURR register
+    pub fn read_diag_curr(&mut self) -> Result<DiagCurr, I2C::Error> {
+        Ok(DiagCurr::from_bits_truncate(
+            self.read_register(Registers::DiagCurr)?,
+        ))
+    }
+
+    /// Write to the DIAG_CURR register
+    pub fn write_diag_curr(&mut self, new_config: DiagCurr) -> Result<(), I2C::Error> {
+        self.write_register(Registers::DiagCurr, new_config.bits())
     }
 }
