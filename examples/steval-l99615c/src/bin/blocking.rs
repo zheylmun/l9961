@@ -158,5 +158,20 @@ fn main() -> ! {
     let diag_ot_ov_ut = l9961.read_diag_ov_ot_ut().unwrap();
     defmt::info!("{}", diag_ot_ov_ut);
 
+    let diag_uv = l9961.read_diag_uv().unwrap();
+    defmt::info!("{}", diag_uv);
+
+    let cc_inst_meas = l9961.read_cc_inst_meas().unwrap();
+    defmt::info!("{}", cc_inst_meas);
+
+    let cc_acc_msb = l9961.read_cc_acc_msb().unwrap();
+    let cc_acc_lsb = l9961.read_cc_acc_lsb_cntr().unwrap();
+    let cc_acc = (cc_acc_msb as u32) << 8 | cc_acc_lsb.get_cc_acc_lsb() as u32;
+    defmt::info!("CC_ACC: {}", cc_acc);
+    defmt::info!("CC_ACC_SAMPLE_CNT: {}", cc_acc_lsb.get_cc_sample_cnt());
+
+    let diag_curr = l9961.read_diag_curr().unwrap();
+    defmt::info!("{}", diag_curr);
+
     functions::exit()
 }
