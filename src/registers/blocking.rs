@@ -1,9 +1,9 @@
 use super::{
-    ntc_gpio::NtcGpio, vb::VB, vcell::VCell, vcellsum::VCellSum, Cfg1FiltersCycles, Cfg2Enables,
-    Cfg3Act, ChipID, CsaGainFactor, CurrMsk, DevAddr, DiagOvOtUt, DieTemp, OvCThresholds,
-    PersistentOvCThresholds, Registers, SCThreshold, ToFaultnMsk, ToFuseRstMask, ToPrdrvBalMask,
-    VBOvTh, VBSumMaxDiffTh, VBUvTh, VCell1Faults, VCellBalUvDeltaTh, VCellOvTh,
-    VCellSevereDeltaThrs, VCellUvTh, VNTCOTTh, VNTCSevereOTTh, VNTCUTTh,
+    Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID, CsaGainFactor, CurrMsk, DevAddr, DiagOvOtUt,
+    DiagUv, DieTemp, NtcGpio, OvCThresholds, PersistentOvCThresholds, Registers, SCThreshold,
+    ToFaultnMsk, ToFuseRstMask, ToPrdrvBalMask, VBOvTh, VBSumMaxDiffTh, VBUvTh, VCell,
+    VCell1Faults, VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs, VCellSum, VCellUvTh,
+    VNTCOTTh, VNTCSevereOTTh, VNTCUTTh, VB,
 };
 
 use crate::L9961;
@@ -407,7 +407,7 @@ where
         Ok(self.read_register(Registers::DieTemp)?.into())
     }
 
-    /// Reat the DIAG_OV_OT_UT register
+    /// Read the DIAG_OV_OT_UT register
     pub fn read_diag_ov_ot_ut(&mut self) -> Result<DiagOvOtUt, I2C::Error> {
         Ok(DiagOvOtUt::from_bits_truncate(
             self.read_register(Registers::DiagOvOtUt)?,
@@ -417,5 +417,17 @@ where
     /// Write a new value to the DIAG_OV_OT_UT register
     pub fn write_diag_ov_ot_ut(&mut self, new_config: DiagOvOtUt) -> Result<(), I2C::Error> {
         self.write_register(Registers::DiagOvOtUt, new_config.bits())
+    }
+
+    /// Read the DIAG_UV register
+    pub fn read_diag_uv(&mut self) -> Result<DiagUv, I2C::Error> {
+        Ok(DiagUv::from_bits_truncate(
+            self.read_register(Registers::DiagUv)?,
+        ))
+    }
+
+    /// Write to the DIAG_UV register
+    pub fn write_diag_uv(&mut self, new_config: DiagUv) -> Result<(), I2C::Error> {
+        self.write_register(Registers::DiagUv, new_config.bits())
     }
 }

@@ -9,6 +9,7 @@ mod csa_gain_factor;
 mod curr_msk;
 mod dev_addr;
 mod diag_ov_ot_ut;
+mod diag_uv;
 mod die_temp;
 mod ntc_gpio;
 mod ovc_thresholds;
@@ -38,13 +39,14 @@ mod blocking;
 pub use self::{
     cfg1_filters_cycles::Cfg1FiltersCycles, cfg2_enables::Cfg2Enables, cfg3_act::Cfg3Act,
     chip_id::ChipID, csa_gain_factor::CsaGainFactor, curr_msk::CurrMsk, dev_addr::DevAddr,
-    diag_ov_ot_ut::DiagOvOtUt, die_temp::DieTemp, ntc_gpio::NtcGpio, ovc_thresholds::OvCThresholds,
-    persistent_ovc_thresholds::PersistentOvCThresholds, sc_threshold::SCThreshold,
-    to_faultn_msk::ToFaultnMsk, to_fuse_rst_msk::ToFuseRstMask, to_prdrv_bal_mask::ToPrdrvBalMask,
-    vb::VB, vb_ov_th::VBOvTh, vb_sum_max_diff_th::VBSumMaxDiffTh, vb_uv_th::VBUvTh,
+    diag_ov_ot_ut::DiagOvOtUt, diag_uv::DiagUv, die_temp::DieTemp, ntc_gpio::NtcGpio,
+    ovc_thresholds::OvCThresholds, persistent_ovc_thresholds::PersistentOvCThresholds,
+    sc_threshold::SCThreshold, to_faultn_msk::ToFaultnMsk, to_fuse_rst_msk::ToFuseRstMask,
+    to_prdrv_bal_mask::ToPrdrvBalMask, vb::VB, vb_ov_th::VBOvTh,
+    vb_sum_max_diff_th::VBSumMaxDiffTh, vb_uv_th::VBUvTh, vcell::VCell,
     vcell_1_faults::VCell1Faults, vcell_bal_uv_delta_th::VCellBalUvDeltaTh, vcell_ov_th::VCellOvTh,
-    vcell_severe_delta_thrs::VCellSevereDeltaThrs, vcell_uv_th::VCellUvTh, vntc_ot_th::VNTCOTTh,
-    vntc_severe_ot_th::VNTCSevereOTTh, vntc_ut_th::VNTCUTTh,
+    vcell_severe_delta_thrs::VCellSevereDeltaThrs, vcell_uv_th::VCellUvTh, vcellsum::VCellSum,
+    vntc_ot_th::VNTCOTTh, vntc_severe_ot_th::VNTCSevereOTTh, vntc_ut_th::VNTCUTTh,
 };
 
 /// The registers of the L9961 chip represented as their addresses
@@ -136,4 +138,6 @@ pub enum Registers {
     DieTemp = 0x29,
     /// DIAG_OV_OT_UT Register
     DiagOvOtUt,
+    /// DIAG_UV Register
+    DiagUv,
 }
