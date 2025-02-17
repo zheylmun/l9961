@@ -140,4 +140,6 @@ pub enum Registers {
     DiagOvOtUt,
     /// DIAG_UV Register
     DiagUv,
+    /// CC_INST_MEAS Register
+    CCInstMeas,
 }

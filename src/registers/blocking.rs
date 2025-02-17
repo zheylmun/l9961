@@ -430,4 +430,9 @@ where
     pub fn write_diag_uv(&mut self, new_config: DiagUv) -> Result<(), I2C::Error> {
         self.write_register(Registers::DiagUv, new_config.bits())
     }
+
+    /// Read the CC_INST_MEAS register
+    pub fn read_cc_inst_meas(&mut self) -> Result<u16, I2C::Error> {
+        Ok(self.read_register(Registers::CCInstMeas)?)
+    }
 }
