@@ -1,5 +1,5 @@
 use super::{
-    vcell::VCell, vcellsum::VCellSum, Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID,
+    vb::VB, vcell::VCell, vcellsum::VCellSum, Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID,
     CsaGainFactor, CurrMsk, DevAddr, OvCThresholds, PersistentOvCThresholds, Registers,
     SCThreshold, ToFaultnMsk, ToFuseRstMask, ToPrdrvBalMask, VBOvTh, VBSumMaxDiffTh, VBUvTh,
     VCell1Faults, VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs, VCellUvTh, VNTCOTTh,
@@ -390,5 +390,10 @@ where
     /// Read the VCellSum measurement register
     pub fn read_vcellsum(&mut self) -> Result<VCellSum, I2C::Error> {
         Ok(self.read_register(Registers::VCellSum)?.into())
+    }
+
+    /// Read the VB measurement register
+    pub fn read_vb(&mut self) -> Result<VB, I2C::Error> {
+        Ok(self.read_register(Registers::VB)?.into())
     }
 }

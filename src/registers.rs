@@ -14,6 +14,7 @@ mod sc_threshold;
 mod to_faultn_msk;
 mod to_fuse_rst_msk;
 mod to_prdrv_bal_mask;
+mod vb;
 mod vb_ov_th;
 mod vb_sum_max_diff_th;
 mod vb_uv_th;
@@ -123,4 +124,6 @@ pub enum Registers {
     VCell5 = 0x25,
     /// VCELLSUM Register
     VCellSum = 0x26,
+    /// VB Register
+    VB = 0x27,
 }

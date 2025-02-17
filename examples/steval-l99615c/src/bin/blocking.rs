@@ -145,6 +145,7 @@ fn main() -> ! {
 
     let vcell_sum = l9961.read_vcellsum().unwrap();
     defmt::info!("{}", vcell_sum);
-
+    let vb = l9961.read_vb().unwrap();
+    defmt::info!("{}", vb);
     functions::exit()
 }
