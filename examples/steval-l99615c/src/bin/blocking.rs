@@ -24,7 +24,7 @@ fn main() -> ! {
 
     let mut l9961 = L9961::new(i2c, 0x49);
 
-    l9961.download_configuration_from_nvm().unwrap();
+    //l9961.download_configuration_from_nvm().unwrap();
 
     // Read the chip ID
     let id = l9961.read_chip_id().unwrap();
@@ -151,5 +151,9 @@ fn main() -> ! {
 
     let ntc_gpio = l9961.read_ntc_gpio().unwrap();
     defmt::info!("{}", ntc_gpio);
+
+    let die_temp = l9961.read_die_temp().unwrap();
+    defmt::info!("{}", die_temp);
+
     functions::exit()
 }

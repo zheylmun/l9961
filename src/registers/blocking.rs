@@ -1,9 +1,9 @@
 use super::{
     ntc_gpio::NtcGpio, vb::VB, vcell::VCell, vcellsum::VCellSum, Cfg1FiltersCycles, Cfg2Enables,
-    Cfg3Act, ChipID, CsaGainFactor, CurrMsk, DevAddr, OvCThresholds, PersistentOvCThresholds,
-    Registers, SCThreshold, ToFaultnMsk, ToFuseRstMask, ToPrdrvBalMask, VBOvTh, VBSumMaxDiffTh,
-    VBUvTh, VCell1Faults, VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs, VCellUvTh, VNTCOTTh,
-    VNTCSevereOTTh, VNTCUTTh,
+    Cfg3Act, ChipID, CsaGainFactor, CurrMsk, DevAddr, DieTemp, OvCThresholds,
+    PersistentOvCThresholds, Registers, SCThreshold, ToFaultnMsk, ToFuseRstMask, ToPrdrvBalMask,
+    VBOvTh, VBSumMaxDiffTh, VBUvTh, VCell1Faults, VCellBalUvDeltaTh, VCellOvTh,
+    VCellSevereDeltaThrs, VCellUvTh, VNTCOTTh, VNTCSevereOTTh, VNTCUTTh,
 };
 
 use crate::L9961;
@@ -400,5 +400,10 @@ where
     /// Read the NTC_GPIO register
     pub fn read_ntc_gpio(&mut self) -> Result<NtcGpio, I2C::Error> {
         Ok(self.read_register(Registers::NtcGpio)?.into())
+    }
+
+    /// Read the Die Temperature register
+    pub fn read_die_temp(&mut self) -> Result<DieTemp, I2C::Error> {
+        Ok(self.read_register(Registers::DieTemp)?.into())
     }
 }

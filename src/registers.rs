@@ -8,6 +8,7 @@ mod chip_id;
 mod csa_gain_factor;
 mod curr_msk;
 mod dev_addr;
+mod die_temp;
 mod ntc_gpio;
 mod ovc_thresholds;
 mod persistent_ovc_thresholds;
@@ -36,7 +37,7 @@ mod blocking;
 pub use self::{
     cfg1_filters_cycles::Cfg1FiltersCycles, cfg2_enables::Cfg2Enables, cfg3_act::Cfg3Act,
     chip_id::ChipID, csa_gain_factor::CsaGainFactor, curr_msk::CurrMsk, dev_addr::DevAddr,
-    ovc_thresholds::OvCThresholds, persistent_ovc_thresholds::PersistentOvCThresholds,
+    diag_ov_ot_ut::DiagOvOtUt, die_temp::DieTemp, ntc_gpio::NtcGpio, ovc_thresholds::OvCThresholds,
     sc_threshold::SCThreshold, to_faultn_msk::ToFaultnMsk, to_fuse_rst_msk::ToFuseRstMask,
     to_prdrv_bal_mask::ToPrdrvBalMask, vb_ov_th::VBOvTh, vb_sum_max_diff_th::VBSumMaxDiffTh,
     vb_uv_th::VBUvTh, vcell_1_faults::VCell1Faults, vcell_bal_uv_delta_th::VCellBalUvDeltaTh,
@@ -129,4 +130,6 @@ pub enum Registers {
     VB = 0x27,
     /// NTC_GPIO Register
     NtcGpio = 0x28,
+    /// Die Temp Register
+    DieTemp = 0x29,
 }
