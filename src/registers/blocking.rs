@@ -435,4 +435,19 @@ where
     pub fn read_cc_inst_meas(&mut self) -> Result<u16, I2C::Error> {
         Ok(self.read_register(Registers::CCInstMeas)?)
     }
+
+    /// Read the CC_ACC_MSB register
+    pub fn read_cc_acc_msb(&mut self) -> Result<u16, I2C::Error> {
+        Ok(self.read_register(Registers::CCAccMsb)?)
+    }
+
+    /// Write the CC_ACC_MSB register
+    pub fn write_cc_acc_msb(&mut self, value: u16) -> Result<(), I2C::Error> {
+        self.write_register(Registers::CCAccMsb, value)
+    }
+
+    /// Read the CC_ACC_LSB_CNTR register
+    pub fn read_cc_acc_lsb_cntr(&mut self) -> Result<u16, I2C::Error> {
+        Ok(self.read_register(Registers::CCAccLsbCntr)?)
+    }
 }
