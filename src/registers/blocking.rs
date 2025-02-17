@@ -1,6 +1,6 @@
 use super::{
     ntc_gpio::NtcGpio, vb::VB, vcell::VCell, vcellsum::VCellSum, Cfg1FiltersCycles, Cfg2Enables,
-    Cfg3Act, ChipID, CsaGainFactor, CurrMsk, DevAddr, DieTemp, OvCThresholds,
+    Cfg3Act, ChipID, CsaGainFactor, CurrMsk, DevAddr, DiagOvOtUt, DieTemp, OvCThresholds,
     PersistentOvCThresholds, Registers, SCThreshold, ToFaultnMsk, ToFuseRstMask, ToPrdrvBalMask,
     VBOvTh, VBSumMaxDiffTh, VBUvTh, VCell1Faults, VCellBalUvDeltaTh, VCellOvTh,
     VCellSevereDeltaThrs, VCellUvTh, VNTCOTTh, VNTCSevereOTTh, VNTCUTTh,
@@ -405,5 +405,17 @@ where
     /// Read the Die Temperature register
     pub fn read_die_temp(&mut self) -> Result<DieTemp, I2C::Error> {
         Ok(self.read_register(Registers::DieTemp)?.into())
+    }
+
+    /// Reat the DIAG_OV_OT_UT register
+    pub fn read_diag_ov_ot_ut(&mut self) -> Result<DiagOvOtUt, I2C::Error> {
+        Ok(DiagOvOtUt::from_bits_truncate(
+            self.read_register(Registers::DiagOvOtUt)?,
+        ))
+    }
+
+    /// Write a new value to the DIAG_OV_OT_UT register
+    pub fn write_diag_ov_ot_ut(&mut self, new_config: DiagOvOtUt) -> Result<(), I2C::Error> {
+        self.write_register(Registers::DiagOvOtUt, new_config.bits())
     }
 }

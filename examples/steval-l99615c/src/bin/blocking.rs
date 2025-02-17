@@ -155,5 +155,8 @@ fn main() -> ! {
     let die_temp = l9961.read_die_temp().unwrap();
     defmt::info!("{}", die_temp);
 
+    let diag_ot_ov_ut = l9961.read_diag_ov_ot_ut().unwrap();
+    defmt::info!("{}", diag_ot_ov_ut);
+
     functions::exit()
 }
