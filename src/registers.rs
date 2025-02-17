@@ -8,6 +8,7 @@ mod chip_id;
 mod csa_gain_factor;
 mod curr_msk;
 mod dev_addr;
+mod ntc_gpio;
 mod ovc_thresholds;
 mod persistent_ovc_thresholds;
 mod sc_threshold;
@@ -126,4 +127,6 @@ pub enum Registers {
     VCellSum = 0x26,
     /// VB Register
     VB = 0x27,
+    /// NTC_GPIO Register
+    NtcGpio = 0x28,
 }

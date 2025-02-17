@@ -1,8 +1,8 @@
 use super::{
-    vb::VB, vcell::VCell, vcellsum::VCellSum, Cfg1FiltersCycles, Cfg2Enables, Cfg3Act, ChipID,
-    CsaGainFactor, CurrMsk, DevAddr, OvCThresholds, PersistentOvCThresholds, Registers,
-    SCThreshold, ToFaultnMsk, ToFuseRstMask, ToPrdrvBalMask, VBOvTh, VBSumMaxDiffTh, VBUvTh,
-    VCell1Faults, VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs, VCellUvTh, VNTCOTTh,
+    ntc_gpio::NtcGpio, vb::VB, vcell::VCell, vcellsum::VCellSum, Cfg1FiltersCycles, Cfg2Enables,
+    Cfg3Act, ChipID, CsaGainFactor, CurrMsk, DevAddr, OvCThresholds, PersistentOvCThresholds,
+    Registers, SCThreshold, ToFaultnMsk, ToFuseRstMask, ToPrdrvBalMask, VBOvTh, VBSumMaxDiffTh,
+    VBUvTh, VCell1Faults, VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs, VCellUvTh, VNTCOTTh,
     VNTCSevereOTTh, VNTCUTTh,
 };
 
@@ -395,5 +395,10 @@ where
     /// Read the VB measurement register
     pub fn read_vb(&mut self) -> Result<VB, I2C::Error> {
         Ok(self.read_register(Registers::VB)?.into())
+    }
+
+    /// Read the NTC_GPIO register
+    pub fn read_ntc_gpio(&mut self) -> Result<NtcGpio, I2C::Error> {
+        Ok(self.read_register(Registers::NtcGpio)?.into())
     }
 }
