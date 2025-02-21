@@ -1,6 +1,6 @@
 use core::ops::Deref;
 
-/// Coulomb Counter access LSB and counter register
+/// Coulomb Counter accumulator LSB and counter register
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct CCAccLsbCntr(u16);
 
