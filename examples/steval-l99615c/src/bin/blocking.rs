@@ -3,7 +3,7 @@
 #![no_std]
 
 use cortex_m_rt::entry;
-use l9961::L9961;
+use l9961::{configuration::CellThresholds, L9961};
 use steval_l99615c as functions;
 use stm32g0xx_hal::{
     i2c::{Config, I2cExt},
@@ -23,7 +23,8 @@ fn main() -> ! {
         .i2c(sda, scl, Config::with_timing(0x2020_151b), &mut rcc);
 
     let mut l9961 = L9961::<_, 5>::new(i2c, 0x49);
-
+    let cell_thresholds = CellThresholds::new();
+    l9961.configure_voltage_thresholds(cell_thresholds).unwrap();
     //l9961.download_configuration_from_nvm().unwrap();
 
     // Read the chip ID
