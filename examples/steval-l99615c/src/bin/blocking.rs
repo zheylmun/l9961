@@ -22,7 +22,7 @@ fn main() -> ! {
         .I2C2
         .i2c(sda, scl, Config::with_timing(0x2020_151b), &mut rcc);
 
-    let mut l9961 = L9961::new(i2c, 0x49);
+    let mut l9961 = L9961::<_, 5>::new(i2c, 0x49);
 
     //l9961.download_configuration_from_nvm().unwrap();
 

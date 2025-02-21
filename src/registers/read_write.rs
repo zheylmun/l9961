@@ -15,7 +15,7 @@ use embedded_hal_async::i2c::I2c;
 
 use maybe_async::maybe_async;
 
-impl<I2C> L9961<I2C>
+impl<I2C, const CELL_COUNT: u8> L9961<I2C, CELL_COUNT>
 where
     I2C: I2c,
 {
