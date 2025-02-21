@@ -43,21 +43,19 @@ where
         // Program the cell over-voltage threshold and counter threshold
         let vcell_ov_th = VCellOvTh::new(
             cell_voltage_code_from_mv(config.cell_over_voltage_threshold_mv),
-            config.cell_over_voltage_counter_threshold.value(),
+            config.fault_counter_threshold.value(),
         );
         self.write_vcell_ov_th(vcell_ov_th).await?;
         // Program the cell under-voltage threshold and counter threshold
         let vcell_uv_th = VCellUvTh::new(
             cell_voltage_code_from_mv(config.cell_under_voltage_threshold_mv),
-            config.cell_under_voltage_counter_threshold.value(),
+            config.fault_counter_threshold.value(),
         );
         self.write_vcell_uv_th(vcell_uv_th).await?;
         // Program the cell balancing under-voltage delta threshold and counter threshold
         let vcell_bal_uv_delta_th = VCellBalUvDeltaTh::new(
             cell_voltage_code_from_mv(config.cell_balancing_under_voltage_delta_threshold_mv),
-            config
-                .cell_balancing_under_voltage_counter_threshold
-                .value(),
+            config.fault_counter_threshold.value(),
         );
         self.write_vcell_bal_uv_delta_th(vcell_bal_uv_delta_th)
             .await?;

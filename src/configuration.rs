@@ -7,14 +7,12 @@
 /// Cell threshold configuration struct
 pub struct CellThresholds {
     pub(crate) cell_over_voltage_threshold_mv: u16,
-    pub(crate) cell_over_voltage_counter_threshold: CounterThreshold,
     // TODO: Sample code and documentation disagree here.  Test with simulator cells to determine correct value.
     pub(crate) cell_severe_over_voltage_delta_threshold_mv: u16,
     pub(crate) cell_under_voltage_threshold_mv: u16,
     pub(crate) cell_severe_under_voltage_threshold_mv: u16,
-    pub(crate) cell_under_voltage_counter_threshold: CounterThreshold,
     pub(crate) cell_balancing_under_voltage_delta_threshold_mv: u16,
-    pub(crate) cell_balancing_under_voltage_counter_threshold: CounterThreshold,
+    pub(crate) fault_counter_threshold: CounterThreshold,
 }
 
 impl CellThresholds {
@@ -23,12 +21,10 @@ impl CellThresholds {
         CellThresholds {
             cell_over_voltage_threshold_mv: 4200,
             cell_severe_over_voltage_delta_threshold_mv: 4400,
-            cell_over_voltage_counter_threshold: CounterThreshold::default(),
             cell_under_voltage_threshold_mv: 3000,
-            cell_severe_under_voltage_threshold_mv: 2800,
-            cell_under_voltage_counter_threshold: CounterThreshold::default(),
+            cell_severe_under_voltage_threshold_mv: 2700,
             cell_balancing_under_voltage_delta_threshold_mv: 3200,
-            cell_balancing_under_voltage_counter_threshold: CounterThreshold::default(),
+            fault_counter_threshold: CounterThreshold::default(),
         }
     }
 
@@ -44,13 +40,6 @@ impl CellThresholds {
         self
     }
 
-    /// Set the cell over-voltage counter threshold
-    pub const fn with_cell_over_voltage_counter_threshold(mut self, threshold: u8) -> Self {
-        let threshold = CounterThreshold::new(threshold);
-        self.cell_over_voltage_counter_threshold = threshold;
-        self
-    }
-
     /// Set the cell under-voltage threshold in mV
     pub const fn with_cell_under_voltage_threshold_mv(mut self, voltage_mv: u16) -> Self {
         self.cell_under_voltage_threshold_mv = voltage_mv;
@@ -63,26 +52,12 @@ impl CellThresholds {
         self
     }
 
-    /// Set the cell under-voltage counter threshold
-    pub const fn with_cell_under_voltage_counter_threshold(mut self, threshold: u8) -> Self {
+    /// Set the cell fault counter thresholds
+    /// The fault counter threshold is a 4-bit value (0-15) used to determine how many times a fault condition must be measured before the fault is triggered.
+    /// The default value is 10.
+    pub const fn with_fault_counter_threshold(mut self, threshold: u8) -> Self {
         let threshold = CounterThreshold::new(threshold);
-        self.cell_under_voltage_counter_threshold = threshold;
-        self
-    }
-
-    /// Set the cell balancing under-voltage threshold in mV
-    pub const fn with_cell_balancing_under_voltage_threshold_mv(mut self, voltage_mv: u16) -> Self {
-        self.cell_balancing_under_voltage_delta_threshold_mv = voltage_mv;
-        self
-    }
-
-    /// Set the cell balancing under-voltage counter threshold
-    pub const fn with_cell_balancing_under_voltage_counter_threshold(
-        mut self,
-        threshold: u8,
-    ) -> Self {
-        let threshold = CounterThreshold::new(threshold);
-        self.cell_balancing_under_voltage_counter_threshold = threshold;
+        self.fault_counter_threshold = threshold;
         self
     }
 }
