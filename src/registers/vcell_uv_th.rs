@@ -1,18 +1,25 @@
 use core::ops::Deref;
 use defmt::{Format, Formatter, write};
 
-/// Cell undervoltage monitoring threshold configuration register
+/// Cell under-voltage monitoring threshold configuration register
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct VCellUvTh(u16);
 
 impl VCellUvTh {
+    /// Create a new VCellUvTh register value
+    #[inline]
+    pub const fn new(vcell_uv_th: u8, ncell_uv_cnt_th: u8) -> Self {
+        debug_assert!(ncell_uv_cnt_th < 16, "Invalid VCellUvTh value");
+        VCellUvTh((vcell_uv_th as u16) | ((ncell_uv_cnt_th as u16) << 8))
+    }
+
     /// Get the programmable cell under-voltage fault threshold (8bit)
     #[inline]
     pub const fn get_vcell_uv_th(&self) -> u8 {
         (self.0 & 0x00FF) as u8
     }
 
-    /// Set the the programmable cell undervoltage fault threshold (8bit)
+    /// Set the the programmable cell under-voltage fault threshold (8bit)
     #[inline]
     pub const fn set_vcell_uv_th(&mut self, vcell_uv_th: u8) {
         self.0 = self.0 & 0xFF00 | (vcell_uv_th as u16);
@@ -39,9 +46,9 @@ impl Deref for VCellUvTh {
 }
 
 impl From<u16> for VCellUvTh {
-    fn from(id: u16) -> Self {
-        debug_assert!(id & 0xF000 == 0, "Invalid VCellUvTh value");
-        VCellUvTh(id)
+    fn from(value: u16) -> Self {
+        debug_assert!(value & 0xF000 == 0, "Invalid VCellUvTh value");
+        VCellUvTh(value)
     }
 }
 
