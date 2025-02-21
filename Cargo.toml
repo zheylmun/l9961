@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["Zach Heylmun <zheylmun@gmail.com>"]
 description = "Driver for the ST L9961 Industrial BMS"
 license = "MIT OR Apache-2.0"
-edition = "2021"
+edition = "2024"
 repository = "https://github.com/zheylmun/stl9961"
 readme = "README.md"
 
@@ -12,14 +12,14 @@ readme = "README.md"
 # Upgrade to 2.x once Defmt supports it
 bitflags = "1"
 defmt = { version = "0.3", optional = true }
-embedded-hal = {version="1"}
-embedded-hal-async = { version = "1", optional = true }
-maybe-async-cfg = "0.2"
+embedded-hal = {version="1", optional = true}
+embedded-hal-async = { version = "1" }
+maybe-async = "0.2"
 
 [dev-dependencies]
-l9961 = { path = ".", features = ["defmt",]}
+l9961 = { path = ".", features = ["defmt"]}
 
 [features]
 default = ["defmt"]
-async = ["dep:embedded-hal-async"]
+is_sync = ["dep:embedded-hal", "maybe-async/is_sync"]
 defmt = ["dep:defmt"]

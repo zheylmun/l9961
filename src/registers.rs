@@ -16,6 +16,7 @@ mod die_temp;
 mod ntc_gpio;
 mod ovc_thresholds;
 mod persistent_ovc_thresholds;
+mod read_write;
 mod sc_threshold;
 mod to_faultn_msk;
 mod to_fuse_rst_msk;
@@ -34,9 +35,6 @@ mod vcellsum;
 mod vntc_ot_th;
 mod vntc_severe_ot_th;
 mod vntc_ut_th;
-
-#[cfg(not(feature = "async"))]
-mod blocking;
 
 pub use self::{
     cc_acc_lsb_cntr::CCAccLsbCntr, cfg1_filters_cycles::Cfg1FiltersCycles,

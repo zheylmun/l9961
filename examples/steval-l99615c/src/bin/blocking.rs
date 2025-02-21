@@ -3,7 +3,7 @@
 #![no_std]
 
 use cortex_m_rt::entry;
-use l9961::{registers::ToPrdrvBalMask, L9961};
+use l9961::L9961;
 use steval_l99615c as functions;
 use stm32g0xx_hal::{
     i2c::{Config, I2cExt},
@@ -101,16 +101,10 @@ fn main() -> ! {
     // Test this new bitmask a bit more than the others
     let to_prdrv_bal_mask = l9961.read_to_prdrv_bal_mask().unwrap();
     defmt::info!("{}", to_prdrv_bal_mask);
-    let masking = ToPrdrvBalMask::CELL_UV_PRDRV_MSK | ToPrdrvBalMask::CELL_SEVERE_UV_PRDRV_MSK;
-    l9961.write_to_prdrv_bal_mask(masking).unwrap();
-    let to_prdrv_bal_mask = l9961.read_to_prdrv_bal_mask().unwrap();
-    defmt::info!("{}", to_prdrv_bal_mask);
-    let masking = ToPrdrvBalMask::empty();
-    l9961.write_to_prdrv_bal_mask(masking).unwrap();
-    let to_prdrv_bal_mask = l9961.read_to_prdrv_bal_mask().unwrap();
-    defmt::info!("{}", to_prdrv_bal_mask);
+
     let to_fuse_rst_mask = l9961.read_to_fuse_rst_msk().unwrap();
     defmt::info!("{}", to_fuse_rst_mask);
+
     let to_faultn_mask = l9961.read_to_faultn_msk().unwrap();
     defmt::info!("{}", to_faultn_mask);
 

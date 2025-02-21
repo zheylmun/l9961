@@ -9,18 +9,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bef38d45163c2f1dde094a7dfd33ccf595c92905c8f8f4fdc18d06fb1037718a"
 
 [[package]]
-name = "bitflags"
-version = "2.8.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8f68f53c83ab957f72c32642f3868eec03eb974d1fb82e453128456482613d36"
-
-[[package]]
 name = "defmt"
 version = "0.3.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "86f6162c53f659f65d00619fe31f14556a6e9f8752ccc4a41bd177ffcf3d6130"
 dependencies = [
- "bitflags 1.3.2",
+ "bitflags",
  "defmt-macros",
 ]
 
@@ -34,7 +28,7 @@ dependencies = [
  "proc-macro-error2",
  "proc-macro2",
  "quote",
- "syn 2.0.98",
+ "syn",
 ]
 
 [[package]]
@@ -65,56 +59,24 @@ dependencies = [
 name = "l9961"
 version = "0.1.0"
 dependencies = [
- "bitflags 1.3.2",
+ "bitflags",
  "defmt",
  "embedded-hal",
  "embedded-hal-async",
  "l9961",
- "maybe-async-cfg",
+ "maybe-async",
 ]
 
 [[package]]
-name = "manyhow"
-version = "0.11.4"
+name = "maybe-async"
+version = "0.2.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b33efb3ca6d3b07393750d4030418d594ab1139cee518f0dc88db70fec873587"
+checksum = "5cf92c10c7e361d6b99666ec1c6f9805b0bea2c3bd8c78dc6fe98ac5bd78db11"
 dependencies = [
- "manyhow-macros",
  "proc-macro2",
  "quote",
- "syn 1.0.109",
- "syn 2.0.98",
+ "syn",
 ]
-
-[[package]]
-name = "manyhow-macros"
-version = "0.11.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "46fce34d199b78b6e6073abf984c9cf5fd3e9330145a93ee0738a7443e371495"
-dependencies = [
- "proc-macro-utils",
- "proc-macro2",
- "quote",
-]
-
-[[package]]
-name = "maybe-async-cfg"
-version = "0.2.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8dbfaa67a76e2623580df07d6bb5e7956c0a4bae4b418314083a9c619bd66627"
-dependencies = [
- "manyhow",
- "proc-macro2",
- "pulldown-cmark",
- "quote",
- "syn 1.0.109",
-]
-
-[[package]]
-name = "memchr"
-version = "2.7.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "78ca9ab1a0babb1e7d5695e3530886289c18cf2f87ec19a575a0abdce112e3a3"
 
 [[package]]
 name = "proc-macro-error-attr2"
@@ -135,18 +97,7 @@ dependencies = [
  "proc-macro-error-attr2",
  "proc-macro2",
  "quote",
- "syn 2.0.98",
-]
-
-[[package]]
-name = "proc-macro-utils"
-version = "0.10.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eeaf08a13de400bc215877b5bdc088f241b12eb42f0a548d3390dc1c56bb7071"
-dependencies = [
- "proc-macro2",
- "quote",
- "smallvec",
+ "syn",
 ]
 
 [[package]]
@@ -159,40 +110,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "pulldown-cmark"
-version = "0.11.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "679341d22c78c6c649893cbd6c3278dcbe9fc4faa62fea3a9296ae2b50c14625"
-dependencies = [
- "bitflags 2.8.0",
- "memchr",
- "unicase",
-]
-
-[[package]]
 name = "quote"
 version = "1.0.38"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0e4dccaaaf89514f546c693ddc140f729f958c247918a13380cccc6078391acc"
 dependencies = [
  "proc-macro2",
-]
-
-[[package]]
-name = "smallvec"
-version = "1.13.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3c5e1a9a646d36c3599cd173a41282daf47c44583ad367b8e6837255952e5c67"
-
-[[package]]
-name = "syn"
-version = "1.0.109"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "72b64191b275b66ffe2469e8af2c1cfe3bafa67b529ead792a6d0160888b4237"
-dependencies = [
- "proc-macro2",
- "quote",
- "unicode-ident",
 ]
 
 [[package]]
@@ -223,14 +146,8 @@ checksum = "26afc1baea8a989337eeb52b6e72a039780ce45c3edfcc9c5b9d112feeb173c2"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.98",
+ "syn",
 ]
-
-[[package]]
-name = "unicase"
-version = "2.8.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "75b844d17643ee918803943289730bec8aac480150456169e647ed0b576ba539"
 
 [[package]]
 name = "unicode-ident"
