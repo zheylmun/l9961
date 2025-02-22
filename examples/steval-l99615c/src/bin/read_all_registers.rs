@@ -31,43 +31,26 @@ async fn main(_spawner: Spawner) -> ! {
         false,
     );
     l9961.write_cfg2_enables(enables).await.unwrap();
-    // Read the chip ID
+
+    // Read em all
     let chip_id = l9961.read_chip_id().await.unwrap();
-    // Read the Cfg3Act register
     let cfg3_act = l9961.read_cfg3_act().await.unwrap();
-    // Read the Cfg1FiltersCycles register
     let filters = l9961.read_cfg1_filters_cycles().await.unwrap();
-    // Read the Device Address Register
     let device_address = l9961.read_device_address().await.unwrap();
-    // Read the Cfg2Enables register
     let cfg2_enables = l9961.read_cfg2_enables().await.unwrap();
-    // Read the CSA Gain Factor register
     let csa_gain_factor = l9961.read_csa_gain_factor().await.unwrap();
-    // Read the VCellOvTh register
     let vcell_ov_th = l9961.read_vcell_ov_th().await.unwrap();
-    // Read the VCellUvTh register
     let vcell_uv_th = l9961.read_vcell_uv_th().await.unwrap();
-    // Read the VCellSevereDeltaThrs register
     let vcell_severe_delta_thrs = l9961.read_vcell_severe_delta_thrs().await.unwrap();
-    // Read the VCellBalUvDeltaTh register
     let vcell_bal_uv_delta_th = l9961.read_vcell_bal_uv_delta_th().await.unwrap();
-    // Read the VBOvTh register
     let vb_ov_th = l9961.read_vb_ov_th().await.unwrap();
-    // Read the VBUvTh register
     let vb_uv_th = l9961.read_vb_uv_th().await.unwrap();
-    // Read the VBSumMaxDiffTh register
     let vb_sum_max_diff_th = l9961.read_vb_sum_max_diff_th().await.unwrap();
-    // Read the VNTCOTTh register
     let vntc_ot_th = l9961.read_vntc_ot_th().await.unwrap();
-    // Read the VNTCUTTh register
     let vntc_ut_th = l9961.read_vntc_ut_th().await.unwrap();
-    // Read the VNTCSevereOTTh register
     let vntc_severe_ot_th = l9961.read_vntc_severe_ot_th().await.unwrap();
-    // Read the OvCTHresholds register
     let ovc_thresholds = l9961.read_ovc_thresholds().await.unwrap();
-    // Read the PersistentOvCThresholds register
     let persistent_ovc_thresholds = l9961.read_persistent_ovc_thresholds().await.unwrap();
-    // Test this new bitmask a bit more than the others
     let to_prdrv_bal_mask = l9961.read_to_prdrv_bal_mask().await.unwrap();
     let to_fuse_rst_mask = l9961.read_to_fuse_rst_msk().await.unwrap();
     let to_faultn_mask = l9961.read_to_faultn_msk().await.unwrap();
