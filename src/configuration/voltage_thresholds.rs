@@ -43,45 +43,6 @@ impl VoltageThresholds {
         }
     }
 
-    /// Set the cell over-voltage threshold in mV
-    pub const fn with_cell_over_voltage_threshold_mv(mut self, voltage_mv: u16) -> Self {
-        self.cell_over_voltage_threshold_mv = round_trip_cell_voltage(voltage_mv);
-        self
-    }
-
-    /// Set the cell severe over-voltage threshold in mV
-    pub const fn with_cell_severe_over_voltage_threshold_mv(mut self, voltage_mv: u16) -> Self {
-        self.cell_severe_over_voltage_delta_threshold_mv = round_trip_cell_voltage(voltage_mv);
-        self
-    }
-
-    /// Set the cell under-voltage threshold in mV
-    pub const fn with_cell_under_voltage_threshold_mv(mut self, voltage_mv: u16) -> Self {
-        self.cell_under_voltage_threshold_mv = round_trip_cell_voltage(voltage_mv);
-        self
-    }
-
-    /// Set the cell severe under-voltage threshold in mV
-    pub const fn with_cell_severe_under_voltage_threshold_mv(mut self, voltage_mv: u16) -> Self {
-        self.cell_severe_under_voltage_delta_threshold_mv = round_trip_cell_voltage(voltage_mv);
-        self
-    }
-
-    /// Set the cell fault counter thresholds
-    /// The fault counter threshold is a 4-bit value (0-15) used to determine how many times a fault condition must be measured before the fault is triggered.
-    /// The default value is 10.
-    pub const fn with_fault_counter_threshold(mut self, threshold: u8) -> Self {
-        let threshold = CounterThreshold::new(threshold);
-        self.fault_counter_threshold = threshold;
-        self
-    }
-
-    /// Set the allowed delta between the sum of the cell voltages and the pack voltage
-    pub const fn with_max_pack_cell_sum_delta_mv(mut self, delta_mv: u16) -> Self {
-        self.max_pack_cell_sum_delta_mv = round_trip_cell_voltage(delta_mv);
-        self
-    }
-
     /// Get the cell over-voltage register config based on this configuration
     pub(crate) fn cell_over_voltage_configuration(&self) -> VCellOvTh {
         let cell_over_voltage_code = cell_voltage_code_from_mv(self.cell_over_voltage_threshold_mv);
