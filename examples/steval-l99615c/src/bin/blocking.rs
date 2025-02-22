@@ -3,15 +3,8 @@
 #![no_std]
 
 use cortex_m_rt::entry;
-use embassy_stm32::{
-    i2c::{Config, I2c},
-    time::Hertz,
-};
-use l9961::{
-    configuration::CellThresholds,
-    registers::{Cfg2Enables, FetConfig},
-    L9961,
-};
+use embassy_stm32::{i2c::I2c, time::Hertz};
+use l9961::L9961;
 use steval_l99615c as functions;
 
 #[entry]

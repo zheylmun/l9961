@@ -1,10 +1,16 @@
 use core::ops::Deref;
 
-/// Battery Stack Monitoring undervoltage threshold configuration register
+/// Battery pack monitoring under-voltage threshold configuration register
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct VBUvTh(u16);
 
 impl VBUvTh {
+    /// Create a new VBUvTh register value
+    #[inline]
+    pub const fn new(vb_uv_th: u8, nvb_uv_cnt_th: u8) -> Self {
+        VBUvTh((vb_uv_th as u16) | ((nvb_uv_cnt_th as u16) << 8))
+    }
+
     /// Get the programmable VB UV fault threshold (8 bit)
     #[inline]
     pub const fn get_vb_uv_th(&self) -> u8 {

@@ -73,7 +73,7 @@ pub use self::{
 
 use crate::L9961;
 
-use defmt::{info, println};
+use defmt::Format;
 #[cfg(feature = "is_sync")]
 use embedded_hal::i2c::I2c;
 #[cfg(not(feature = "is_sync"))]
@@ -82,6 +82,7 @@ use embedded_hal_async::i2c::I2c;
 use maybe_async::maybe_async;
 
 /// The registers of the L9961 chip represented as their addresses
+#[derive(Clone, Copy, Debug, Format)]
 #[repr(u8)]
 pub enum Registers {
     /// The chip ID register
@@ -190,6 +191,9 @@ where
     #[maybe_async]
     pub async fn read_register(&mut self, register: Registers) -> Result<u16, I2C::Error> {
         let mut buffer = [0, 0];
+        // TODO:To validate CRC
+        // CRC of the data is calculated over the following values
+        // [address << 1, register, address<< 1 | 1, value]
         self.i2c
             .write_read(self.address, &[register as u8], &mut buffer)
             .await?;
@@ -203,6 +207,9 @@ where
         register: Registers,
         value: u16,
     ) -> Result<(), I2C::Error> {
+        // TODO:To calculate CRC
+        // CRC of the data is calculated over the following values
+        // [address << 1, register, value]
         let buffer = value.to_be_bytes();
         self.i2c
             .write(self.address, &[register as u8, buffer[0], buffer[1]])
