@@ -11,10 +11,9 @@ readme = "README.md"
 [dependencies]
 # Upgrade to 2.x once Defmt supports it
 bitflags = "1"
-crc8-rs = "*"
 defmt = { version = "0.3", optional = true }
-embedded-hal = {version="1"}
-embedded-hal-async = { version = "1" }
+embedded-hal = "1"
+embedded-hal-async = "1"
 maybe-async = "0.2"
 
 [dev-dependencies]
@@ -22,5 +21,4 @@ l9961 = { path = ".", features = ["defmt"]}
 
 [features]
 default = ["defmt"]
-is_sync = [ "maybe-async/is_sync"]
 defmt = ["dep:defmt"]

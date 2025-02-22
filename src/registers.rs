@@ -71,14 +71,11 @@ pub use self::{
     vntc_ut_th::VNTCUTTh,
 };
 
-use crate::{Input, L9961};
+use crate::L9961;
 
 use defmt::Format;
 use embedded_hal::digital::OutputPin;
-#[cfg(feature = "is_sync")]
-use embedded_hal::i2c::I2c;
-#[cfg(not(feature = "is_sync"))]
-use embedded_hal_async::i2c::I2c;
+use embedded_hal_async::{digital::Wait, i2c::I2c};
 
 use maybe_async::maybe_async;
 
@@ -187,7 +184,7 @@ pub enum Registers {
 impl<I2C, I, O, const CELL_COUNT: u8> L9961<I2C, I, O, CELL_COUNT>
 where
     I2C: I2c,
-    I: Input,
+    I: Wait,
     O: OutputPin,
 {
     /// Read a register from the L9961.

@@ -3,13 +3,10 @@
 //! Note that these functions overlap with the register definitions, but are broken out due to the
 //! higher level abstraction of the device commands.
 
-use crate::{Input, Registers, L9961};
+use crate::{Registers, L9961};
 
 use embedded_hal::digital::OutputPin;
-#[cfg(feature = "is_sync")]
-use embedded_hal::i2c::I2c;
-#[cfg(not(feature = "is_sync"))]
-use embedded_hal_async::i2c::I2c;
+use embedded_hal_async::{digital::Wait, i2c::I2c};
 use maybe_async::maybe_async;
 
 /// NVM command value to upload configuration to NVM
@@ -22,7 +19,7 @@ const CMD_VAL: u16 = 0x2000;
 impl<I2C, I, O, const CELL_COUNT: u8> L9961<I2C, I, O, CELL_COUNT>
 where
     I2C: I2c,
-    I: Input,
+    I: Wait,
     O: OutputPin,
 {
     /// Download the stored device configuration from NVM

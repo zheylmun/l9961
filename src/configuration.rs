@@ -6,20 +6,17 @@
 
 mod voltage_thresholds;
 
+use embedded_hal_async::digital::Wait;
 pub use voltage_thresholds::VoltageThresholds;
 
-use crate::{Input, L9961};
+use crate::L9961;
 use embedded_hal::digital::OutputPin;
-
-#[cfg(feature = "is_sync")]
-use embedded_hal::i2c::I2c;
-#[cfg(not(feature = "is_sync"))]
 use embedded_hal_async::i2c::I2c;
 
 impl<I2C, I, O, const CELL_COUNT: u8> L9961<I2C, I, O, CELL_COUNT>
 where
     I2C: I2c,
-    I: Input,
+    I: Wait,
     O: OutputPin,
 {
     /// Configure the cell voltage thresholds
