@@ -1,5 +1,7 @@
 use core::ops::Deref;
 
+use defmt::Format;
+
 const VCELL_EN_1_MASK: u16 = 0x0001;
 const VCELL_EN_2_MASK: u16 = 0x0002;
 const VCELL_EN_3_MASK: u16 = 0x0004;
@@ -14,6 +16,32 @@ const SC_EN: u16 = 0x0400;
 const DCHG_HS_LS: u16 = 0x0800;
 const CHG_HS_LS: u16 = 0x1000;
 const CRC_EN: u16 = 0x2000;
+
+/// Configuration for high-side vs. low side FETs for charge and discharge
+pub enum FetConfig {
+    /// High-side FET configuration
+    HighSide,
+    /// Low-side FET configuration
+    LowSide,
+}
+
+impl From<FetConfig> for u16 {
+    fn from(fet_config: FetConfig) -> u16 {
+        match fet_config {
+            FetConfig::HighSide => 0,
+            FetConfig::LowSide => 1,
+        }
+    }
+}
+
+impl Format for FetConfig {
+    fn format(&self, f: defmt::Formatter) {
+        match self {
+            FetConfig::HighSide => defmt::write!(f, "High Side"),
+            FetConfig::LowSide => defmt::write!(f, "Low Side"),
+        }
+    }
+}
 
 /// Register CFG2_ENABLES
 /// Used to enable or disable features such as VCELL_EN (cell voltage monitoring),
@@ -40,8 +68,8 @@ impl Cfg2Enables {
         cc_acc_en: bool,
         ovc_en: bool,
         sc_en: bool,
-        dchg_hs_ls: bool,
-        chg_hs_ls: bool,
+        dchg_hs_ls: FetConfig,
+        chg_hs_ls: FetConfig,
         crc_en: bool,
     ) -> Self {
         Self(
@@ -195,18 +223,21 @@ impl Cfg2Enables {
     }
 
     /// Get the Discahrge FET configuration
-    /// - True configured for High Side FET
+    /// - False configured for High Side FET
     /// - False configured for Low Side FET
     #[inline]
-    pub const fn get_dchg_hs_ls(&self) -> bool {
-        (self.0 & DCHG_HS_LS) != 0
+    pub const fn get_dchg_hs_ls(&self) -> FetConfig {
+        match (self.0 & DCHG_HS_LS) == 0 {
+            true => FetConfig::HighSide,
+            false => FetConfig::LowSide,
+        }
     }
 
     /// Set the discharge FET configuration
     /// - True configured for High Side FET
     /// - False configured for Low Side FET
     #[inline]
-    pub const fn set_dchg_hs_ls(&mut self, value: bool) {
+    pub const fn set_dchg_hs_ls(&mut self, value: FetConfig) {
         self.0 = self.0 & !DCHG_HS_LS | ((value as u16) << 11);
     }
 
@@ -214,15 +245,18 @@ impl Cfg2Enables {
     /// - True configured for High Side FET
     /// - False configured for Low Side FET
     #[inline]
-    pub const fn get_chg_hs_ls(&self) -> bool {
-        (self.0 & CHG_HS_LS) != 0
+    pub const fn get_chg_hs_ls(&self) -> FetConfig {
+        match (self.0 & CHG_HS_LS) == 0 {
+            true => FetConfig::HighSide,
+            false => FetConfig::LowSide,
+        }
     }
 
     /// Set the charge FET configuration
     /// - True configured for High Side FET
     /// - False configured for Low Side FET
     #[inline]
-    pub const fn set_chg_hs_ls(&mut self, value: bool) {
+    pub const fn set_chg_hs_ls(&mut self, value: FetConfig) {
         self.0 = self.0 & !CHG_HS_LS | ((value as u16) << 12);
     }
 

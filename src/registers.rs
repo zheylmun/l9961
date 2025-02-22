@@ -36,20 +36,44 @@ mod vntc_severe_ot_th;
 mod vntc_ut_th;
 
 pub use self::{
-    cc_acc_lsb_cntr::CCAccLsbCntr, cfg1_filters_cycles::Cfg1FiltersCycles,
-    cfg2_enables::Cfg2Enables, cfg3_act::Cfg3Act, chip_id::ChipID, csa_gain_factor::CsaGainFactor,
-    curr_msk::CurrMsk, dev_addr::DevAddr, diag_curr::DiagCurr, diag_ov_ot_ut::DiagOvOtUt,
-    diag_uv::DiagUv, die_temp::DieTemp, ntc_gpio::NtcGpio, ovc_thresholds::OvCThresholds,
-    persistent_ovc_thresholds::PersistentOvCThresholds, sc_threshold::SCThreshold,
-    to_faultn_msk::ToFaultnMsk, to_fuse_rst_msk::ToFuseRstMask, to_prdrv_bal_mask::ToPrdrvBalMask,
-    vb::VB, vb_ov_th::VBOvTh, vb_sum_max_diff_th::VBSumMaxDiffTh, vb_uv_th::VBUvTh, vcell::VCell,
-    vcell_1_faults::VCell1Faults, vcell_bal_uv_delta_th::VCellBalUvDeltaTh, vcell_ov_th::VCellOvTh,
-    vcell_severe_delta_thrs::VCellSevereDeltaThrs, vcell_uv_th::VCellUvTh, vcellsum::VCellSum,
-    vntc_ot_th::VNTCOTTh, vntc_severe_ot_th::VNTCSevereOTTh, vntc_ut_th::VNTCUTTh,
+    cc_acc_lsb_cntr::CCAccLsbCntr,
+    cfg1_filters_cycles::Cfg1FiltersCycles,
+    cfg2_enables::{Cfg2Enables, FetConfig},
+    cfg3_act::Cfg3Act,
+    chip_id::ChipID,
+    csa_gain_factor::CsaGainFactor,
+    curr_msk::CurrMsk,
+    dev_addr::DevAddr,
+    diag_curr::DiagCurr,
+    diag_ov_ot_ut::DiagOvOtUt,
+    diag_uv::DiagUv,
+    die_temp::DieTemp,
+    ntc_gpio::NtcGpio,
+    ovc_thresholds::OvCThresholds,
+    persistent_ovc_thresholds::PersistentOvCThresholds,
+    sc_threshold::SCThreshold,
+    to_faultn_msk::ToFaultnMsk,
+    to_fuse_rst_msk::ToFuseRstMask,
+    to_prdrv_bal_mask::ToPrdrvBalMask,
+    vb::VB,
+    vb_ov_th::VBOvTh,
+    vb_sum_max_diff_th::VBSumMaxDiffTh,
+    vb_uv_th::VBUvTh,
+    vcell::VCell,
+    vcell_1_faults::VCell1Faults,
+    vcell_bal_uv_delta_th::VCellBalUvDeltaTh,
+    vcell_ov_th::VCellOvTh,
+    vcell_severe_delta_thrs::VCellSevereDeltaThrs,
+    vcell_uv_th::VCellUvTh,
+    vcellsum::VCellSum,
+    vntc_ot_th::VNTCOTTh,
+    vntc_severe_ot_th::VNTCSevereOTTh,
+    vntc_ut_th::VNTCUTTh,
 };
 
 use crate::L9961;
 
+use defmt::{info, println};
 #[cfg(feature = "is_sync")]
 use embedded_hal::i2c::I2c;
 #[cfg(not(feature = "is_sync"))]
