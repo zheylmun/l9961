@@ -13,21 +13,15 @@ use crate::{
 
 use super::CounterThreshold;
 
-/// Cell threshold configuration struct
-pub struct CellThresholds {
-    pub(crate) cell_over_voltage_threshold_mv: u16,
-    // TODO: Sample code and documentation disagree here.  Test with simulator cells to determine correct value.
-    pub(crate) cell_severe_over_voltage_delta_threshold_mv: u16,
-    pub(crate) cell_under_voltage_threshold_mv: u16,
-    pub(crate) cell_severe_under_voltage_delta_threshold_mv: u16,
-    pub(crate) cell_balancing_under_voltage_delta_threshold_mv: u16,
+/// Temperature threshold configuration struct
+pub struct NtcThresholds {
+    pub(crate) ntc_over_temperature_threshold_mv: u16,
+    pub(crate) ntc_severe_over_temperature_delta_threshold_mv: u16,
+    pub(crate) ntc_under_temperature_threshold_mv: u16,
     pub(crate) fault_counter_threshold: CounterThreshold,
-    pub(crate) max_pack_cell_sum_delta_mv: u16,
-    pub(crate) pack_over_voltage_threshold_mv: u16,
-    pub(crate) pack_under_voltage_threshold_mv: u16,
 }
 
-impl CellThresholds {
+impl CellThresholds<CELL_COUNT> {
     /// Create a new CellThresholds struct with the default values.
     pub const fn new() -> Self {
         CellThresholds {
@@ -38,8 +32,8 @@ impl CellThresholds {
             cell_balancing_under_voltage_delta_threshold_mv: 3181,
             fault_counter_threshold: CounterThreshold::default(),
             max_pack_cell_sum_delta_mv: 995,
-            pack_over_voltage_threshold_mv: 21000,
-            pack_under_voltage_threshold_mv: 15000,
+            pack_over_voltage_threshold_mv: 4200 * CELL_COUNT as u16,
+            pack_under_voltage_threshold_mv: 3000 * CELL_COUNT as u16,
         }
     }
 
@@ -138,7 +132,7 @@ impl CellThresholds {
     }
 }
 
-impl Format for CellThresholds {
+impl<const CELL_COUNT: u8> Format for CellThresholds<CELL_COUNT> {
     fn format(&self, f: Formatter) {
         write!(
             f,

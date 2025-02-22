@@ -37,7 +37,7 @@ mod vntc_ut_th;
 
 pub use self::{
     cc_acc_lsb_cntr::CCAccLsbCntr,
-    cfg1_filters_cycles::Cfg1FiltersCycles,
+    cfg1_filters_cycles::{Cfg1FiltersCycles, TCellFilter, TCurFilter, TMeasCycle, TSCFilter},
     cfg2_enables::{Cfg2Enables, FetConfig},
     cfg3_act::Cfg3Act,
     chip_id::ChipID,
@@ -71,9 +71,10 @@ pub use self::{
     vntc_ut_th::VNTCUTTh,
 };
 
-use crate::L9961;
+use crate::{Input, L9961};
 
 use defmt::Format;
+use embedded_hal::digital::OutputPin;
 #[cfg(feature = "is_sync")]
 use embedded_hal::i2c::I2c;
 #[cfg(not(feature = "is_sync"))]
@@ -183,9 +184,11 @@ pub enum Registers {
     DiagCurr = 0x2F,
 }
 
-impl<I2C, const CELL_COUNT: u8> L9961<I2C, CELL_COUNT>
+impl<I2C, I, O, const CELL_COUNT: u8> L9961<I2C, I, O, CELL_COUNT>
 where
     I2C: I2c,
+    I: Input,
+    O: OutputPin,
 {
     /// Read a register from the L9961.
     #[maybe_async]

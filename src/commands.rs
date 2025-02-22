@@ -3,8 +3,9 @@
 //! Note that these functions overlap with the register definitions, but are broken out due to the
 //! higher level abstraction of the device commands.
 
-use crate::{L9961, Registers};
+use crate::{Input, Registers, L9961};
 
+use embedded_hal::digital::OutputPin;
 #[cfg(feature = "is_sync")]
 use embedded_hal::i2c::I2c;
 #[cfg(not(feature = "is_sync"))]
@@ -18,9 +19,11 @@ const NVM_WRITE_READ_CODE_CMD_DOWNLOAD: u16 = 0x5555;
 /// Register value for GO2 commands
 const CMD_VAL: u16 = 0x2000;
 
-impl<I2C> L9961<I2C>
+impl<I2C, I, O, const CELL_COUNT: u8> L9961<I2C, I, O, CELL_COUNT>
 where
     I2C: I2c,
+    I: Input,
+    O: OutputPin,
 {
     /// Download the stored device configuration from NVM
     #[maybe_async]
@@ -44,7 +47,7 @@ where
 
     /// Send the GO2STBY command to the device
     #[maybe_async]
-    pub async fn go_2_stby(&mut self) -> Result<(), I2C::Error> {
+    pub async fn go_2_standby(&mut self) -> Result<(), I2C::Error> {
         self.write_register(Registers::VCell2, CMD_VAL).await
     }
 

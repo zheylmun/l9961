@@ -14,7 +14,7 @@ name = "integration"
 harness = false
 
 [dependencies]
-embassy-stm32 = {version = "*", features = ["defmt","stm32g071rb"]}
+embassy-stm32 = {version = "*", features = ["defmt","exti","stm32g071rb", "unstable-pac"]}
 embassy-time = "*"
 cortex-m = { version = "0.7", features = ["critical-section-single-core"] }
 cortex-m-rt = "0.7"

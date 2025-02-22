@@ -8,17 +8,19 @@ mod voltage_thresholds;
 
 pub use voltage_thresholds::VoltageThresholds;
 
-use crate::L9961;
+use crate::{Input, L9961};
+use embedded_hal::digital::OutputPin;
 
-use defmt::info;
 #[cfg(feature = "is_sync")]
 use embedded_hal::i2c::I2c;
 #[cfg(not(feature = "is_sync"))]
 use embedded_hal_async::i2c::I2c;
 
-impl<I2C, const CELL_COUNT: u8> L9961<I2C, CELL_COUNT>
+impl<I2C, I, O, const CELL_COUNT: u8> L9961<I2C, I, O, CELL_COUNT>
 where
     I2C: I2c,
+    I: Input,
+    O: OutputPin,
 {
     /// Configure the cell voltage thresholds
     /// Pack level thresholds will be set automatically based on the per-cell thresholds and the number of cells.
@@ -27,8 +29,6 @@ where
         &mut self,
         config: VoltageThresholds,
     ) -> Result<(), I2C::Error> {
-        info!("Applying cell voltage thresholds:\n{}", config);
-
         // Program the cell over-voltage threshold and counter threshold register
         self.write_vcell_ov_th(config.cell_over_voltage_configuration())
             .await?;

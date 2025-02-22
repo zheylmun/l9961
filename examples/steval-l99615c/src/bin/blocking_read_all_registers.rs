@@ -2,15 +2,16 @@
 #![no_main]
 #![no_std]
 
+use cortex_m::asm::{delay, wfi};
 use cortex_m_rt::entry;
 use embassy_stm32::{
     exti::ExtiInput,
-    gpio::{Input, Level, Output, Pull, Speed},
+    gpio::{Level, Output, Pull, Speed},
     i2c::I2c,
     time::Hertz,
 };
 use l9961::{
-    configuration::VoltageThresholds,
+    configuration::CellThresholds,
     registers::{
         Cfg1FiltersCycles, Cfg2Enables, DiagCurr, DiagOvOtUt, DiagUv, FetConfig, TCellFilter,
         TCurFilter, TSCFilter,
@@ -22,8 +23,8 @@ use steval_l99615c as functions;
 #[entry]
 fn main() -> ! {
     let p = embassy_stm32::init(Default::default());
-    let ready = Input::new(p.PB0, Pull::None);
-    let faultn = Input::new(p.PA6, Pull::None);
+    let ready = ExtiInput::new(p.PB0, p.EXTI0, Pull::None);
+    let faultn = ExtiInput::new(p.PA6, p.EXTI6, Pull::None);
     let mut wakeup = Output::new(p.PA5, Level::Low, Speed::Low);
     let mut nship = Output::new(p.PB9, Level::Low, Speed::Low);
     let i2c = I2c::new_blocking(p.I2C2, p.PB13, p.PB14, Hertz(100_000), Default::default());
@@ -42,7 +43,7 @@ fn main() -> ! {
         }
     }
 
-    let cell_thresholds = VoltageThresholds::new()
+    let cell_thresholds = CellThresholds::new(3)
         .with_cell_under_voltage_threshold_mv(1000)
         .with_cell_severe_under_voltage_threshold_mv(500);
     l9961.configure_voltage_thresholds(cell_thresholds).unwrap();

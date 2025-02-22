@@ -13,7 +13,7 @@ readme = "README.md"
 bitflags = "1"
 crc8-rs = "*"
 defmt = { version = "0.3", optional = true }
-embedded-hal = {version="1", optional = true}
+embedded-hal = {version="1"}
 embedded-hal-async = { version = "1" }
 maybe-async = "0.2"
 
@@ -22,5 +22,5 @@ l9961 = { path = ".", features = ["defmt"]}
 
 [features]
 default = ["defmt"]
-is_sync = ["dep:embedded-hal", "maybe-async/is_sync"]
+is_sync = [ "maybe-async/is_sync"]
 defmt = ["dep:defmt"]
