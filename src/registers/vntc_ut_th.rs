@@ -6,13 +6,11 @@ pub struct VNTCUTTh(u16);
 
 impl VNTCUTTh {
     /// Get the programmable under temp fault threshold (12bit)
-    #[inline]
     pub const fn get_ntc_ut_th(&self) -> u16 {
         (self.0 & 0x0FFF) as u16
     }
 
     /// Set the the programmable under temp fault threshold (12bit)
-    #[inline]
     pub const fn set_ntc_ut_th(&mut self, ntc_ut_th: u16) {
         debug_assert!(
             ntc_ut_th & 0x0FFF == ntc_ut_th,
@@ -22,13 +20,11 @@ impl VNTCUTTh {
     }
 
     /// Get the programmable under temp event counter threshold (4 bit)
-    #[inline]
     pub const fn get_nntc_ut_cnt_th(&self) -> u8 {
         ((self.0 & 0x0F00) >> 12) as u8
     }
 
     /// Set the programmable under temp event counter threshold (4 bit)
-    #[inline]
     pub const fn set_nntc_ut_cnt_th(&mut self, nntc_ut_cnt_th: u8) {
         self.0 = self.0 & 0x0FFF | ((nntc_ut_cnt_th as u16) << 12);
     }

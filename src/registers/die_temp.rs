@@ -8,13 +8,11 @@ pub struct DieTemp(u16);
 
 impl DieTemp {
     /// Get the measurement code of the DIE_TEMP_MEAS value
-    #[inline]
     pub const fn get_die_temp(&self) -> u16 {
         (self.0 & 0x0FFF) as u16
     }
 
     /// Get the voltage measurement of the pack in mV
-    #[inline]
     pub const fn get_die_temp_kelvin(&self) -> u16 {
         ((343165u32 - 196u32 * self.get_die_temp() as u32) / 1000u32) as u16
     }

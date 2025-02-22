@@ -7,26 +7,22 @@ pub struct VCell(u16);
 
 impl VCell {
     /// Create a new VCell register value
-    #[inline]
     pub(super) fn new(cell: u8, measurement: u16) -> Self {
         debug_assert!(cell > 0 && cell < 6);
         VCell(((cell as u16) << 12) | (measurement & 0x0FFF))
     }
 
     /// Get the cell voltage measurement code
-    #[inline]
     pub const fn get_vcell_meas(&self) -> u16 {
         (self.0 & 0x0FFF) as u16
     }
 
     /// Get the cell voltage measurement in mV
-    #[inline]
     pub const fn get_vcell_meas_mv(&self) -> u16 {
         122 * self.get_vcell_meas() / 100
     }
 
     /// Get the cell number
-    #[inline]
     pub const fn get_cell(&self) -> u8 {
         ((self.0 >> 12) & 0x0F) as u8
     }

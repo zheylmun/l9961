@@ -6,13 +6,11 @@ pub struct PersistentOvCThresholds(u16);
 
 impl PersistentOvCThresholds {
     /// Get the programmable persistent overcurrent fault threshold (8bit)
-    #[inline]
     pub const fn get_persistent_ovc_th(&self) -> u8 {
         (self.0 & 0x00FF) as u8
     }
 
     /// Set the programmable persistent overcurrent fault threshold (8bit)
-    #[inline]
     pub const fn set_persistent_ovc_th(&mut self, peristent_ovc_th: u8) {
         self.0 = self.0 & 0xFF00 | (peristent_ovc_th as u16);
     }

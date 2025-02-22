@@ -8,13 +8,11 @@ pub struct NtcGpio(u16);
 
 impl NtcGpio {
     /// Get the measurement code of the NTC_MEAS value
-    #[inline]
     pub const fn get_ntc_meas(&self) -> u16 {
         (self.0 & 0x0FFF) as u16
     }
 
     /// Get the converted NTC_MEAS value in TODO units
-    #[inline]
     pub const fn get_ntc_meas_unspecified(&self) -> u16 {
         806 * self.get_ntc_meas() / 1000
     }

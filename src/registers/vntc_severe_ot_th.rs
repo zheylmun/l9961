@@ -6,13 +6,11 @@ pub struct VNTCSevereOTTh(u16);
 
 impl VNTCSevereOTTh {
     /// Get the programmable severe over temp fault threshold (12bit)
-    #[inline]
     pub const fn get_ntc_severe_ot_th(&self) -> u16 {
         (self.0 & 0x0FFF) as u16
     }
 
     /// Set the the programmable severe over temp fault threshold (12bit)
-    #[inline]
     pub const fn set_ntc_severe_ot_th(&mut self, ntc_ot_th: u16) {
         debug_assert!(
             ntc_ot_th & 0x0FFF == ntc_ot_th,

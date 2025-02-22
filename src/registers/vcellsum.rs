@@ -8,13 +8,11 @@ pub struct VCellSum(u16);
 
 impl VCellSum {
     /// Get the sum of cell voltages measurement code
-    #[inline]
     pub const fn get_vcellsum_meas(&self) -> u16 {
         (self.0 & 0x7FFF) as u16
     }
 
     /// Get the sum of cell voltages measurement in mV
-    #[inline]
     pub const fn get_vcellsum_meas_mv(&self) -> u16 {
         122 * self.get_vcellsum_meas() / 100
     }

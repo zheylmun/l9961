@@ -8,13 +8,11 @@ pub struct VB(u16);
 
 impl VB {
     /// Get the measurement code of the battery pack
-    #[inline]
     pub const fn get_vb_meas(&self) -> u16 {
         (self.0 & 0x7FFF) as u16
     }
 
     /// Get the voltage measurement of the pack in mV
-    #[inline]
     pub const fn get_vb_meas_mv(&self) -> u16 {
         61 * self.get_vb_meas() / 10
     }

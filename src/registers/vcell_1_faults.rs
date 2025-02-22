@@ -10,13 +10,11 @@ pub struct VCell1Faults(u16);
 
 impl VCell1Faults {
     /// Get the Programmable cell overvoltage event counter threshold (4 bit)
-    #[inline]
     pub const fn get_crc_trim_cal_fail(&self) -> bool {
         self.0 & 0x4000 != 0
     }
 
     /// Get the Programmable cell overvoltage event counter threshold (4 bit)
-    #[inline]
     pub const fn get_crc_cfg_fail(&self) -> bool {
         self.0 & 0x8000 != 0
     }

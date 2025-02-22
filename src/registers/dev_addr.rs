@@ -8,13 +8,11 @@ pub struct DevAddr(u16);
 
 impl DevAddr {
     /// Get the configured device_address
-    #[inline]
     pub fn get_device_address(&self) -> u8 {
         (self.0 & 0b01111111) as u8
     }
 
     /// Set the device_address
-    #[inline]
     pub fn set_device_address(&mut self, device_address: u8) {
         debug_assert!(
             device_address & 0b01111111 == device_address,

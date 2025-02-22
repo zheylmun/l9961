@@ -22,7 +22,6 @@ pub enum TCellFilter {
 }
 
 impl From<u16> for TCellFilter {
-    #[inline]
     fn from(value: u16) -> Self {
         match value {
             0b00 => TCellFilter::T0_8Ms,
@@ -62,7 +61,6 @@ pub enum TSCFilter {
 }
 
 impl From<u16> for TSCFilter {
-    #[inline]
     fn from(value: u16) -> Self {
         match value {
             0b000 => TSCFilter::T32us,
@@ -102,7 +100,6 @@ pub enum TCurFilter {
 }
 
 impl From<u16> for TCurFilter {
-    #[inline]
     fn from(value: u16) -> Self {
         match value {
             0b00 => TCurFilter::T4_22Ms,
@@ -132,7 +129,6 @@ impl defmt::Format for TCurFilter {
 pub struct TMeasCycle(u8);
 
 impl From<u8> for TMeasCycle {
-    #[inline]
     fn from(value: u8) -> Self {
         debug_assert!(value & 0b1110000 == 0, "Invalid T_MEAS_CYCLE");
         Self(value)
@@ -141,7 +137,7 @@ impl From<u8> for TMeasCycle {
 
 impl Deref for TMeasCycle {
     type Target = u8;
-    #[inline]
+
     fn deref(&self) -> &u8 {
         &self.0
     }
@@ -181,52 +177,44 @@ impl Cfg1FiltersCycles {
     }
 
     /// Get the current cell voltage conversion time
-    #[inline]
     pub fn get_t_cell_filter(&self) -> TCellFilter {
         TCellFilter::from((self.0 >> TCELL_FILTER_SHIFT) & TCELL_FILTER_MASK)
     }
 
     /// Set a new cell voltage conversion time
-    #[inline]
     pub const fn set_t_cell_filter(&mut self, filter: TCellFilter) {
         self.0 = self.0 & !(TCELL_FILTER_MASK << TCELL_FILTER_SHIFT)
             | (filter as u16) << TCELL_FILTER_SHIFT;
     }
 
     /// Get the current short circuit measurement time
-    #[inline]
     pub fn get_t_sc_filter(&self) -> TSCFilter {
         TSCFilter::from((self.0 >> T_SC_FILTER_SHIFT) & T_SC_FILTER_MASK)
     }
 
     /// Set a new short circuit measurement time
-    #[inline]
     pub const fn set_t_sc_filter(&mut self, filter: TSCFilter) {
         self.0 = self.0 & !(T_SC_FILTER_MASK << T_SC_FILTER_SHIFT)
             | (filter as u16) << T_SC_FILTER_SHIFT;
     }
 
     /// Get the current current sense acquisition time
-    #[inline]
     pub fn get_t_curr_filter(&self) -> TCurFilter {
         TCurFilter::from((self.0 >> T_CUR_FILTER_SHIFT) & T_CUR_FILTER_MASK)
     }
 
     /// Set a new current sense acquisition time
-    #[inline]
     pub const fn set_t_curr_filter(&mut self, filter: TCurFilter) {
         self.0 = self.0 & !(T_CUR_FILTER_MASK << T_CUR_FILTER_SHIFT)
             | (filter as u16) << T_CUR_FILTER_SHIFT;
     }
 
     /// Get the current measurement cycle period
-    #[inline]
     pub fn get_t_meas_cycle(&self) -> TMeasCycle {
         TMeasCycle::from(((self.0 >> T_MEAS_CYCLE_SHIFT) & TCELL_FILTER_MASK) as u8)
     }
 
     /// Set a new measurement cycle period
-    #[inline]
     pub fn set_t_meas_cycle(&mut self, filter: TMeasCycle) {
         let filter_value = *filter as u16;
         self.0 = self.0 & !(T_MEAS_CYCLE_MASK << T_MEAS_CYCLE_SHIFT)
@@ -242,7 +230,6 @@ impl Deref for Cfg1FiltersCycles {
 }
 
 impl From<u16> for Cfg1FiltersCycles {
-    #[inline]
     fn from(id: u16) -> Self {
         debug_assert!(id & 0xF000 == 0, "Invalid CFG1_FILTERS_CYCLES");
         Cfg1FiltersCycles(id)

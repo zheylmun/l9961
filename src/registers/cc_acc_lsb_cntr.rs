@@ -6,13 +6,11 @@ pub struct CCAccLsbCntr(u16);
 
 impl CCAccLsbCntr {
     /// Get the number of samples stored in the accumulator
-    #[inline]
     pub const fn get_cc_sample_cnt(&self) -> u8 {
         (self.0 & 0x00FF) as u8
     }
 
     /// Get the lsb of the cc accumulator
-    #[inline]
     pub const fn get_cc_acc_lsb(&self) -> u8 {
         ((self.0 & 0xFF00) >> 8) as u8
     }
