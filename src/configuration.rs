@@ -4,14 +4,15 @@
 //! with validation of the values to ensure they are within the valid range for the L9961.
 //! The various configuration structs are used to set the configuration registers on the L9961.
 
+mod ntc_thresholds;
 mod voltage_thresholds;
 
-use embedded_hal_async::digital::Wait;
+pub use ntc_thresholds::NtcThresholds;
 pub use voltage_thresholds::VoltageThresholds;
 
 use crate::L9961;
 use embedded_hal::digital::OutputPin;
-use embedded_hal_async::i2c::I2c;
+use embedded_hal_async::{digital::Wait, i2c::I2c};
 
 impl<I2C, I, O, const CELL_COUNT: u8> L9961<I2C, I, O, CELL_COUNT>
 where
@@ -60,18 +61,21 @@ where
 /// Newtype for the counter threshold value to ensure a valid range.
 /// The counter threshold is a 4-bit value used to determine how many times a fault condition must occur before the fault is triggered.
 /// Default value is 10.
-pub(crate) struct CounterThreshold(u8);
+pub struct CounterThreshold(u8);
 
 impl CounterThreshold {
-    const fn new(value: u8) -> Self {
+    /// Create a new CounterThreshold with the given value
+    pub const fn new(value: u8) -> Self {
         debug_assert!(value < 16);
         CounterThreshold(value)
     }
 
+    /// Create a new CounterThreshold with the default value of 10
     pub const fn default() -> Self {
         Self(10)
     }
 
+    /// Get the internal value
     pub(crate) const fn value(&self) -> u8 {
         self.0
     }
