@@ -2,14 +2,24 @@
 #![no_main]
 #![no_std]
 
+use cortex_m::asm::wfi;
 use cortex_m_rt::entry;
-use embassy_stm32::{i2c::I2c, time::Hertz};
+use embassy_stm32::{
+    exti::ExtiInput,
+    gpio::Pull,
+    i2c::I2c,
+    interrupt::{self, EXTI0_1},
+    pac::exti,
+    peripherals::EXTI0,
+    time::Hertz,
+};
 use l9961::L9961;
 use steval_l99615c as functions;
 
 #[entry]
 fn main() -> ! {
     let p = embassy_stm32::init(Default::default());
+    let ready = ExtiInput::new(p.PB0, p.EXTI0, Pull::None);
     let i2c = I2c::new_blocking(p.I2C2, p.PB13, p.PB14, Hertz(100_000), Default::default());
     let mut l9961 = L9961::<_, 5>::new(i2c, 0x49);
     //let cell_thresholds = CellThresholds::new();

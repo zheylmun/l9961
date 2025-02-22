@@ -14,7 +14,7 @@ use crate::{
 use super::CounterThreshold;
 
 /// Cell threshold configuration struct
-pub struct CellThresholds<const CELL_COUNT: u8> {
+pub struct CellThresholds {
     pub(crate) cell_over_voltage_threshold_mv: u16,
     // TODO: Sample code and documentation disagree here.  Test with simulator cells to determine correct value.
     pub(crate) cell_severe_over_voltage_delta_threshold_mv: u16,
@@ -23,9 +23,11 @@ pub struct CellThresholds<const CELL_COUNT: u8> {
     pub(crate) cell_balancing_under_voltage_delta_threshold_mv: u16,
     pub(crate) fault_counter_threshold: CounterThreshold,
     pub(crate) max_pack_cell_sum_delta_mv: u16,
+    pub(crate) pack_over_voltage_threshold_mv: u16,
+    pub(crate) pack_under_voltage_threshold_mv: u16,
 }
 
-impl<const CELL_COUNT: u8> CellThresholds<CELL_COUNT> {
+impl CellThresholds {
     /// Create a new CellThresholds struct with the default values.
     pub const fn new() -> Self {
         CellThresholds {
@@ -36,6 +38,8 @@ impl<const CELL_COUNT: u8> CellThresholds<CELL_COUNT> {
             cell_balancing_under_voltage_delta_threshold_mv: 3181,
             fault_counter_threshold: CounterThreshold::default(),
             max_pack_cell_sum_delta_mv: 995,
+            pack_over_voltage_threshold_mv: 21000,
+            pack_under_voltage_threshold_mv: 15000,
         }
     }
 
@@ -118,15 +122,13 @@ impl<const CELL_COUNT: u8> CellThresholds<CELL_COUNT> {
 
     /// Get the pack over-voltage threshold register config based on this configuration
     pub(crate) fn pack_over_voltage_threshold(&self) -> VBOvTh {
-        let over_voltage_code =
-            pack_voltage_code_from_mv(self.cell_over_voltage_threshold_mv * CELL_COUNT as u16);
+        let over_voltage_code = pack_voltage_code_from_mv(self.pack_over_voltage_threshold_mv);
         VBOvTh::new(over_voltage_code, self.fault_counter_threshold.value())
     }
 
     /// Get the pack under-voltage threshold register config based on this configuration
     pub(crate) fn pack_under_voltage_threshold(&self) -> VBUvTh {
-        let under_voltage_code =
-            pack_voltage_code_from_mv(self.cell_under_voltage_threshold_mv * CELL_COUNT as u16);
+        let under_voltage_code = pack_voltage_code_from_mv(self.pack_under_voltage_threshold_mv);
         VBUvTh::new(under_voltage_code, self.fault_counter_threshold.value())
     }
 
@@ -136,7 +138,7 @@ impl<const CELL_COUNT: u8> CellThresholds<CELL_COUNT> {
     }
 }
 
-impl<const CELL_COUNT: u8> Format for CellThresholds<CELL_COUNT> {
+impl Format for CellThresholds {
     fn format(&self, f: Formatter) {
         write!(
             f,
@@ -158,8 +160,8 @@ impl<const CELL_COUNT: u8> Format for CellThresholds<CELL_COUNT> {
             round_trip_cell_voltage(self.cell_balancing_under_voltage_delta_threshold_mv),
             self.fault_counter_threshold.value(),
             round_trip_pack_voltage(self.max_pack_cell_sum_delta_mv),
-            round_trip_pack_voltage(self.cell_over_voltage_threshold_mv * CELL_COUNT as u16),
-            round_trip_pack_voltage(self.cell_under_voltage_threshold_mv * CELL_COUNT as u16)
+            round_trip_pack_voltage(self.pack_over_voltage_threshold_mv),
+            round_trip_pack_voltage(self.pack_under_voltage_threshold_mv)
         )
     }
 }
