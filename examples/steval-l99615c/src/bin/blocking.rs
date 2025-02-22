@@ -3,28 +3,24 @@
 #![no_std]
 
 use cortex_m_rt::entry;
-use l9961::{configuration::CellThresholds, L9961};
-use steval_l99615c as functions;
-use stm32g0xx_hal::{
-    i2c::{Config, I2cExt},
-    prelude::*,
-    stm32,
+use embassy_stm32::{
+    i2c::{Config, I2c},
+    time::Hertz,
 };
+use l9961::{
+    configuration::CellThresholds,
+    registers::{Cfg2Enables, FetConfig},
+    L9961,
+};
+use steval_l99615c as functions;
 
 #[entry]
 fn main() -> ! {
-    let dp = stm32::Peripherals::take().unwrap();
-    let mut rcc = dp.RCC.constrain();
-    let gpiob = dp.GPIOB.split(&mut rcc);
-    let scl = gpiob.pb13.into_open_drain_output_in_state(PinState::High);
-    let sda = gpiob.pb14.into_open_drain_output_in_state(PinState::High);
-    let i2c = dp
-        .I2C2
-        .i2c(sda, scl, Config::with_timing(0x2020_151b), &mut rcc);
-
+    let p = embassy_stm32::init(Default::default());
+    let i2c = I2c::new_blocking(p.I2C2, p.PB13, p.PB14, Hertz(100_000), Default::default());
     let mut l9961 = L9961::<_, 5>::new(i2c, 0x49);
-    let cell_thresholds = CellThresholds::new();
-    l9961.configure_voltage_thresholds(cell_thresholds).unwrap();
+    //let cell_thresholds = CellThresholds::new();
+    //l9961.configure_voltage_thresholds(cell_thresholds).unwrap();
     //l9961.download_configuration_from_nvm().unwrap();
 
     // Read the chip ID
