@@ -5,6 +5,18 @@ use core::ops::Deref;
 pub struct VNTCUTTh(u16);
 
 impl VNTCUTTh {
+    /// Create a new VNTCUTTh struct
+    pub const fn new(threshold: u16, fault_count: u8) -> Self {
+        debug_assert!(
+            threshold & 0x0FFF == threshold,
+            "Invalid ntc under temp threshold value"
+        );
+        debug_assert!(
+            fault_count & 0x0F == fault_count,
+            "Invalid ntc under temp counter threshold value"
+        );
+        Self((threshold & 0x0FFF) | ((fault_count as u16) << 12))
+    }
     /// Get the programmable under temp fault threshold (12bit)
     pub const fn get_ntc_ut_th(&self) -> u16 {
         (self.0 & 0x0FFF) as u16

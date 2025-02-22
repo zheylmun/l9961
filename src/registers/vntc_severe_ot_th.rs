@@ -5,16 +5,25 @@ use core::ops::Deref;
 pub struct VNTCSevereOTTh(u16);
 
 impl VNTCSevereOTTh {
-    /// Get the programmable severe over temp fault threshold (12bit)
+    /// Create a new NTC Severe Over Temperature Delta Threshold struct
+    pub const fn new(ntc_severe_ot_th: u16) -> Self {
+        debug_assert!(
+            ntc_severe_ot_th & 0x0FFF == ntc_severe_ot_th,
+            "Invalid ntc severe over-temp threshold value"
+        );
+        Self(ntc_severe_ot_th)
+    }
+
+    /// Get the programmable severe over temp delta threshold (12bit)
     pub const fn get_ntc_severe_ot_th(&self) -> u16 {
         (self.0 & 0x0FFF) as u16
     }
 
-    /// Set the the programmable severe over temp fault threshold (12bit)
+    /// Set the the programmable severe over temp delta threshold (12bit)
     pub const fn set_ntc_severe_ot_th(&mut self, ntc_ot_th: u16) {
         debug_assert!(
             ntc_ot_th & 0x0FFF == ntc_ot_th,
-            "Invalid ntc severe overtemp threshold value"
+            "Invalid ntc severe over-temp threshold value"
         );
         self.0 = self.0 & 0xF000 | (ntc_ot_th as u16);
     }

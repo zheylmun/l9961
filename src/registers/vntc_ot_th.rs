@@ -5,6 +5,19 @@ use core::ops::Deref;
 pub struct VNTCOTTh(u16);
 
 impl VNTCOTTh {
+    /// Create a new VNTCOTTh struct
+    pub const fn new(ntc_ot_th: u16, nntc_ot_cnt_th: u8) -> Self {
+        debug_assert!(
+            ntc_ot_th & 0x0FFF == ntc_ot_th,
+            "Invalid ntc overtemp threshold value"
+        );
+        debug_assert!(
+            nntc_ot_cnt_th & 0x0F == nntc_ot_cnt_th,
+            "Invalid ntc overtemp counter threshold value"
+        );
+        Self((ntc_ot_th & 0x0FFF) | ((nntc_ot_cnt_th as u16) << 12))
+    }
+
     /// Get the programmable over temp fault threshold (12bit)
     pub const fn get_ntc_ot_th(&self) -> u16 {
         (self.0 & 0x0FFF) as u16
