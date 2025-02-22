@@ -5,10 +5,43 @@ use cortex_m_semihosting::debug;
 
 use defmt_rtt as _; // global logger
 
-// TODO(5) adjust HAL import
-use embassy_stm32 as _; // memory layout
+use embassy_stm32::{
+    self as _, bind_interrupts,
+    exti::ExtiInput,
+    gpio::{Level, Output, Pull, Speed},
+    i2c::{self, I2c},
+    mode::Async,
+    peripherals::{self},
+    time::Hertz,
+    Peripherals,
+}; // memory layout
 
+use l9961::L9961;
 use panic_probe as _;
+
+bind_interrupts!(struct Irqs {
+    I2C2 => i2c::EventInterruptHandler<peripherals::I2C2>, i2c::ErrorInterruptHandler<peripherals::I2C2>;
+});
+
+pub fn initialize_l9961<'a>(
+    peripherals: Peripherals,
+) -> L9961<I2c<'a, Async>, ExtiInput<'a>, Output<'a>, 3> {
+    let i2c = I2c::new(
+        peripherals.I2C2,
+        peripherals.PB13,
+        peripherals.PB14,
+        Irqs,
+        peripherals.DMA1_CH1,
+        peripherals.DMA1_CH2,
+        Hertz(100_000),
+        Default::default(),
+    );
+
+    let ready = ExtiInput::new(peripherals.PB0, peripherals.EXTI0, Pull::None);
+    let faultn = ExtiInput::new(peripherals.PA6, peripherals.EXTI6, Pull::None);
+    let wakeup = Output::new(peripherals.PA5, Level::Low, Speed::Low);
+    L9961::<_, _, _, 3>::new(i2c, ready, faultn, wakeup, 0x49)
+}
 
 // same panicking *behavior* as `panic-probe` but doesn't print a panic message
 // this prevents the panic message being printed *twice* when `defmt::panic` is invoked

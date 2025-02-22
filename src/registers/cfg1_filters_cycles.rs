@@ -175,6 +175,11 @@ impl Cfg1FiltersCycles {
         )
     }
 
+    /// Create a new Cfg1FiltersCycles register that deactivates measurements
+    pub const fn deactivate() -> Self {
+        Self(0)
+    }
+
     /// Get the current cell voltage conversion time
     #[inline]
     pub fn get_t_cell_filter(&self) -> TCellFilter {

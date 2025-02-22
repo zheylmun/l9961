@@ -1,87 +1,53 @@
 #![no_main]
 #![no_std]
 
-use cortex_m_rt::entry;
+use defmt::info;
 use embassy_executor::Spawner;
-use embassy_stm32::{
-    bind_interrupts,
-    exti::ExtiInput,
-    gpio::{Level, Output, Pull, Speed},
-    i2c::{self, I2c},
-    peripherals,
-    time::Hertz,
-};
+use embassy_time::Delay;
 use l9961::{
     configuration::VoltageThresholds,
-    registers::{Cfg1FiltersCycles, Cfg2Enables, FetConfig, TCellFilter, TCurFilter, TSCFilter},
-    L9961,
+    registers::{Cfg2Enables, FetConfig},
 };
-use steval_l99615c as functions;
-
-bind_interrupts!(struct Irqs {
-    I2C2 => i2c::EventInterruptHandler<peripherals::I2C2>, i2c::ErrorInterruptHandler<peripherals::I2C2>;
-});
+use steval_l99615c::{self as functions, initialize_l9961};
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) -> ! {
-    let p = embassy_stm32::init(Default::default());
-
-    let i2c = I2c::new(
-        p.I2C2,
-        p.PB13,
-        p.PB14,
-        Irqs,
-        p.DMA1_CH1,
-        p.DMA1_CH2,
-        Hertz(100_000),
-        Default::default(),
-    );
-
-    let ready = ExtiInput::new(p.PB0, p.EXTI0, Pull::None);
-    let faultn = ExtiInput::new(p.PA6, p.EXTI6, Pull::None);
-    let mut wakeup = Output::new(p.PA5, Level::Low, Speed::Low);
-    let mut nship = Output::new(p.PB9, Level::Low, Speed::Low);
-    let mut l9961 = L9961::<_, _, _, 3>::new(i2c, ready, faultn, wakeup, 0x49);
-
-    /*
+    let peripherals = embassy_stm32::init(Default::default());
+    let mut l9961 = initialize_l9961(peripherals);
+    let mut delay = Delay;
+    info!("L9961 Initialized");
+    l9961.wake_if_asleep(&mut delay).await;
+    l9961.disable_measurements().await.unwrap();
+    l9961.mask_all_faults().await.unwrap();
+    l9961.clear_all_faults().await.unwrap();
     // See if the l9961 is awake by trying to read the chip ID
-    match l9961.read_chip_id().await {
-        Ok(id) => {
-            defmt::info!("L9961 is awake: {}", id);
-        }
-        Err(_) => {
-            defmt::info!("L9961 is asleep Waking up L9961");
-            wakeup.set_high();
-            while ready.is_low() {}
-            wakeup.set_low();
-        }
-    }
 
-        let cell_thresholds = VoltageThresholds::new()
-            .with_cell_under_voltage_threshold_mv(1000)
-            .with_cell_severe_under_voltage_threshold_mv(500);
-        l9961
-            .configure_voltage_thresholds(cell_thresholds)
-            .await
-            .unwrap();
+    let cell_thresholds = VoltageThresholds::new()
+        .with_cell_under_voltage_threshold_mv(1000)
+        .with_cell_severe_under_voltage_threshold_mv(500);
+    l9961
+        .configure_voltage_thresholds(cell_thresholds)
+        .await
+        .unwrap();
 
-        let enables = Cfg2Enables::new(
-            true,
-            true,
-            false,
-            false,
-            false,
-            true,
-            false,
-            false,
-            false,
-            false,
-            false,
-            FetConfig::HighSide,
-            FetConfig::HighSide,
-            false,
-        );
-        l9961.write_cfg2_enables(enables).unwrap();
+    let enables = Cfg2Enables::new(
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        FetConfig::HighSide,
+        FetConfig::HighSide,
+        false,
+    );
+    l9961.write_cfg2_enables(enables).await.unwrap();
+    /*
         let cell_filters = Cfg1FiltersCycles::new(
             TCellFilter::T1_31Ms,
             TSCFilter::T64us,
@@ -195,6 +161,22 @@ async fn main(_spawner: Spawner) -> ! {
     let crc_faults = l9961.read_vcell_1_faults().await.unwrap();
     defmt::info!("{}", crc_faults);
 
+    let diag_ot_ov_ut = l9961.read_diag_ov_ot_ut().await.unwrap();
+    defmt::info!("{}", diag_ot_ov_ut);
+
+    let diag_uv = l9961.read_diag_uv().await.unwrap();
+    defmt::info!("{}", diag_uv);
+
+    let cc_inst_meas = l9961.read_cc_inst_meas().await.unwrap();
+    defmt::info!("{}", cc_inst_meas);
+
+    let cc_acc_msb = l9961.read_cc_acc_msb().await.unwrap();
+    let cc_acc_lsb = l9961.read_cc_acc_lsb_cntr().await.unwrap();
+    let cc_acc = (cc_acc_msb as u32) << 8 | cc_acc_lsb.get_cc_acc_lsb() as u32;
+    defmt::info!("CC_ACC: {}", cc_acc);
+    defmt::info!("CC_ACC_SAMPLE_CNT: {}", cc_acc_lsb.get_cc_sample_cnt());
+    let diag_curr = l9961.read_diag_curr().await.unwrap();
+    defmt::info!("{}", diag_curr);
     // Read the cell voltages
 
     for i in 1..=5 {
@@ -213,33 +195,6 @@ async fn main(_spawner: Spawner) -> ! {
 
     let die_temp = l9961.read_die_temp().await.unwrap();
     defmt::info!("{}", die_temp);
-
-    let diag_ot_ov_ut = l9961.read_diag_ov_ot_ut().await.unwrap();
-    defmt::info!("{}", diag_ot_ov_ut);
-
-    let diag_uv = l9961.read_diag_uv().await.unwrap();
-    defmt::info!("{}", diag_uv);
-
-    let cc_inst_meas = l9961.read_cc_inst_meas().await.unwrap();
-    defmt::info!("{}", cc_inst_meas);
-
-    let cc_acc_msb = l9961.read_cc_acc_msb().await.unwrap();
-    let cc_acc_lsb = l9961.read_cc_acc_lsb_cntr().await.unwrap();
-    let cc_acc = (cc_acc_msb as u32) << 8 | cc_acc_lsb.get_cc_acc_lsb() as u32;
-    defmt::info!("CC_ACC: {}", cc_acc);
-    defmt::info!("CC_ACC_SAMPLE_CNT: {}", cc_acc_lsb.get_cc_sample_cnt());
-    let diag_curr = l9961.read_diag_curr().await.unwrap();
-    defmt::info!("{}", diag_curr);
-
-    /*
-    let mut measurements = 0;
-    while measurements < 10 {
-        while ready.is_low() {}
-        let cell_voltage = l9961.read_vcell(1).await.unwrap();
-        defmt::info!("{}", cell_voltage);
-        measurements += 1;
-    }
-    */
 
     l9961.go_2_standby().await.unwrap();
 
