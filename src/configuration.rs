@@ -4,9 +4,9 @@
 //! with validation of the values to ensure they are within the valid range for the L9961.
 //! The various configuration structs are used to set the configuration registers on the L9961.
 
-mod cell_thresholds;
+mod voltage_thresholds;
 
-pub use cell_thresholds::CellThresholds;
+pub use voltage_thresholds::VoltageThresholds;
 
 use crate::L9961;
 
@@ -25,7 +25,7 @@ where
     #[maybe_async::maybe_async]
     pub async fn configure_voltage_thresholds(
         &mut self,
-        config: CellThresholds<CELL_COUNT>,
+        config: VoltageThresholds,
     ) -> Result<(), I2C::Error> {
         info!("Applying cell voltage thresholds:\n{}", config);
 
