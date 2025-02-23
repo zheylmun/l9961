@@ -39,12 +39,12 @@ async fn main(_spawner: Spawner) -> ! {
 
     // Configure the voltage monitoring with extreme thresholds to avoid faults triggering
     let voltage = VoltageThresholds {
-        cell_over_voltage_threshold_mv: 5000,
-        cell_severe_over_voltage_delta_threshold_mv: 500,
+        cell_over_voltage_threshold_mv: 4500,
+        cell_severe_over_voltage_delta_threshold_mv: 4900,
         cell_under_voltage_threshold_mv: 0,
         cell_severe_under_voltage_delta_threshold_mv: 500,
         cell_balancing_under_voltage_delta_threshold_mv: 500,
-        pack_over_voltage_threshold_mv: 25000,
+        pack_over_voltage_threshold_mv: 24000,
         pack_under_voltage_threshold_mv: 0,
         max_pack_cell_sum_delta_mv: 1000,
         fault_counter_threshold: CounterThreshold::default(),
@@ -53,8 +53,11 @@ async fn main(_spawner: Spawner) -> ! {
     // Clear any faults that may have been triggered
     l9961.clear_all_faults().await.unwrap();
     l9961.enable_measurements().await.unwrap();
-
-    loop {}
+    let mut counter = 0;
+    while counter < 100 {
+        l9961.make_measurement(&mut delay).await.unwrap();
+        counter += 1;
+    }
 
     l9961.go_2_standby().await.unwrap();
 

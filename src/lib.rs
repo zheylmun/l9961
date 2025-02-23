@@ -6,6 +6,7 @@
 pub mod commands;
 pub mod configuration;
 pub mod conversions;
+pub mod measurement;
 pub mod registers;
 
 use embassy_futures::select::select;
