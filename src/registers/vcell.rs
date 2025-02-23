@@ -1,5 +1,7 @@
 use core::ops::Deref;
 
+use crate::conversions::cell_voltage_measurement_mv_from_code;
+
 /// VCell Measurement Register
 /// Packs the cell number and measurement value into a single u16.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -13,13 +15,8 @@ impl VCell {
     }
 
     /// Get the cell voltage measurement code
-    pub const fn get_vcell_meas(&self) -> u16 {
+    pub const fn get_vcell_meas_code(&self) -> u16 {
         (self.0 & 0x0FFF) as u16
-    }
-
-    /// Get the cell voltage measurement in mV
-    pub const fn get_vcell_meas_mv(&self) -> u16 {
-        122 * self.get_vcell_meas() / 100
     }
 
     /// Get the cell number
@@ -44,7 +41,7 @@ impl defmt::Format for VCell {
             "VCELL{}: {{\n  VCELL{} : {}mv,\n}}",
             cell,
             cell,
-            self.get_vcell_meas_mv()
+            cell_voltage_measurement_mv_from_code(self.get_vcell_meas_code()),
         )
     }
 }

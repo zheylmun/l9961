@@ -2,19 +2,34 @@
 //! The L9961 uses coded values for many of its registers.
 //! These functions convert between the coded values and the actual values in mV, mA, etc.
 
-/// Convert a cell voltage register code to mV
-pub const fn cell_voltage_mv_from_code(code: u8) -> u16 {
+/// Convert a cell voltage threshold register code to mV
+pub const fn cell_voltage_threshold_mv_from_code(code: u8) -> u16 {
     ((19520 * code as u32) / 1000) as u16
 }
 
 /// Convert a cell voltage in mV to a register code
-pub const fn cell_voltage_code_from_mv(voltage_mv: u16) -> u8 {
+pub const fn cell_voltage_threshold_code_from_mv(voltage_mv: u16) -> u8 {
     ((voltage_mv as u32 * 1000) / 19520) as u8
 }
 
 /// Convert from mv to code and back to get the actual value which will be set given a target mv value
-pub const fn round_trip_cell_voltage(voltage_mv: u16) -> u16 {
-    cell_voltage_mv_from_code(cell_voltage_code_from_mv(voltage_mv))
+pub const fn round_trip_cell_voltage_threshold(voltage_mv: u16) -> u16 {
+    cell_voltage_threshold_mv_from_code(cell_voltage_threshold_code_from_mv(voltage_mv))
+}
+
+/// Convert a cell voltage measurement register code to mV
+pub const fn cell_voltage_measurement_mv_from_code(code: u16) -> u16 {
+    ((122 * code as u32) / 100) as u16
+}
+
+/// Convert a cell voltage in mV to a register code
+pub const fn cell_voltage_measurement_code_from_mv(voltage_mv: u16) -> u16 {
+    ((voltage_mv as u32 * 100) / 122) as u16
+}
+
+/// Convert from mv to code and back to get the actual value which will be set given a target mv value
+pub const fn round_trip_cell_voltage_measurement(voltage_mv: u16) -> u16 {
+    cell_voltage_measurement_mv_from_code(cell_voltage_measurement_code_from_mv(voltage_mv))
 }
 
 /// Convert a pack voltage register code to mV
