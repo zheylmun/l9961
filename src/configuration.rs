@@ -22,7 +22,6 @@ where
 {
     /// Configure the cell voltage thresholds
     /// Pack level thresholds will be set automatically based on the per-cell thresholds and the number of cells.
-    #[maybe_async::maybe_async]
     pub async fn configure_voltage_thresholds(
         &mut self,
         config: VoltageThresholds,
