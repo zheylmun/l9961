@@ -126,27 +126,41 @@ impl defmt::Format for TCurFilter {
 
 /// Programmable voltage conversion routine execution period (5 bit)
 /// The period is equal to T_MEAS_CYCLE * 10 ms
-pub struct TMeasCycle(u8);
+#[repr(u8)]
+pub enum TMeasCycle {
+    /// When T_MEAS_CYCLE is 0, the measurement loop is disabled
+    Disabled = 0b00000,
+    /// The measurement loop is executed every T_MEAS_CYCLE * 10 ms
+    Period10ms(u8),
+}
 
 impl From<u8> for TMeasCycle {
     fn from(value: u8) -> Self {
         debug_assert!(value & 0b1110000 == 0, "Invalid T_MEAS_CYCLE");
-        Self(value)
+        match value {
+            0 => TMeasCycle::Disabled,
+            _ => TMeasCycle::Period10ms(value),
+        }
     }
 }
 
 impl Deref for TMeasCycle {
     type Target = u8;
-
     fn deref(&self) -> &u8 {
-        &self.0
+        match self {
+            TMeasCycle::Disabled => &0,
+            TMeasCycle::Period10ms(value) => value,
+        }
     }
 }
 
 #[cfg(feature = "defmt")]
 impl defmt::Format for TMeasCycle {
     fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "T_MEAS_CYCLE: {} ms", (self.0 * 10).max(10))
+        match self {
+            TMeasCycle::Disabled => defmt::write!(f, "T_MEAS_CYCLE: Disabled"),
+            TMeasCycle::Period10ms(value) => defmt::write!(f, "T_MEAS_CYCLE: {}ms", value * 10,),
+        }
     }
 }
 
