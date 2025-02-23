@@ -15,7 +15,7 @@ mod diag_uv;
 mod die_temp;
 mod ntc_gpio;
 mod ovc_thresholds;
-mod persistent_ovc_thresholds;
+mod persistent_ovc_threshold;
 mod sc_threshold;
 mod to_faultn_msk;
 mod to_fuse_rst_msk;
@@ -50,7 +50,7 @@ pub use self::{
     die_temp::DieTemp,
     ntc_gpio::NtcGpio,
     ovc_thresholds::OvCThresholds,
-    persistent_ovc_thresholds::PersistentOvCThresholds,
+    persistent_ovc_threshold::PersistentOvCThreshold,
     sc_threshold::SCThreshold,
     to_faultn_msk::ToFaultnMsk,
     to_fuse_rst_msk::ToFuseRstMask,
@@ -450,7 +450,7 @@ where
     /// Read the PERSISTENT_OVC_THRESHOLDS register
     pub async fn read_persistent_ovc_thresholds(
         &mut self,
-    ) -> Result<PersistentOvCThresholds, I2C::Error> {
+    ) -> Result<PersistentOvCThreshold, I2C::Error> {
         Ok(self
             .read_register(Registers::PersistentOvCThresholds)
             .await?
@@ -460,7 +460,7 @@ where
     /// Write a new value to the PERSISTENT_OVC_THRESHOLDS register
     pub async fn write_persistent_ovc_thresholds(
         &mut self,
-        new_config: PersistentOvCThresholds,
+        new_config: PersistentOvCThreshold,
     ) -> Result<(), I2C::Error> {
         self.write_register(Registers::PersistentOvCThresholds, *new_config)
             .await

@@ -12,8 +12,8 @@ impl NtcGpio {
         (self.0 & 0x0FFF) as u16
     }
 
-    /// Get the converted NTC_MEAS value in TODO units
-    pub const fn get_ntc_meas_unspecified(&self) -> u16 {
+    /// Get the converted NTC_MEAS value in mV
+    pub const fn get_ntc_meas_mv(&self) -> u16 {
         806 * self.get_ntc_meas() / 1000
     }
 }
@@ -35,10 +35,6 @@ impl From<u16> for NtcGpio {
 #[cfg(feature = "defmt")]
 impl defmt::Format for NtcGpio {
     fn format(&self, f: defmt::Formatter) {
-        defmt::write!(
-            f,
-            "NTC_MEAS : {} godknowswhatunits,",
-            self.get_ntc_meas_unspecified()
-        )
+        defmt::write!(f, "NTC_MEAS : {} mV", self.get_ntc_meas_mv())
     }
 }

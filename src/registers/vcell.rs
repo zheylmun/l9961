@@ -38,8 +38,7 @@ impl defmt::Format for VCell {
         let cell = self.get_cell();
         defmt::write!(
             f,
-            "VCELL{}: {{\n  VCELL{} : {}mv,\n}}",
-            cell,
+            "VCELL{}: {}mv",
             cell,
             cell_voltage_measurement_mv_from_code(self.get_vcell_meas_code()),
         )

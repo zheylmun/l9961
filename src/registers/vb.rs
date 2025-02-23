@@ -35,6 +35,6 @@ impl From<u16> for VB {
 #[cfg(feature = "defmt")]
 impl defmt::Format for VB {
     fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "VB : {}mv,", self.get_vb_meas_mv())
+        defmt::write!(f, "VB : {}mv", self.get_vb_meas_mv())
     }
 }

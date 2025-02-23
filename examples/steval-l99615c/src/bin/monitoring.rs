@@ -39,9 +39,9 @@ async fn main(_spawner: Spawner) -> ! {
 
     // Configure the voltage monitoring with extreme thresholds to avoid faults triggering
     let voltage = VoltageThresholds {
-        cell_over_voltage_threshold_mv: 4500,
-        cell_severe_over_voltage_delta_threshold_mv: 4900,
-        cell_under_voltage_threshold_mv: 0,
+        cell_over_voltage_threshold_mv: 2000,
+        cell_severe_over_voltage_delta_threshold_mv: 100,
+        cell_under_voltage_threshold_mv: 1000,
         cell_severe_under_voltage_delta_threshold_mv: 500,
         cell_balancing_under_voltage_delta_threshold_mv: 500,
         pack_over_voltage_threshold_mv: 24000,

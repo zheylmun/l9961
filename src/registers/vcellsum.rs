@@ -35,10 +35,6 @@ impl From<u16> for VCellSum {
 #[cfg(feature = "defmt")]
 impl defmt::Format for VCellSum {
     fn format(&self, f: defmt::Formatter) {
-        defmt::write!(
-            f,
-            "VCELLSUM: {{\n  VCELLSUM : {}mv,\n}}",
-            self.get_vcellsum_meas_mv()
-        )
+        defmt::write!(f, "VCELLSUM:  {}mv", self.get_vcellsum_meas_mv())
     }
 }

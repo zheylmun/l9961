@@ -45,10 +45,6 @@ impl From<u16> for VNTCSevereOTTh {
 #[cfg(feature = "defmt")]
 impl defmt::Format for VNTCSevereOTTh {
     fn format(&self, f: defmt::Formatter) {
-        defmt::write!(
-            f,
-            "VNTC_SEVERE_OT_TH: {{\n  NTC_SEVERE_OT_TH: {},\n}}",
-            self.get_ntc_severe_ot_th(),
-        )
+        defmt::write!(f, "VNTC_SEVERE_OT_TH: {}", self.get_ntc_severe_ot_th(),)
     }
 }

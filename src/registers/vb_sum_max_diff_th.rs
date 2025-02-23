@@ -36,7 +36,7 @@ impl defmt::Format for VBSumMaxDiffTh {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "VB_SUM_MAX_DIFF_TH: {{\n  VB_SUM_MAX_DIFF_TH: {},\n}}",
+            "VB_SUM_MAX_DIFF_TH: {}",
             self.get_vb_sum_max_diff_th_volts(),
         )
     }

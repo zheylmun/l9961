@@ -2,9 +2,9 @@ use core::ops::Deref;
 
 /// Overcurrent monitoring persistent covercurrent threshold configuration register
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub struct PersistentOvCThresholds(u16);
+pub struct PersistentOvCThreshold(u16);
 
-impl PersistentOvCThresholds {
+impl PersistentOvCThreshold {
     /// Get the programmable persistent overcurrent fault threshold (8bit)
     pub const fn get_persistent_ovc_th(&self) -> u8 {
         (self.0 & 0x00FF) as u8
@@ -16,14 +16,14 @@ impl PersistentOvCThresholds {
     }
 }
 
-impl Deref for PersistentOvCThresholds {
+impl Deref for PersistentOvCThreshold {
     type Target = u16;
     fn deref(&self) -> &u16 {
         &self.0
     }
 }
 
-impl From<u16> for PersistentOvCThresholds {
+impl From<u16> for PersistentOvCThreshold {
     fn from(id: u16) -> Self {
         debug_assert!(id & 0xFF00 == 0, "Invalid OvCThresholds value");
         Self(id)
@@ -31,11 +31,11 @@ impl From<u16> for PersistentOvCThresholds {
 }
 
 #[cfg(feature = "defmt")]
-impl defmt::Format for PersistentOvCThresholds {
+impl defmt::Format for PersistentOvCThreshold {
     fn format(&self, f: defmt::Formatter) {
         defmt::write!(
             f,
-            "PERSISTENT_OVC_THRESHOLDS: {{\n  PERSISTENT_OVC_TH: {},\n}}",
+            "PERSISTENT_OVC_THRESHOLD: {}",
             self.get_persistent_ovc_th(),
         )
     }
