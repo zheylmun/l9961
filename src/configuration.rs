@@ -30,15 +30,12 @@ where
         // Program the cell over-voltage threshold and counter threshold register
         self.write_vcell_ov_th(config.cell_over_voltage_configuration())
             .await?;
-
         // Program the cell under-voltage threshold and counter threshold register
         self.write_vcell_uv_th(config.cell_under_voltage_configuration())
             .await?;
-
         // Program the cell balancing under-voltage delta threshold and counter threshold register
         self.write_vcell_bal_uv_delta_th(config.cell_balancing_under_voltage_delta_configuration())
             .await?;
-
         // Program the cell severe under/over-voltage threshold register
         self.write_vcell_severe_delta_thrs(
             config.cell_severe_voltage_threshold_delta_configuration(),
@@ -47,17 +44,30 @@ where
         // Program the pack over voltage threshold register
         self.write_vb_ov_th(config.pack_over_voltage_threshold())
             .await?;
-
         // Program the pack under voltage threshold register
         self.write_vb_uv_th(config.pack_under_voltage_threshold())
             .await?;
-
         // Program the pack vs cell sum plausibility check register
         self.write_vb_sum_max_diff_th(config.pack_vs_cell_sum_delta_threshold())
             .await?;
         Ok(())
     }
+
+    /// Configure the NTC thresholds
+    pub async fn configure_ntc_thresholds(
+        &mut self,
+        thresholds: NtcThresholds,
+    ) -> Result<(), I2C::Error> {
+        self.write_vntc_ot_th(thresholds.over_temperature_configuration())
+            .await?;
+        self.write_vntc_ut_th(thresholds.under_temperature_configuration())
+            .await?;
+        self.write_vntc_severe_ot_th(thresholds.severe_over_temp_delta_configuration())
+            .await?;
+        Ok(())
+    }
 }
+
 /// Newtype for the counter threshold value to ensure a valid range.
 /// The counter threshold is a 4-bit value used to determine how many times a fault condition must occur before the fault is triggered.
 /// Default value is 10.

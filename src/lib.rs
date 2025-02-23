@@ -11,7 +11,8 @@ pub mod registers;
 use embassy_futures::select::select;
 pub use registers::Registers;
 use registers::{
-    Cfg1FiltersCycles, DiagCurr, DiagOvOtUt, DiagUv, ToFaultnMsk, ToFuseRstMask, ToPrdrvBalMask,
+    Cfg1FiltersCycles, DiagCurr, DiagOvOtUt, DiagUv, TCellFilter, TCurFilter, TSCFilter,
+    ToFaultnMsk, ToFuseRstMask, ToPrdrvBalMask,
 };
 
 use embedded_hal::digital::OutputPin;
@@ -60,6 +61,17 @@ where
         // Setting the cycle period to 0 disables all measurement
         self.write_cfg1_filters_cycles(Cfg1FiltersCycles::deactivate())
             .await
+    }
+
+    /// Enable the measurement cycle
+    pub async fn enable_measurements(&mut self) -> Result<(), I2C::Error> {
+        self.write_cfg1_filters_cycles(Cfg1FiltersCycles::new(
+            TCellFilter::T4_38Ms,
+            TSCFilter::T128us,
+            TCurFilter::T16_9Ms,
+            30,
+        ))
+        .await
     }
 
     /// Clear all fault registers
