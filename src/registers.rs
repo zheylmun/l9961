@@ -187,17 +187,43 @@ where
     I: Wait,
     O: OutputPin,
 {
-    /// Read a register from the L9961.
+    /// Read one or more registers from the l9961
     #[maybe_async]
-    pub async fn read_register(&mut self, register: Registers) -> Result<u16, I2C::Error> {
-        let mut buffer = [0, 0];
+    pub async fn read_registers(
+        &mut self,
+        register: Registers,
+        count: usize,
+    ) -> Result<&[u16], I2C::Error> {
+        let crc = false;
+        let stride = match crc {
+            true => 3,
+            false => 2,
+        };
+        let bytes_to_read = count * stride;
         // TODO:To validate CRC
         // CRC of the data is calculated over the following values
         // [address << 1, register, address<< 1 | 1, value]
         self.i2c
-            .write_read(self.address, &[register as u8], &mut buffer)
+            .write_read(
+                self.address,
+                &[register as u8],
+                &mut self.i2c_scratch_buffer[3..3 + bytes_to_read],
+            )
             .await?;
-        Ok(u16::from_be_bytes(buffer))
+        for i in 0..count {
+            self.i2c_results[i] = u16::from_be_bytes(
+                self.i2c_scratch_buffer[3 + i * stride..3 + i * stride + 2]
+                    .try_into()
+                    .unwrap(),
+            );
+    }
+        Ok(&self.i2c_results[0..count])
+    }
+
+    /// Convenience function to read a single register from the l9961
+    #[inline]
+    pub async fn read_register(&mut self, register: Registers) -> Result<u16, I2C::Error> {
+        Ok(self.read_registers(register, 1).await?[0].into())
     }
 
     /// Write a new value to a register on the l9961
