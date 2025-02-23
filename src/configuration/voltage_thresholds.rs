@@ -13,18 +13,49 @@ use crate::{
 
 use super::CounterThreshold;
 
-/// Cell threshold configuration struct
+/// Voltage threshold configuration struct
 pub struct VoltageThresholds {
-    pub(crate) cell_over_voltage_threshold_mv: u16,
-    // TODO: Sample code and documentation disagree here.  Test with simulator cells to determine correct value.
-    pub(crate) cell_severe_over_voltage_delta_threshold_mv: u16,
-    pub(crate) cell_under_voltage_threshold_mv: u16,
-    pub(crate) cell_severe_under_voltage_delta_threshold_mv: u16,
-    pub(crate) cell_balancing_under_voltage_delta_threshold_mv: u16,
-    pub(crate) fault_counter_threshold: CounterThreshold,
-    pub(crate) max_pack_cell_sum_delta_mv: u16,
-    pub(crate) pack_over_voltage_threshold_mv: u16,
-    pub(crate) pack_under_voltage_threshold_mv: u16,
+    /// # Cell over-voltage threshold in mV
+    /// The cell over-voltage threshold is the voltage at which the cell is considered to be over-voltage.
+    /// The threshold is a 12-bit value with a resolution of 19.52mV.
+    /// If the cell voltage exceeds this threshold, the cell over-voltage fault will be triggered.
+    pub cell_over_voltage_threshold_mv: u16,
+    /// # Cell severe over-voltage delta threshold in mV
+    /// The cell severe over-voltage delta threshold is the voltage difference between the cell voltage and the over-voltage threshold at which the cell is considered to be severely over-voltage.
+    /// A severe over-voltage fault is expected to cause irreversible damage to the cell.
+    /// The threshold is a 12-bit value with a resolution of 19.52mV.
+    /// If the cell voltage exceeds this threshold, the cell severe over-voltage fault will be triggered, potentially blowing the pack fuse to prevent further over-charge
+    pub cell_severe_over_voltage_delta_threshold_mv: u16,
+    /// # Cell under-voltage threshold in mV
+    /// The cell under-voltage threshold is the voltage at which the cell is considered to be under-voltage.
+    /// The threshold is a 12-bit value with a resolution of 19.52mV.
+    /// If the cell voltage falls below this threshold, the cell under-voltage fault will be triggered.
+    pub cell_under_voltage_threshold_mv: u16,
+    /// # Cell severe under-voltage delta threshold in mV
+    /// The cell severe under-voltage delta threshold is the voltage difference between the cell voltage and the under-voltage threshold at which the cell is considered to be severely under-voltage.
+    /// A severe under
+    pub cell_severe_under_voltage_delta_threshold_mv: u16,
+    /// # Cell balancing under-voltage delta threshold in mV
+    /// The cell balancing under-voltage delta threshold is the voltage difference above the under-voltage threshold at which the cell voltage is too low to be considered for balancing.
+    /// The threshold is a 12-bit value with a resolution of 19.52mV.
+    /// If the cell voltage falls below this threshold, the cell balancing under-voltage fault will be triggered.
+    pub cell_balancing_under_voltage_delta_threshold_mv: u16,
+    /// # Maximum allowed delta between measured pack voltage and sum of cell measurements
+    /// This is a plausibility check to compare the individual cell measurements to the overall pack voltage
+    /// TODO: This one has a different scale
+    pub max_pack_cell_sum_delta_mv: u16,
+    /// # VB over-voltage threshold in mV
+    /// The pack over voltage threshold is the voltage at which the pack is considered to be over-voltage
+    /// The threshold is a 16-bit value with a resolution of 9.76mV.
+    /// If the pack voltage exceeds this threshold, the pack over-voltage fault will be triggered.
+    pub pack_over_voltage_threshold_mv: u16,
+    /// # VB under-voltage threshold in mV
+    /// The pack under voltage threshold is the voltage at which the pack is considered to be under-voltage
+    /// The threshold is a 16-bit value with a resolution of 9.76mV.
+    /// If the pack voltage falls below this threshold, the pack under-voltage fault will be triggered.
+    pub pack_under_voltage_threshold_mv: u16,
+    /// Number of measurement cycles where thresholds must be exceeded before triggering a fault
+    pub fault_counter_threshold: CounterThreshold,
 }
 
 impl VoltageThresholds {
