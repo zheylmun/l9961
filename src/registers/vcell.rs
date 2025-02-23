@@ -7,7 +7,7 @@ pub struct VCell(u16);
 
 impl VCell {
     /// Create a new VCell register value
-    pub(super) fn new(cell: u8, measurement: u16) -> Self {
+    pub const fn new(cell: u8, measurement: u16) -> Self {
         debug_assert!(cell > 0 && cell < 6);
         VCell(((cell as u16) << 12) | (measurement & 0x0FFF))
     }
