@@ -36,6 +36,8 @@ where
             embassy_futures::select::Either3::Second(result) => {
                 result.unwrap();
                 self.read_fault_registers().await?;
+                self.clear_fault_registers().await?;
+                self.read_measurement_registers().await?;
                 self.ready.wait_for_any_edge().await.unwrap();
             }
             embassy_futures::select::Either3::Third(()) => (),
@@ -62,7 +64,7 @@ where
         Ok(())
     }
 
-    async fn read_fault_registers(&mut self) -> Result<(), I2C::Error> {
+    async fn read_fault_registers(&mut self) -> Result<(DiagOvOtUt, DiagUv, DiagCurr), I2C::Error> {
         let register_values = self.read_registers(Registers::DiagOvOtUt, 2).await.unwrap();
         let diag_1 = DiagOvOtUt::from_bits_truncate(register_values[0]);
         let diag_2 = DiagUv::from_bits_truncate(register_values[1]);
@@ -78,6 +80,12 @@ where
             diag3
         );
 
-        Ok(())
+        Ok((diag_1, diag_2, diag3))
+    }
+
+    async fn clear_fault_registers(&mut self) -> Result<(), I2C::Error> {
+        self.write_diag_ov_ot_ut(DiagOvOtUt::all()).await?;
+        self.write_diag_uv(DiagUv::all()).await?;
+        self.write_diag_curr(DiagCurr::all()).await
     }
 }

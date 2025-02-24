@@ -134,22 +134,22 @@ pub enum TMeasCycle {
     Period10ms(u8),
 }
 
+impl TMeasCycle {
+    /// Get the period in milliseconds
+    pub const fn value(&self) -> u8 {
+        match self {
+            TMeasCycle::Disabled => 0,
+            TMeasCycle::Period10ms(value) => *value,
+        }
+    }
+}
+
 impl From<u8> for TMeasCycle {
     fn from(value: u8) -> Self {
         debug_assert!(value & 0b1110000 == 0, "Invalid T_MEAS_CYCLE");
         match value {
             0 => TMeasCycle::Disabled,
             _ => TMeasCycle::Period10ms(value),
-        }
-    }
-}
-
-impl Deref for TMeasCycle {
-    type Target = u8;
-    fn deref(&self) -> &u8 {
-        match self {
-            TMeasCycle::Disabled => &0,
-            TMeasCycle::Period10ms(value) => value,
         }
     }
 }
@@ -175,13 +175,23 @@ impl Cfg1FiltersCycles {
         tcell_filter: TCellFilter,
         t_sc_filter: TSCFilter,
         t_cur_filter: TCurFilter,
-        t_meas_cycle: u8,
+        t_meas_cycle: TMeasCycle,
     ) -> Self {
         Self(
             tcell_filter as u16 & TCELL_FILTER_MASK << TCELL_FILTER_SHIFT
                 | (t_sc_filter as u16 & T_SC_FILTER_MASK) << T_SC_FILTER_SHIFT
                 | (t_cur_filter as u16 & T_CUR_FILTER_MASK) << T_CUR_FILTER_SHIFT
-                | (t_meas_cycle as u16 & T_MEAS_CYCLE_MASK) << T_MEAS_CYCLE_SHIFT,
+                | (t_meas_cycle.value() as u16 & T_MEAS_CYCLE_MASK) << T_MEAS_CYCLE_SHIFT,
+        )
+    }
+
+    /// Create a new Cfg1FiltersCycles register with default values
+    pub const fn default() -> Self {
+        Self::new(
+            TCellFilter::T4_38Ms,
+            TSCFilter::T128us,
+            TCurFilter::T16_9Ms,
+            TMeasCycle::Period10ms(30),
         )
     }
 
@@ -230,7 +240,7 @@ impl Cfg1FiltersCycles {
 
     /// Set a new measurement cycle period
     pub fn set_t_meas_cycle(&mut self, filter: TMeasCycle) {
-        let filter_value = *filter as u16;
+        let filter_value = filter.value() as u16;
         self.0 = self.0 & !(T_MEAS_CYCLE_MASK << T_MEAS_CYCLE_SHIFT)
             | filter_value << T_MEAS_CYCLE_SHIFT;
     }

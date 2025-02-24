@@ -4,15 +4,17 @@
 use embassy_executor::Spawner;
 use embassy_time::Delay;
 use l9961::{
-    configuration::{CounterThreshold, VoltageThresholds},
+    config::{CounterThreshold, VoltageThresholds},
     registers::{Cfg2Enables, FetConfig},
+    Config,
 };
 use steval_l99615c::{self as functions, initialize_l9961};
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) -> ! {
     let peripherals = embassy_stm32::init(Default::default());
-    let mut l9961 = initialize_l9961(peripherals);
+    let config = Config::default();
+    let mut l9961 = initialize_l9961(peripherals, config);
     let mut delay = Delay;
     l9961.wake_if_asleep(&mut delay).await;
     // Make sure measurements are disabled before changing settings

@@ -16,7 +16,7 @@ use embassy_stm32::{
     Peripherals,
 }; // memory layout
 
-use l9961::L9961;
+use l9961::{Config, L9961};
 use panic_probe as _;
 
 bind_interrupts!(struct Irqs {
@@ -25,6 +25,7 @@ bind_interrupts!(struct Irqs {
 
 pub fn initialize_l9961<'a>(
     peripherals: Peripherals,
+    config: Config,
 ) -> L9961<I2c<'a, Async>, ExtiInput<'a>, Output<'a>, 3> {
     let i2c = I2c::new(
         peripherals.I2C2,
@@ -40,7 +41,7 @@ pub fn initialize_l9961<'a>(
     let ready = ExtiInput::new(peripherals.PB0, peripherals.EXTI0, Pull::None);
     let faultn = ExtiInput::new(peripherals.PA6, peripherals.EXTI6, Pull::None);
     let wakeup = Output::new(peripherals.PA5, Level::Low, Speed::Low);
-    L9961::<_, _, _, 3>::new(i2c, ready, faultn, wakeup, 0x49)
+    L9961::<_, _, _, 3>::new(i2c, ready, faultn, wakeup, config)
 }
 
 // same panicking *behavior* as `panic-probe` but doesn't print a panic message

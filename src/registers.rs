@@ -202,7 +202,7 @@ where
         // [address << 1, register, address<< 1 | 1, value]
         self.i2c
             .write_read(
-                self.address,
+                self.config.address,
                 &[register as u8],
                 &mut self.i2c_scratch_buffer[3..3 + bytes_to_read],
             )
@@ -234,7 +234,7 @@ where
         // [address << 1, register, value]
         let buffer = value.to_be_bytes();
         self.i2c
-            .write(self.address, &[register as u8, buffer[0], buffer[1]])
+            .write(self.config.address, &[register as u8, buffer[0], buffer[1]])
             .await?;
         Ok(())
     }
@@ -280,7 +280,7 @@ where
     /// Note that this will also update the internal I2C address of the `L9961` driver upon success
     pub async fn write_device_address(&mut self, new_config: DevAddr) -> Result<(), I2C::Error> {
         self.write_register(Registers::DevAddr, *new_config).await?;
-        self.address = new_config.get_device_address();
+        self.config.address = new_config.get_device_address();
         Ok(())
     }
 

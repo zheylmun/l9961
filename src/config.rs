@@ -10,7 +10,7 @@ mod voltage_thresholds;
 pub use ntc_thresholds::NtcThresholds;
 pub use voltage_thresholds::VoltageThresholds;
 
-use crate::L9961;
+use crate::{registers::Cfg1FiltersCycles, L9961};
 use embedded_hal::digital::OutputPin;
 use embedded_hal_async::{digital::Wait, i2c::I2c};
 
@@ -64,6 +64,31 @@ where
         self.write_vntc_severe_ot_th(thresholds.severe_over_temp_delta_configuration())
             .await?;
         Ok(())
+    }
+}
+
+/// Configuration struct for the L9961
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub struct Config {
+    /// I2C address of the l9961 device
+    pub address: u8,
+    /// Configuration block for cell and pack voltage thresholds
+    pub voltage_thresholds: VoltageThresholds,
+    /// Configuration block for NTC monitoring thresholds
+    pub ntc_thresholds: NtcThresholds,
+    /// Configuration block the timing of measurements
+    pub measurement_cycles: Cfg1FiltersCycles,
+}
+
+impl Config {
+    /// Create a new L9961 Config with default address, voltage thresholds, NTC thresholds, and measurement cycles
+    pub const fn default() -> Self {
+        Self {
+            address: 0x49,
+            voltage_thresholds: VoltageThresholds::new(),
+            ntc_thresholds: NtcThresholds::new(),
+            measurement_cycles: Cfg1FiltersCycles::default(),
+        }
     }
 }
 

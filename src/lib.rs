@@ -4,18 +4,19 @@
 #![no_std]
 
 pub mod commands;
-pub mod configuration;
+pub mod config;
 pub mod conversions;
 pub mod measurement;
 pub mod registers;
 
-use embassy_futures::select::select;
+pub use config::Config;
 pub use registers::Registers;
+
 use registers::{
-    Cfg1FiltersCycles, DiagCurr, DiagOvOtUt, DiagUv, TCellFilter, TCurFilter, TSCFilter,
-    ToFaultnMsk, ToFuseRstMask, ToPrdrvBalMask,
+    Cfg1FiltersCycles, DiagCurr, DiagOvOtUt, DiagUv, ToFaultnMsk, ToFuseRstMask, ToPrdrvBalMask,
 };
 
+use embassy_futures::select::select;
 use embedded_hal::digital::OutputPin;
 use embedded_hal_async::{delay::DelayNs, digital::Wait, i2c::I2c};
 
@@ -26,7 +27,7 @@ pub struct L9961<I2C, I, O, const CELL_COUNT: u8 = 3> {
     ready: I,
     fault: I,
     wake: O,
-    address: u8,
+    config: Config,
     //keep a large enough buffer to read measurement run of 9 registers
     // write address + register + read address + (2 bytes + crc * each register)
     i2c_scratch_buffer: [u8; 30],
@@ -41,14 +42,14 @@ where
     O: OutputPin,
 {
     /// Create a new instance of the ST L9961 driver for the given blocking I2C bus and address.
-    pub fn new(i2c: I2C, ready: I, fault: I, wakeup: O, address: u8) -> Self {
+    pub fn new(i2c: I2C, ready: I, fault: I, wakeup: O, config: Config) -> Self {
         debug_assert!(CELL_COUNT >= 3 && CELL_COUNT <= 5);
         Self {
             i2c,
             ready,
             fault,
             wake: wakeup,
-            address,
+            config,
             i2c_scratch_buffer: [0; 30],
             i2c_results: [0; 9],
         }
@@ -73,13 +74,8 @@ where
 
     /// Enable the measurement cycle
     pub async fn enable_measurements(&mut self) -> Result<(), I2C::Error> {
-        self.write_cfg1_filters_cycles(Cfg1FiltersCycles::new(
-            TCellFilter::T4_38Ms,
-            TSCFilter::T128us,
-            TCurFilter::T16_9Ms,
-            30,
-        ))
-        .await
+        self.write_cfg1_filters_cycles(self.config.measurement_cycles)
+            .await
     }
 
     /// Clear all fault registers
