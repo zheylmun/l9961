@@ -4,68 +4,18 @@
 //! with validation of the values to ensure they are within the valid range for the L9961.
 //! The various configuration structs are used to set the configuration registers on the L9961.
 
+#[cfg(feature = "ntc")]
 mod ntc_thresholds;
 mod voltage_thresholds;
 
+#[cfg(feature = "ntc")]
 pub use ntc_thresholds::NtcThresholds;
 pub use voltage_thresholds::VoltageThresholds;
 
-use crate::{registers::Cfg1FiltersCycles, L9961};
-use embedded_hal::digital::OutputPin;
-use embedded_hal_async::{digital::Wait, i2c::I2c};
-
-impl<I2C, I, O, const CELL_COUNT: u8> L9961<I2C, I, O, CELL_COUNT>
-where
-    I2C: I2c,
-    I: Wait,
-    O: OutputPin,
-{
-    /// Configure the cell voltage thresholds
-    /// Pack level thresholds will be set automatically based on the per-cell thresholds and the number of cells.
-    pub async fn configure_voltage_thresholds(
-        &mut self,
-        config: VoltageThresholds,
-    ) -> Result<(), I2C::Error> {
-        // Program the cell over-voltage threshold and counter threshold register
-        self.write_vcell_ov_th(config.cell_over_voltage_configuration())
-            .await?;
-        // Program the cell under-voltage threshold and counter threshold register
-        self.write_vcell_uv_th(config.cell_under_voltage_configuration())
-            .await?;
-        // Program the cell balancing under-voltage delta threshold and counter threshold register
-        self.write_vcell_bal_uv_delta_th(config.cell_balancing_under_voltage_delta_configuration())
-            .await?;
-        // Program the cell severe under/over-voltage threshold register
-        self.write_vcell_severe_delta_thrs(
-            config.cell_severe_voltage_threshold_delta_configuration(),
-        )
-        .await?;
-        // Program the pack over voltage threshold register
-        self.write_vb_ov_th(config.pack_over_voltage_threshold())
-            .await?;
-        // Program the pack under voltage threshold register
-        self.write_vb_uv_th(config.pack_under_voltage_threshold())
-            .await?;
-        // Program the pack vs cell sum plausibility check register
-        self.write_vb_sum_max_diff_th(config.pack_vs_cell_sum_delta_threshold())
-            .await?;
-        Ok(())
-    }
-
-    /// Configure the NTC thresholds
-    pub async fn configure_ntc_thresholds(
-        &mut self,
-        thresholds: NtcThresholds,
-    ) -> Result<(), I2C::Error> {
-        self.write_vntc_ot_th(thresholds.over_temperature_configuration())
-            .await?;
-        self.write_vntc_ut_th(thresholds.under_temperature_configuration())
-            .await?;
-        self.write_vntc_severe_ot_th(thresholds.severe_over_temp_delta_configuration())
-            .await?;
-        Ok(())
-    }
-}
+use crate::{
+    registers::{Cfg1FiltersCycles, DevAddr},
+    L9961,
+};
 
 /// Configuration struct for the L9961
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
@@ -75,6 +25,7 @@ pub struct Config {
     /// Configuration block for cell and pack voltage thresholds
     pub voltage_thresholds: VoltageThresholds,
     /// Configuration block for NTC monitoring thresholds
+    #[cfg(feature = "ntc")]
     pub ntc_thresholds: NtcThresholds,
     /// Configuration block the timing of measurements
     pub measurement_cycles: Cfg1FiltersCycles,
@@ -86,6 +37,7 @@ impl Config {
         Self {
             address: 0x49,
             voltage_thresholds: VoltageThresholds::new(),
+            #[cfg(feature = "ntc")]
             ntc_thresholds: NtcThresholds::new(),
             measurement_cycles: Cfg1FiltersCycles::default(),
         }
@@ -112,5 +64,25 @@ impl CounterThreshold {
     /// Get the internal value
     pub(crate) const fn value(&self) -> u8 {
         self.0
+    }
+}
+
+impl<I2C, I, O, const CELL_COUNT: u8> L9961<I2C, I, O, CELL_COUNT>
+where
+    I2C: embedded_hal_async::i2c::I2c,
+    I: embedded_hal_async::digital::Wait,
+    O: embedded_hal::digital::OutputPin,
+{
+    /// Apply the given configuration to the L9961
+    pub async fn apply_config(&mut self, config: &Config) -> Result<(), I2C::Error> {
+        self.write_device_address(DevAddr::from(config.address as u16))
+            .await?;
+        self.apply_voltage_threshold_configuration(&config.voltage_thresholds)
+            .await?;
+        #[cfg(feature = "ntc")]
+        self.apply_ntc_threshold_configuration(&config.ntc_thresholds)
+            .await?;
+
+        Ok(())
     }
 }

@@ -3,7 +3,7 @@
     "rust-analyzer": {
       "initialization_options": {
         "cargo": {
-          "features": ["defmt"]
+          "features": ["defmt", "5_cells", "ntc"]
         },
         "check": {
           "allTargets": false,

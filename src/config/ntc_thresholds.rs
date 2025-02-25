@@ -1,11 +1,9 @@
-use defmt::{write, Format, Formatter};
-
 use crate::{
+    config::CounterThreshold,
     conversions::ntc_voltage_code_from_mv,
     registers::{VNTCOTTh, VNTCSevereOTTh, VNTCUTTh},
+    L9961,
 };
-
-use super::CounterThreshold;
 
 /// Temperature threshold configuration struct
 pub struct NtcThresholds {
@@ -50,9 +48,9 @@ impl NtcThresholds {
     }
 }
 
-impl Format for NtcThresholds {
-    fn format(&self, f: Formatter) {
-        write!(
+impl defmt::Format for NtcThresholds {
+    fn format(&self, f: defmt::Formatter) {
+        defmt::write!(
             f,
             "Ntc Thresholds {{
 over temp threshold mv: {},
@@ -65,5 +63,25 @@ fault counter threshold: {},
             self.under_temp_threshold_mv,
             self.fault_counter_threshold.value(),
         )
+    }
+}
+impl<I2C, I, O, const CELL_COUNT: u8> L9961<I2C, I, O, CELL_COUNT>
+where
+    I2C: embedded_hal_async::i2c::I2c,
+    I: embedded_hal_async::digital::Wait,
+    O: embedded_hal::digital::OutputPin,
+{
+    /// Configure the NTC thresholds
+    pub async fn apply_ntc_threshold_configuration(
+        &mut self,
+        thresholds: &NtcThresholds,
+    ) -> Result<(), I2C::Error> {
+        self.write_vntc_ot_th(thresholds.over_temperature_configuration())
+            .await?;
+        self.write_vntc_ut_th(thresholds.under_temperature_configuration())
+            .await?;
+        self.write_vntc_severe_ot_th(thresholds.severe_over_temp_delta_configuration())
+            .await?;
+        Ok(())
     }
 }

@@ -17,12 +17,15 @@ embedded-hal = "1"
 embedded-hal-async = "1"
 
 [dev-dependencies]
-l9961 = { path = ".", features = ["defmt"]}
 
 [features]
 default = ["defmt"]
 defmt = ["dep:defmt"]
 #Hardware features
-4_cell = []
-5_cell = ["4_cell"]
+# "default" is 3 cells
+4_cells = []
+5_cells = ["4_cells"]
+# Add NTC temperature sensing functionality to ll9961
 ntc = []
+# Enable coulomb counting
+coulomb_counting = []

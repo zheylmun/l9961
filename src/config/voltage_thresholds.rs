@@ -1,14 +1,13 @@
-use defmt::{write, Format, Formatter};
-
 use crate::{
     conversions::{
-        cell_voltage_threshold_code_from_mv, pack_voltage_code_from_mv,
-        round_trip_cell_voltage_threshold, round_trip_pack_voltage,
+        cell_voltage_threshold_code_from_mv, pack_voltage_threshold_code_from_mv,
+        round_trip_cell_voltage_threshold, round_trip_pack_voltage_threshold,
     },
     registers::{
         VBOvTh, VBSumMaxDiffTh, VBUvTh, VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs,
         VCellUvTh,
     },
+    L9961,
 };
 
 use super::CounterThreshold;
@@ -116,25 +115,29 @@ impl VoltageThresholds {
 
     /// Get the pack over-voltage threshold register config based on this configuration
     pub(crate) fn pack_over_voltage_threshold(&self) -> VBOvTh {
-        let over_voltage_code = pack_voltage_code_from_mv(self.pack_over_voltage_threshold_mv);
+        let over_voltage_code =
+            pack_voltage_threshold_code_from_mv(self.pack_over_voltage_threshold_mv);
         VBOvTh::new(over_voltage_code, self.fault_counter_threshold.value())
     }
 
     /// Get the pack under-voltage threshold register config based on this configuration
     pub(crate) fn pack_under_voltage_threshold(&self) -> VBUvTh {
-        let under_voltage_code = pack_voltage_code_from_mv(self.pack_under_voltage_threshold_mv);
+        let under_voltage_code =
+            pack_voltage_threshold_code_from_mv(self.pack_under_voltage_threshold_mv);
         VBUvTh::new(under_voltage_code, self.fault_counter_threshold.value())
     }
 
     /// Get the pack vs cell sum voltage delta threshold register config based on this configuration
     pub(crate) fn pack_vs_cell_sum_delta_threshold(&self) -> VBSumMaxDiffTh {
-        VBSumMaxDiffTh::from(pack_voltage_code_from_mv(self.max_pack_cell_sum_delta_mv) as u16)
+        VBSumMaxDiffTh::from(
+            pack_voltage_threshold_code_from_mv(self.max_pack_cell_sum_delta_mv) as u16,
+        )
     }
 }
 
-impl Format for VoltageThresholds {
-    fn format(&self, f: Formatter) {
-        write!(
+impl defmt::Format for VoltageThresholds {
+    fn format(&self, f: defmt::Formatter) {
+        defmt::write!(
             f,
             "CellThresholds {{
     cell over voltage threshold mv: {},
@@ -153,9 +156,47 @@ impl Format for VoltageThresholds {
             round_trip_cell_voltage_threshold(self.cell_severe_under_voltage_delta_threshold_mv),
             round_trip_cell_voltage_threshold(self.cell_balancing_under_voltage_delta_threshold_mv),
             self.fault_counter_threshold.value(),
-            round_trip_pack_voltage(self.max_pack_cell_sum_delta_mv),
-            round_trip_pack_voltage(self.pack_over_voltage_threshold_mv),
-            round_trip_pack_voltage(self.pack_under_voltage_threshold_mv)
+            round_trip_pack_voltage_threshold(self.max_pack_cell_sum_delta_mv),
+            round_trip_pack_voltage_threshold(self.pack_over_voltage_threshold_mv),
+            round_trip_pack_voltage_threshold(self.pack_under_voltage_threshold_mv)
         )
+    }
+}
+
+impl<I2C, I, O, const CELL_COUNT: u8> L9961<I2C, I, O, CELL_COUNT>
+where
+    I2C: embedded_hal_async::i2c::I2c,
+    I: embedded_hal_async::digital::Wait,
+    O: embedded_hal::digital::OutputPin,
+{
+    /// Configure the cell voltage thresholds
+    pub async fn apply_voltage_threshold_configuration(
+        &mut self,
+        config: &VoltageThresholds,
+    ) -> Result<(), I2C::Error> {
+        // Program the cell over-voltage threshold and counter threshold register
+        self.write_vcell_ov_th(config.cell_over_voltage_configuration())
+            .await?;
+        // Program the cell under-voltage threshold and counter threshold register
+        self.write_vcell_uv_th(config.cell_under_voltage_configuration())
+            .await?;
+        // Program the cell balancing under-voltage delta threshold and counter threshold register
+        self.write_vcell_bal_uv_delta_th(config.cell_balancing_under_voltage_delta_configuration())
+            .await?;
+        // Program the cell severe under/over-voltage threshold register
+        self.write_vcell_severe_delta_thrs(
+            config.cell_severe_voltage_threshold_delta_configuration(),
+        )
+        .await?;
+        // Program the pack over voltage threshold register
+        self.write_vb_ov_th(config.pack_over_voltage_threshold())
+            .await?;
+        // Program the pack under voltage threshold register
+        self.write_vb_uv_th(config.pack_under_voltage_threshold())
+            .await?;
+        // Program the pack vs cell sum plausibility check register
+        self.write_vb_sum_max_diff_th(config.pack_vs_cell_sum_delta_threshold())
+            .await?;
+        Ok(())
     }
 }

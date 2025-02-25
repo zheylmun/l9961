@@ -1,6 +1,4 @@
-use core::ops::Deref;
-
-use defmt::debug_assert;
+use crate::conversions::cell_voltage_measurement_mv_from_code;
 
 /// VCellSum Measurement Register
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -11,14 +9,9 @@ impl VCellSum {
     pub const fn get_vcellsum_meas(&self) -> u16 {
         (self.0 & 0x7FFF) as u16
     }
-
-    /// Get the sum of cell voltages measurement in mV
-    pub const fn get_vcellsum_meas_mv(&self) -> u16 {
-        122 * self.get_vcellsum_meas() / 100
-    }
 }
 
-impl Deref for VCellSum {
+impl core::ops::Deref for VCellSum {
     type Target = u16;
     fn deref(&self) -> &u16 {
         &self.0
@@ -35,6 +28,10 @@ impl From<u16> for VCellSum {
 #[cfg(feature = "defmt")]
 impl defmt::Format for VCellSum {
     fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "VCELLSUM:  {}mv", self.get_vcellsum_meas_mv())
+        defmt::write!(
+            f,
+            "VCELLSUM:  {}mv",
+            cell_voltage_measurement_mv_from_code(self.get_vcellsum_meas())
+        )
     }
 }

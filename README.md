@@ -13,7 +13,9 @@ The L9961 has a number of configuration options that can be set to customize the
 These items can be configured at initialization, as well as on-the-fly and are stored in the configuration struct.
 Configuration items that are determined by hardware configuration are enabled by feature flags:
 - Cell count
+  Enabling cells 4 and 5 add the corresponding measurement data to the measurement output
 - NTC sensor
+  Enabling the features adds the corresponding configuration to the configuration struct, and the corresponding measurement data to the measurement output
 
 Typical usage of the driver will involve configuring the necessary pins and peripherals, creating a  configuration for the chip,
 creating new instance of the driver, activating measurement, and then reading the measurement data in a loop.

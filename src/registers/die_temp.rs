@@ -11,7 +11,7 @@ impl DieTemp {
     pub const fn get_die_temp(&self) -> u16 {
         (self.0 & 0x0FFF) as u16
     }
-
+    //TODO: move conversion function to conversions module
     /// Get the temperature of the l9961 in Celsius
     pub const fn get_die_temp_celsius(&self) -> u16 {
         ((343165u32 - 196u32 * self.get_die_temp() as u32) / 1000u32) as u16

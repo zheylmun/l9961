@@ -2,19 +2,16 @@ use core::ops::Deref;
 
 use defmt::debug_assert;
 
+use crate::conversions::pack_voltage_measurement_mv_from_code;
+
 /// VB Measurement Register
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct VB(u16);
 
 impl VB {
     /// Get the measurement code of the battery pack
-    pub const fn get_vb_meas(&self) -> u16 {
+    pub const fn get_vb_meas_code(&self) -> u16 {
         (self.0 & 0x7FFF) as u16
-    }
-
-    /// Get the voltage measurement of the pack in mV
-    pub const fn get_vb_meas_mv(&self) -> u16 {
-        61 * self.get_vb_meas() / 10
     }
 }
 
@@ -35,6 +32,10 @@ impl From<u16> for VB {
 #[cfg(feature = "defmt")]
 impl defmt::Format for VB {
     fn format(&self, f: defmt::Formatter) {
-        defmt::write!(f, "VB : {}mv", self.get_vb_meas_mv())
+        defmt::write!(
+            f,
+            "VB : {}mv",
+            pack_voltage_measurement_mv_from_code(self.get_vb_meas_code())
+        )
     }
 }
