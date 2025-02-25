@@ -73,7 +73,7 @@ impl CounterThreshold {
     }
 }
 
-impl<I2C, I, O, const CELL_COUNT: u8> L9961<I2C, I, O, CELL_COUNT>
+impl<I2C, I, O> L9961<I2C, I, O>
 where
     I2C: embedded_hal_async::i2c::I2c,
     I: embedded_hal_async::digital::Wait,

@@ -76,7 +76,7 @@ impl Default for Measurement {
     }
 }
 
-impl<I2C, I, O, const CELL_COUNT: u8> L9961<I2C, I, O, CELL_COUNT>
+impl<I2C, I, O> L9961<I2C, I, O>
 where
     I2C: I2c,
     I: Wait,

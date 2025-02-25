@@ -23,9 +23,18 @@ use embassy_futures::select::select;
 use embedded_hal::digital::OutputPin;
 use embedded_hal_async::{delay::DelayNs, digital::Wait, i2c::I2c};
 
+/// Number of cells in the battery pack
+/// This is used to compile out unnecessary variables and functionality
+#[cfg(not(feature = "4_cells"))]
+const CELL_COUNT: u8 = 3;
+#[cfg(all(feature = "4_cells", not(feature = "5_cells")))]
+const CELL_COUNT: u8 = 4;
+#[cfg(all(feature = "5_cells", feature = "4_cells"))]
+pub(crate) const CELL_COUNT: u8 = 5;
+
 /// L9961 Industrial BMS Driver
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
-pub struct L9961<I2C, I, O, const CELL_COUNT: u8 = 3> {
+pub struct L9961<I2C, I, O> {
     i2c: I2C,
     ready: I,
     fault: I,
@@ -38,7 +47,7 @@ pub struct L9961<I2C, I, O, const CELL_COUNT: u8 = 3> {
     i2c_results: [u16; 9],
 }
 
-impl<I2C, I, O, const CELL_COUNT: u8> L9961<I2C, I, O, CELL_COUNT>
+impl<I2C, I, O> L9961<I2C, I, O>
 where
     I2C: I2c,
     I: Wait,

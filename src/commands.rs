@@ -15,7 +15,7 @@ const NVM_WRITE_READ_CODE_CMD_DOWNLOAD: u16 = 0x5555;
 /// Register value for GO2 commands
 const CMD_VAL: u16 = 0x2000;
 
-impl<I2C, I, O, const CELL_COUNT: u8> L9961<I2C, I, O, CELL_COUNT>
+impl<I2C, I, O> L9961<I2C, I, O>
 where
     I2C: I2c,
     I: Wait,
