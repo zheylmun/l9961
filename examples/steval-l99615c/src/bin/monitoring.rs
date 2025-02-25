@@ -13,8 +13,24 @@ use steval_l99615c::{self as functions, initialize_l9961};
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) -> ! {
     let peripherals = embassy_stm32::init(Default::default());
-    let config = Config::default();
+    let config = Config {
+        // Configure the voltage monitoring with extreme thresholds to avoid faults triggering
+        voltage_thresholds: VoltageThresholds {
+            cell_over_voltage_threshold_mv: 2000,
+            cell_severe_over_voltage_delta_threshold_mv: 100,
+            cell_under_voltage_threshold_mv: 1000,
+            cell_severe_under_voltage_delta_threshold_mv: 500,
+            cell_balancing_under_voltage_delta_threshold_mv: 500,
+            pack_over_voltage_threshold_mv: 24000,
+            pack_under_voltage_threshold_mv: 0,
+            max_pack_cell_sum_delta_mv: 1000,
+            fault_counter_threshold: CounterThreshold::default(),
+        },
+        ..Default::default()
+    };
+
     let mut l9961 = initialize_l9961(peripherals, config);
+
     let mut delay = Delay;
     l9961.wake_if_asleep(&mut delay).await;
     // Make sure measurements are disabled before changing settings
@@ -39,19 +55,6 @@ async fn main(_spawner: Spawner) -> ! {
     );
     l9961.write_cfg2_enables(enables).await.unwrap();
 
-    // Configure the voltage monitoring with extreme thresholds to avoid faults triggering
-    let voltage = VoltageThresholds {
-        cell_over_voltage_threshold_mv: 2000,
-        cell_severe_over_voltage_delta_threshold_mv: 100,
-        cell_under_voltage_threshold_mv: 1000,
-        cell_severe_under_voltage_delta_threshold_mv: 500,
-        cell_balancing_under_voltage_delta_threshold_mv: 500,
-        pack_over_voltage_threshold_mv: 24000,
-        pack_under_voltage_threshold_mv: 0,
-        max_pack_cell_sum_delta_mv: 1000,
-        fault_counter_threshold: CounterThreshold::default(),
-    };
-    l9961.configure_voltage_thresholds(voltage).await.unwrap();
     // Clear any faults that may have been triggered
     l9961.clear_all_faults().await.unwrap();
     l9961.enable_measurements().await.unwrap();

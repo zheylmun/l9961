@@ -44,6 +44,12 @@ impl Config {
     }
 }
 
+impl Default for Config {
+    fn default() -> Self {
+        Self::default()
+    }
+}
+
 /// Newtype for the counter threshold value to ensure a valid range.
 /// The counter threshold is a 4-bit value used to determine how many times a fault condition must occur before the fault is triggered.
 /// Default value is 10.
@@ -74,14 +80,12 @@ where
     O: embedded_hal::digital::OutputPin,
 {
     /// Apply the given configuration to the L9961
-    pub async fn apply_config(&mut self, config: &Config) -> Result<(), I2C::Error> {
-        self.write_device_address(DevAddr::from(config.address as u16))
+    pub async fn apply_config(&mut self) -> Result<(), I2C::Error> {
+        self.write_device_address(DevAddr::from(self.config.address as u16))
             .await?;
-        self.apply_voltage_threshold_configuration(&config.voltage_thresholds)
-            .await?;
+        self.apply_voltage_threshold_configuration().await?;
         #[cfg(feature = "ntc")]
-        self.apply_ntc_threshold_configuration(&config.ntc_thresholds)
-            .await?;
+        self.apply_ntc_threshold_configuration().await?;
 
         Ok(())
     }

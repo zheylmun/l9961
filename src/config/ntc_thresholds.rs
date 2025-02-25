@@ -72,16 +72,17 @@ where
     O: embedded_hal::digital::OutputPin,
 {
     /// Configure the NTC thresholds
-    pub async fn apply_ntc_threshold_configuration(
-        &mut self,
-        thresholds: &NtcThresholds,
-    ) -> Result<(), I2C::Error> {
-        self.write_vntc_ot_th(thresholds.over_temperature_configuration())
+    pub async fn apply_ntc_threshold_configuration(&mut self) -> Result<(), I2C::Error> {
+        self.write_vntc_ot_th(self.config.ntc_thresholds.over_temperature_configuration())
             .await?;
-        self.write_vntc_ut_th(thresholds.under_temperature_configuration())
+        self.write_vntc_ut_th(self.config.ntc_thresholds.under_temperature_configuration())
             .await?;
-        self.write_vntc_severe_ot_th(thresholds.severe_over_temp_delta_configuration())
-            .await?;
+        self.write_vntc_severe_ot_th(
+            self.config
+                .ntc_thresholds
+                .severe_over_temp_delta_configuration(),
+        )
+        .await?;
         Ok(())
     }
 }

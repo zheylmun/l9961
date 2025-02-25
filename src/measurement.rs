@@ -3,33 +3,14 @@
 
 use crate::{
     conversions::{cell_voltage_measurement_mv_from_code, pack_voltage_measurement_mv_from_code},
-    registers::{DiagCurr, DiagOvOtUt, DiagUv, DieTemp, TMeasCycle, VCell, VCellSum, VB},
-    Registers, L9961,
+    faults::{CellFaults, PackFaults},
+    registers::{DiagCurr, DiagOvOtUt, DiagUv, DieTemp, NtcGpio, TMeasCycle, VCell, VCellSum, VB},
+    Error, Registers, L9961,
 };
 
-use bitflags::bitflags;
 use embassy_futures::select::select3;
 use embedded_hal::digital::OutputPin;
 use embedded_hal_async::{delay::DelayNs, digital::Wait, i2c::I2c};
-
-bitflags! {
-    /// Cell fault flags
-    pub struct CellFaults:u8 {
-        /// Cell is over its configured over-voltage threshold
-        const OVER_VOLTAGE = 0x01;
-        /// Cell is over it's configured severe over-voltage threshold
-        const EXTREME_OVER_VOLTAGE = 0x02;
-        /// Cell is over its configured over-voltage threshold
-        const UNDER_VOLTAGE = 0x04;
-        /// Cell is below its configured under-voltage threshold for balancing
-        const UNDER_VOLTAGE_FOR_BALANCING = 0x08;
-        /// Cell is over it's configured severe over-voltage threshold
-        const EXTREME_UNDER_VOLTAGE = 0x10;
-        // Ensure that the reserved bits are always 0
-        // TODO: This requires Bitflags 2.x
-        // const _ = 0x007F;
-    }
-}
 
 /// A single cell measurement
 pub struct CellMeasurement {
@@ -45,32 +26,6 @@ impl Default for CellMeasurement {
             voltage_mv: 0,
             faults: CellFaults::empty(),
         }
-    }
-}
-
-bitflags! {
-    /// Cell fault flags
-    pub struct PackFaults:u16 {
-        /// Cell is over its configured over-voltage threshold
-        const OVER_VOLTAGE = 0x01;
-        /// Cell is over its configured over-voltage threshold
-        const UNDER_VOLTAGE = 0x02;
-        /// Pack is over it's configured over-temperature threshold
-        const NTC_OVER_TEMP = 0x04;
-        /// Pack is under it's configured under-temperature threshold
-        const NTC_UNDER_TEMP = 0x08;
-        /// Pack is over it's configured severe over-temperature threshold
-        const NTC_SEVERE_OVER_TEMP = 0x10;
-        /// BMS Die over-temperature
-        const DIE_OVER_TEMP = 0x20;
-        /// Mismatch between cell measurements and pack voltage
-        const CELL_VOLTAGE_SUM_VB_MISMATCH = 0x40;
-
-        /// Coulomb counter saturation
-        const CC_SAT = 0x8000;
-        // Ensure that the reserved bits are always 0
-        // TODO: This requires Bitflags 2.x
-        // const _ = 0x007F;
     }
 }
 
@@ -128,7 +83,10 @@ where
     O: OutputPin,
 {
     /// Wait for the device to complete a measurement
-    pub async fn make_measurement(&mut self, delay: &mut impl DelayNs) -> Result<(), I2C::Error> {
+    pub async fn make_measurement(
+        &mut self,
+        delay: &mut impl DelayNs,
+    ) -> Result<Measurement, Error<I2C>> {
         let cycle_time: u32 =
             if let TMeasCycle::Period10ms(t) = self.config.measurement_cycles.get_t_meas_cycle() {
                 t as u32 * 10
@@ -147,6 +105,7 @@ where
                 result.unwrap();
                 let mut measurement = Measurement::default();
                 self.read_measurement_registers(&mut measurement).await?;
+                Ok(measurement)
             }
             embassy_futures::select::Either3::Second(result) => {
                 result.unwrap();
@@ -155,11 +114,10 @@ where
                 self.clear_fault_registers().await?;
                 self.read_measurement_registers(&mut measurement).await?;
                 self.ready.wait_for_any_edge().await.unwrap();
+                Ok(measurement)
             }
-            embassy_futures::select::Either3::Third(()) => (),
+            embassy_futures::select::Either3::Third(()) => Err(Error::MeasurementTimeout),
         }
-
-        Ok(())
     }
 
     async fn read_measurement_registers(
