@@ -60,7 +60,8 @@ async fn main(_spawner: Spawner) -> ! {
     l9961.enable_measurements().await.unwrap();
     let mut counter = 0;
     while counter < 100 {
-        l9961.make_measurement(&mut delay).await.unwrap();
+        let measurement = l9961.make_measurement(&mut delay).await.unwrap();
+        //defmt::info!("{}", measurement);
         counter += 1;
     }
 

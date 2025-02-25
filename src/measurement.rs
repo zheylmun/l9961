@@ -1,11 +1,13 @@
 //! The measurement module contains the entry point for periodically measuring the cell voltages and temperatures,
 //! as well as initiating the fault handling process should faults occur during measurement.
 
+#[cfg(feature = "ntc")]
+use crate::registers::NtcGpio;
 use crate::{
     conversions::{cell_voltage_measurement_mv_from_code, pack_voltage_measurement_mv_from_code},
     faults::{CellFaults, PackFaults},
-    registers::{DiagCurr, DiagOvOtUt, DiagUv, DieTemp, NtcGpio, TMeasCycle, VCell, VCellSum, VB},
-    Error, Registers, L9961,
+    registers::{DieTemp, TMeasCycle, VCell, VCellSum, VB},
+    Registers, L9961,
 };
 
 use embassy_futures::select::select3;
@@ -13,6 +15,8 @@ use embedded_hal::digital::OutputPin;
 use embedded_hal_async::{delay::DelayNs, digital::Wait, i2c::I2c};
 
 /// A single cell measurement
+#[derive(Clone, Copy)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct CellMeasurement {
     /// Cell voltage in mV
     pub voltage_mv: u16,
@@ -30,6 +34,7 @@ impl Default for CellMeasurement {
 }
 
 /// Struct representing data collected from a single measurement cycle
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct Measurement {
     /// Cell 1 measurement
     pub cell_1: CellMeasurement,
@@ -86,7 +91,7 @@ where
     pub async fn make_measurement(
         &mut self,
         delay: &mut impl DelayNs,
-    ) -> Result<Measurement, Error<I2C>> {
+    ) -> Result<Option<Measurement>, I2C::Error> {
         let cycle_time: u32 =
             if let TMeasCycle::Period10ms(t) = self.config.measurement_cycles.get_t_meas_cycle() {
                 t as u32 * 10
@@ -105,7 +110,7 @@ where
                 result.unwrap();
                 let mut measurement = Measurement::default();
                 self.read_measurement_registers(&mut measurement).await?;
-                Ok(measurement)
+                Ok(Some(measurement))
             }
             embassy_futures::select::Either3::Second(result) => {
                 result.unwrap();
@@ -114,9 +119,9 @@ where
                 self.clear_fault_registers().await?;
                 self.read_measurement_registers(&mut measurement).await?;
                 self.ready.wait_for_any_edge().await.unwrap();
-                Ok(measurement)
+                Ok(Some(measurement))
             }
-            embassy_futures::select::Either3::Third(()) => Err(Error::MeasurementTimeout),
+            embassy_futures::select::Either3::Third(()) => Ok(None),
         }
     }
 
@@ -166,58 +171,5 @@ where
             let cc_inst_meas = CCAccLsbCntr::from(cc_registers[2]);
         }
         Ok(())
-    }
-
-    /// Update the measurement with fault registers
-    async fn read_fault_registers(
-        &mut self,
-        measurement: &mut Measurement,
-    ) -> Result<(), I2C::Error> {
-        let register_values = self.read_registers(Registers::DiagOvOtUt, 2).await.unwrap();
-        let diag_1 = DiagOvOtUt::from_bits_truncate(register_values[0]);
-        let diag_2 = DiagUv::from_bits_truncate(register_values[1]);
-        let diag3 = self.read_diag_curr().await?;
-
-        // Set any cell 1 faults'
-        if diag_1.contains(DiagOvOtUt::CELL1_OV) {
-            measurement.cell_1.faults |= CellFaults::OVER_VOLTAGE;
-        }
-        if diag_1.contains(DiagOvOtUt::CELL1_SEVERE_OV) {
-            measurement.cell_1.faults |= CellFaults::EXTREME_OVER_VOLTAGE;
-        }
-
-        // Set any pack faults
-        if diag_1.contains(DiagOvOtUt::DIE_OT) {
-            measurement.pack_faults |= PackFaults::DIE_OVER_TEMP;
-        }
-        if diag_1.contains(DiagOvOtUt::NTC_OT) {
-            measurement.pack_faults |= PackFaults::NTC_OVER_TEMP;
-        }
-        if diag_1.contains(DiagOvOtUt::NTC_SEVERE_OT) {
-            measurement.pack_faults |= PackFaults::DIE_OVER_TEMP;
-        }
-        if diag_1.contains(DiagOvOtUt::NTC_UT) {
-            measurement.pack_faults |= PackFaults::NTC_UNDER_TEMP;
-        }
-        if diag_1.contains(DiagOvOtUt::PACK_OV) {
-            measurement.pack_faults |= PackFaults::OVER_VOLTAGE;
-        }
-        if diag_1.contains(DiagOvOtUt::VB_SUM_CHECK_FAIL) {
-            measurement.pack_faults |= PackFaults::NTC_OVER_TEMP;
-        }
-        if diag_2.contains(DiagUv::VB_UV) {
-            measurement.pack_faults |= PackFaults::UNDER_VOLTAGE;
-        }
-        if diag3.contains(DiagCurr::CC_SAT) {
-            measurement.pack_faults |= PackFaults::DIE_OVER_TEMP;
-        }
-
-        Ok(())
-    }
-
-    async fn clear_fault_registers(&mut self) -> Result<(), I2C::Error> {
-        self.write_diag_ov_ot_ut(DiagOvOtUt::all()).await?;
-        self.write_diag_uv(DiagUv::all()).await?;
-        self.write_diag_curr(DiagCurr::all()).await
     }
 }

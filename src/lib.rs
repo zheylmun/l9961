@@ -6,13 +6,11 @@
 pub mod commands;
 pub mod config;
 pub mod conversions;
-pub mod error;
 pub mod faults;
 pub mod measurement;
 pub mod registers;
 
 pub use config::Config;
-pub use error::Error;
 pub use registers::Registers;
 
 use registers::{
