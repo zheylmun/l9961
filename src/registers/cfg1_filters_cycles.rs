@@ -1,4 +1,6 @@
-use core::ops::Deref;
+use core::{ops::Deref, u16};
+
+use defmt::{info, Format};
 
 const TCELL_FILTER_MASK: u16 = 0b11;
 const TCELL_FILTER_SHIFT: u16 = 0;
@@ -126,40 +128,58 @@ impl defmt::Format for TCurFilter {
 
 /// Programmable voltage conversion routine execution period (5 bit)
 /// The period is equal to T_MEAS_CYCLE * 10 ms
-#[repr(u8)]
-pub enum TMeasCycle {
-    /// When T_MEAS_CYCLE is 0, the measurement loop is disabled
-    Disabled = 0b00000,
-    /// The measurement loop is executed every T_MEAS_CYCLE * 10 ms
-    Period10ms(u8),
-}
+pub struct TMeasCycle(u8);
 
 impl TMeasCycle {
-    /// Get the period in milliseconds
-    pub const fn value(&self) -> u8 {
-        match self {
-            TMeasCycle::Disabled => 0,
-            TMeasCycle::Period10ms(value) => *value,
+    /// Create a measurement cycle representing disabled measurements
+    pub const fn disabled() -> Self {
+        Self(0)
+    }
+    /// Create a measurement cycle representing a period of value ms (note that the value must be a multiple of 10)
+    pub const fn new_ms(value: u16) -> Self {
+        debug_assert!(value >= 10 && value <= 300);
+        Self((value / 10) as u8)
+    }
+
+    /// Whether the cycle represents the disabled state
+    pub fn is_disabled(&self) -> bool {
+        match self.0 {
+            0 => true,
+            _ => false,
         }
+    }
+
+    /// Get the period in milliseconds
+    pub const fn period_ms(&self) -> u16 {
+        self.0 as u16 * 10
+    }
+}
+
+impl From<TMeasCycle> for u8 {
+    fn from(value: TMeasCycle) -> u8 {
+        value.0
+    }
+}
+
+impl From<TMeasCycle> for u16 {
+    fn from(value: TMeasCycle) -> Self {
+        value.0 as u16
     }
 }
 
 impl From<u8> for TMeasCycle {
     fn from(value: u8) -> Self {
-        debug_assert!(value & 0b1110000 == 0, "Invalid T_MEAS_CYCLE");
-        match value {
-            0 => TMeasCycle::Disabled,
-            _ => TMeasCycle::Period10ms(value),
-        }
+        debug_assert!(value & 0xC0 == 0, "Invalid T_MEAS_CYCLE");
+        Self(value)
     }
 }
 
 #[cfg(feature = "defmt")]
-impl defmt::Format for TMeasCycle {
-    fn format(&self, f: defmt::Formatter) {
-        match self {
-            TMeasCycle::Disabled => defmt::write!(f, "T_MEAS_CYCLE: Disabled"),
-            TMeasCycle::Period10ms(value) => defmt::write!(f, "T_MEAS_CYCLE: {}ms", value * 10,),
+impl Format for TMeasCycle {
+    fn format(&self, fmt: defmt::Formatter) {
+        match self.0 {
+            0 => defmt::write!(fmt, "T_MEAS_CYCLE: Disabled"),
+            _ => defmt::write!(fmt, "T_MEAS_CYCLE: {}ms", self.period_ms()),
         }
     }
 }
@@ -181,7 +201,7 @@ impl Cfg1FiltersCycles {
             tcell_filter as u16 & TCELL_FILTER_MASK << TCELL_FILTER_SHIFT
                 | (t_sc_filter as u16 & T_SC_FILTER_MASK) << T_SC_FILTER_SHIFT
                 | (t_cur_filter as u16 & T_CUR_FILTER_MASK) << T_CUR_FILTER_SHIFT
-                | (t_meas_cycle.value() as u16 & T_MEAS_CYCLE_MASK) << T_MEAS_CYCLE_SHIFT,
+                | (t_meas_cycle.0 as u16 & T_MEAS_CYCLE_MASK) << T_MEAS_CYCLE_SHIFT,
         )
     }
 
@@ -191,7 +211,7 @@ impl Cfg1FiltersCycles {
             TCellFilter::T4_38Ms,
             TSCFilter::T128us,
             TCurFilter::T16_9Ms,
-            TMeasCycle::Period10ms(30),
+            TMeasCycle::new_ms(300),
         )
     }
 
@@ -235,14 +255,13 @@ impl Cfg1FiltersCycles {
 
     /// Get the current measurement cycle period
     pub fn get_t_meas_cycle(&self) -> TMeasCycle {
-        TMeasCycle::from(((self.0 >> T_MEAS_CYCLE_SHIFT) & TCELL_FILTER_MASK) as u8)
+        TMeasCycle::from(((self.0 >> T_MEAS_CYCLE_SHIFT) & T_MEAS_CYCLE_MASK) as u8)
     }
 
     /// Set a new measurement cycle period
     pub fn set_t_meas_cycle(&mut self, filter: TMeasCycle) {
-        let filter_value = filter.value() as u16;
         self.0 = self.0 & !(T_MEAS_CYCLE_MASK << T_MEAS_CYCLE_SHIFT)
-            | filter_value << T_MEAS_CYCLE_SHIFT;
+            | (filter.0 as u16) << T_MEAS_CYCLE_SHIFT;
     }
 }
 

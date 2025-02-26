@@ -24,9 +24,9 @@ use embedded_hal_async::{delay::DelayNs, digital::Wait, i2c::I2c};
 /// Number of cells in the battery pack
 /// This is used to compile out unnecessary variables and functionality
 #[cfg(not(feature = "4_cells"))]
-const CELL_COUNT: u8 = 3;
+pub(crate) const CELL_COUNT: u8 = 3;
 #[cfg(all(feature = "4_cells", not(feature = "5_cells")))]
-const CELL_COUNT: u8 = 4;
+pub(crate) const CELL_COUNT: u8 = 4;
 #[cfg(all(feature = "5_cells", feature = "4_cells"))]
 pub(crate) const CELL_COUNT: u8 = 5;
 
@@ -53,7 +53,6 @@ where
 {
     /// Create a new instance of the ST L9961 driver for the given blocking I2C bus and address.
     pub fn new(i2c: I2C, ready: I, fault: I, wakeup: O, config: Config) -> Self {
-        debug_assert!(CELL_COUNT >= 3 && CELL_COUNT <= 5);
         Self {
             i2c,
             ready,

@@ -1,18 +1,27 @@
 #![no_main]
 #![no_std]
 
+use defmt::info;
 use embassy_executor::Spawner;
 use embassy_time::Delay;
 use l9961::{
     config::{CounterThreshold, VoltageThresholds},
-    registers::{Cfg2Enables, FetConfig},
+    registers::{
+        Cfg1FiltersCycles, Cfg2Enables, FetConfig, TCellFilter, TCurFilter, TMeasCycle, TSCFilter,
+    },
     Config,
 };
-use steval_l99615c::{self as functions, initialize_l9961};
+use steval_l99615c::{self as functions, configure_l9961};
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) -> ! {
     let peripherals = embassy_stm32::init(Default::default());
+    let measurement_cycles = Cfg1FiltersCycles::new(
+        TCellFilter::T4_38Ms,
+        TSCFilter::T128us,
+        TCurFilter::T8_44Ms,
+        TMeasCycle::new_ms(300),
+    );
     let config = Config {
         // Configure the voltage monitoring with extreme thresholds to avoid faults triggering
         voltage_thresholds: VoltageThresholds {
@@ -29,10 +38,12 @@ async fn main(_spawner: Spawner) -> ! {
         ..Default::default()
     };
 
-    let mut l9961 = initialize_l9961(peripherals, config);
+    let mut l9961 = configure_l9961(peripherals, config);
 
     let mut delay = Delay;
     l9961.wake_if_asleep(&mut delay).await;
+
+    l9961.apply_config().await.unwrap();
     // Make sure measurements are disabled before changing settings
     l9961.disable_measurements().await.unwrap();
 
@@ -61,7 +72,7 @@ async fn main(_spawner: Spawner) -> ! {
     let mut counter = 0;
     while counter < 100 {
         let measurement = l9961.make_measurement(&mut delay).await.unwrap();
-        //defmt::info!("{}", measurement);
+        defmt::info!("{}", measurement);
         counter += 1;
     }
 

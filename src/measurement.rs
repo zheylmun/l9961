@@ -10,6 +10,7 @@ use crate::{
     Registers, L9961,
 };
 
+use defmt::info;
 use embassy_futures::select::select3;
 use embedded_hal::digital::OutputPin;
 use embedded_hal_async::{delay::DelayNs, digital::Wait, i2c::I2c};
@@ -92,17 +93,16 @@ where
         &mut self,
         delay: &mut impl DelayNs,
     ) -> Result<Option<Measurement>, I2C::Error> {
-        let cycle_time: u32 =
-            if let TMeasCycle::Period10ms(t) = self.config.measurement_cycles.get_t_meas_cycle() {
-                t as u32 * 10
-            } else {
-                // If the measurement cycle isn't specified, wait for 300ms
-                300
-            };
+        let cycle_time = self
+            .config
+            .measurement_cycles
+            .get_t_meas_cycle()
+            .period_ms();
+
         match select3(
             self.ready.wait_for_any_edge(),
             self.fault.wait_for_low(),
-            delay.delay_ms(cycle_time),
+            delay.delay_ms(cycle_time as u32),
         )
         .await
         {
@@ -121,7 +121,10 @@ where
                 self.ready.wait_for_any_edge().await.unwrap();
                 Ok(Some(measurement))
             }
-            embassy_futures::select::Either3::Third(()) => Ok(None),
+            embassy_futures::select::Either3::Third(()) => {
+                info!("Timed out after waiting for {}ms", cycle_time);
+                Ok(None)
+            }
         }
     }
 
