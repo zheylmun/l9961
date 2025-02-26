@@ -1,6 +1,6 @@
 use core::{ops::Deref, u16};
 
-use defmt::{info, Format};
+use defmt::Format;
 
 const TCELL_FILTER_MASK: u16 = 0b11;
 const TCELL_FILTER_SHIFT: u16 = 0;

@@ -537,7 +537,7 @@ where
 
     /// Read the Manufacturer Name msb
     pub async fn read_manufacturer_name_msb(&mut self) -> Result<u16, I2C::Error> {
-        Ok(self.read_register(Registers::ManufacturerNameMsb).await?)
+        self.read_register(Registers::ManufacturerNameMsb).await
     }
 
     /// Write the Manufacturer Name msb
@@ -548,7 +548,7 @@ where
 
     /// Read the Manufacturer Name Lsb
     pub async fn read_manufacturer_name_lsb(&mut self) -> Result<u16, I2C::Error> {
-        Ok(self.read_register(Registers::ManufacturerNameLsb).await?)
+        self.read_register(Registers::ManufacturerNameLsb).await
     }
 
     /// Write the Manufacturer Name lsb
@@ -559,7 +559,7 @@ where
 
     /// Read the Manufacturing Date Register
     pub async fn read_manufacturing_date(&mut self) -> Result<u16, I2C::Error> {
-        Ok(self.read_register(Registers::ManufacturingDate).await?)
+        self.read_register(Registers::ManufacturingDate).await
     }
 
     /// Write the Manufacturing date register
@@ -570,7 +570,7 @@ where
 
     /// Read the First Usage Date Register
     pub async fn read_first_usage_date(&mut self) -> Result<u16, I2C::Error> {
-        Ok(self.read_register(Registers::FirstUsageDate).await?)
+        self.read_register(Registers::FirstUsageDate).await
     }
 
     /// Write the First Usage Date Register
@@ -580,7 +580,7 @@ where
 
     /// Read the Serial Number MSB Register
     pub async fn read_serial_number_msb(&mut self) -> Result<u16, I2C::Error> {
-        Ok(self.read_register(Registers::SerialNumberMsb).await?)
+        self.read_register(Registers::SerialNumberMsb).await
     }
 
     /// Write the Serial Number MSB Register
@@ -590,7 +590,7 @@ where
 
     /// Read the Serial Number LSB Register
     pub async fn read_serial_number_lsb(&mut self) -> Result<u16, I2C::Error> {
-        Ok(self.read_register(Registers::SerialNumberLsb).await?)
+        self.read_register(Registers::SerialNumberLsb).await
     }
 
     /// Write the Serial Number LSB Register
@@ -600,7 +600,7 @@ where
 
     /// Read the device name MSB register
     pub async fn read_device_name_msb(&mut self) -> Result<u16, I2C::Error> {
-        Ok(self.read_register(Registers::DeviceNameMsb).await?)
+        self.read_register(Registers::DeviceNameMsb).await
     }
 
     /// Write the device name MSB register
@@ -610,7 +610,7 @@ where
 
     /// Read the device name LSB register
     pub async fn read_device_name_lsb(&mut self) -> Result<u16, I2C::Error> {
-        Ok(self.read_register(Registers::DeviceNameLsb).await?)
+        self.read_register(Registers::DeviceNameLsb).await
     }
 
     /// Write the device name LSB register
@@ -684,12 +684,12 @@ where
 
     /// Read the CC_INST_MEAS register
     pub async fn read_cc_inst_meas(&mut self) -> Result<u16, I2C::Error> {
-        Ok(self.read_register(Registers::CCInstMeas).await?)
+        self.read_register(Registers::CCInstMeas).await
     }
 
     /// Read the CC_ACC_MSB register
     pub async fn read_cc_acc_msb(&mut self) -> Result<u16, I2C::Error> {
-        Ok(self.read_register(Registers::CCAccMsb).await?)
+        self.read_register(Registers::CCAccMsb).await
     }
 
     /// Write the CC_ACC_MSB register

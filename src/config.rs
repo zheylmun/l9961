@@ -36,7 +36,7 @@ impl Config {
     pub const fn default() -> Self {
         Self {
             address: 0x49,
-            voltage_thresholds: VoltageThresholds::new(),
+            voltage_thresholds: VoltageThresholds::default(),
             #[cfg(feature = "ntc")]
             ntc_thresholds: NtcThresholds::new(),
             measurement_cycles: Cfg1FiltersCycles::default(),

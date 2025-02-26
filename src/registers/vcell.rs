@@ -16,7 +16,7 @@ impl VCell {
 
     /// Get the cell voltage measurement code
     pub const fn get_vcell_meas_code(&self) -> u16 {
-        (self.0 & 0x0FFF) as u16
+        self.0 & 0x0FFF
     }
 
     /// Get the cell number

@@ -59,7 +59,7 @@ pub struct VoltageThresholds {
 
 impl VoltageThresholds {
     /// Create a new CellThresholds struct with the default values.
-    pub const fn new() -> Self {
+    pub const fn default() -> Self {
         VoltageThresholds {
             cell_over_voltage_threshold_mv: 4196,
             cell_severe_over_voltage_delta_threshold_mv: 4392,
@@ -132,6 +132,12 @@ impl VoltageThresholds {
         VBSumMaxDiffTh::from(
             pack_voltage_threshold_code_from_mv(self.max_pack_cell_sum_delta_mv) as u16,
         )
+    }
+}
+
+impl Default for VoltageThresholds {
+    fn default() -> Self {
+        VoltageThresholds::default()
     }
 }
 
