@@ -17,7 +17,7 @@ embedded-hal = "1"
 embedded-hal-async = "1"
 
 [dev-dependencies]
-
+l9961 = { path = "./", features = ["defmt","5_cells","ntc","coulomb_counting"] }
 [features]
 default = ["defmt"]
 defmt = ["dep:defmt"]

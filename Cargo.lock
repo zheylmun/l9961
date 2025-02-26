@@ -70,6 +70,7 @@ dependencies = [
  "embassy-futures",
  "embedded-hal",
  "embedded-hal-async",
+ "l9961",
 ]
 
 [[package]]

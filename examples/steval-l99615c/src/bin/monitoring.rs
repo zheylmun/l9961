@@ -1,14 +1,11 @@
 #![no_main]
 #![no_std]
 
-use defmt::info;
 use embassy_executor::Spawner;
 use embassy_time::Delay;
 use l9961::{
     config::{CounterThreshold, VoltageThresholds},
-    registers::{
-        Cfg1FiltersCycles, Cfg2Enables, FetConfig, TCellFilter, TCurFilter, TMeasCycle, TSCFilter,
-    },
+    registers::{Cfg2Enables, FetConfig},
     Config,
 };
 use steval_l99615c::{self as functions, configure_l9961};
@@ -16,12 +13,7 @@ use steval_l99615c::{self as functions, configure_l9961};
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) -> ! {
     let peripherals = embassy_stm32::init(Default::default());
-    let measurement_cycles = Cfg1FiltersCycles::new(
-        TCellFilter::T4_38Ms,
-        TSCFilter::T128us,
-        TCurFilter::T8_44Ms,
-        TMeasCycle::new_ms(300),
-    );
+
     let config = Config {
         // Configure the voltage monitoring with extreme thresholds to avoid faults triggering
         voltage_thresholds: VoltageThresholds {
@@ -56,8 +48,8 @@ async fn main(_spawner: Spawner) -> ! {
         true,                // Enable cell 5 voltage measurement
         true,                // Enable Battery voltage measurement
         false,               // Disable temperature measurement
-        false,               // Disable current measurement
-        false,               // Disable coulomb counter
+        true,                // Disable current measurement
+        true,                // Disable coulomb counter
         false,               // Disable over-current detection
         false,               // Disable short-circuit detection
         FetConfig::HighSide, // Set the discharge FET configuration to high-side

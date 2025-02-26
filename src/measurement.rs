@@ -6,7 +6,7 @@ use crate::registers::NtcGpio;
 use crate::{
     conversions::{cell_voltage_measurement_mv_from_code, pack_voltage_measurement_mv_from_code},
     faults::{CellFaults, PackFaults},
-    registers::{DieTemp, TMeasCycle, VCell, VCellSum, VB},
+    registers::{CCAccLsbCntr, DieTemp, VCell, VCellSum, VB},
     Registers, L9961,
 };
 
@@ -58,6 +58,15 @@ pub struct Measurement {
     pub ntc_mv: u16,
     /// Die temp in degrees Celsius
     pub die_temp: u16,
+    /// Instantaneous current measurement for coulomb counting
+    #[cfg(feature = "coulomb_counting")]
+    pub cc_inst_meas: i16,
+    /// Accumulated current measurement for coulomb counting
+    #[cfg(feature = "coulomb_counting")]
+    pub cc_acc: i32,
+    /// Number of samples taken for coulomb counting
+    #[cfg(feature = "coulomb_counting")]
+    pub cc_samples: u8,
     /// Pack or BMS level faults
     pub pack_faults: PackFaults,
 }
@@ -77,6 +86,12 @@ impl Default for Measurement {
             #[cfg(feature = "ntc")]
             ntc_mv: 0,
             die_temp: 0,
+            #[cfg(feature = "coulomb_counting")]
+            cc_inst_meas: 0,
+            #[cfg(feature = "coulomb_counting")]
+            cc_acc: 0,
+            #[cfg(feature = "coulomb_counting")]
+            cc_samples: 0,
             pack_faults: PackFaults::empty(),
         }
     }
@@ -169,9 +184,12 @@ where
         #[cfg(feature = "coulomb_counting")]
         {
             let cc_registers = self.read_registers(Registers::CCInstMeas, 3).await.unwrap();
-            let cc_inst_meas = cc_registers[0];
+            measurement.cc_inst_meas = cc_registers[0] as i16;
             let cc_acc_msb = cc_registers[1];
-            let cc_inst_meas = CCAccLsbCntr::from(cc_registers[2]);
+            let lsb_cntr = CCAccLsbCntr::from(cc_registers[2]);
+            measurement.cc_acc =
+                ((cc_acc_msb as u32) << 8 | lsb_cntr.get_cc_acc_lsb() as u32) as i32;
+            measurement.cc_samples = lsb_cntr.get_cc_sample_cnt();
         }
         Ok(())
     }
