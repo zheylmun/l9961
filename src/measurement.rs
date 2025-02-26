@@ -1,12 +1,15 @@
 //! The measurement module contains the entry point for periodically measuring the cell voltages and temperatures,
 //! as well as initiating the fault handling process should faults occur during measurement.
 
+#[cfg(feature = "coulomb_counting")]
+use crate::registers::CCAccLsbCntr;
 #[cfg(feature = "ntc")]
 use crate::registers::NtcGpio;
+
 use crate::{
     conversions::{cell_voltage_measurement_mv_from_code, pack_voltage_measurement_mv_from_code},
     faults::{CellFaults, PackFaults},
-    registers::{CCAccLsbCntr, DieTemp, VCell, VCellSum, VB},
+    registers::{DieTemp, VCell, VCellSum, VB},
     Registers, L9961,
 };
 

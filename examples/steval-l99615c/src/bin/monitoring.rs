@@ -9,7 +9,7 @@ use l9961::{
     registers::{Cfg2Enables, FetConfig},
     Config,
 };
-use steval_l99615c::{self as functions, configure_l9961};
+use steval_l99615c::{configure_l9961_peripherals, exit};
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) -> ! {
@@ -31,7 +31,7 @@ async fn main(_spawner: Spawner) -> ! {
         ..Default::default()
     };
 
-    let mut l9961 = configure_l9961(peripherals, config);
+    let mut l9961 = configure_l9961_peripherals(peripherals, config);
 
     let mut delay = Delay;
     l9961.wake_if_asleep(&mut delay).await;
@@ -66,11 +66,11 @@ async fn main(_spawner: Spawner) -> ! {
     let mut counter = 0;
     while counter < 100 {
         let measurement = l9961.make_measurement(&mut delay).await.unwrap();
-        defmt::info!("{}", measurement);
+        defmt::println!("{}", measurement);
         counter += 1;
     }
 
     l9961.go_2_standby().await.unwrap();
 
-    functions::exit()
+    exit()
 }

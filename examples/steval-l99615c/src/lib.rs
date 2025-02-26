@@ -23,7 +23,7 @@ bind_interrupts!(struct Irqs {
     I2C2 => i2c::EventInterruptHandler<peripherals::I2C2>, i2c::ErrorInterruptHandler<peripherals::I2C2>;
 });
 
-pub fn configure_l9961<'a>(
+pub fn configure_l9961_peripherals<'a>(
     peripherals: Peripherals,
     config: Config,
 ) -> L9961<I2c<'a, Async>, ExtiInput<'a>, Output<'a>> {
