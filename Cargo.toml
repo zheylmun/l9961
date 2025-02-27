@@ -1,10 +1,10 @@
 [package]
 name = "l9961"
-version = "0.1.0"
+version = "0.0.1"
 authors = ["Zach Heylmun <zheylmun@gmail.com>"]
 description = "Driver for the ST L9961 Industrial BMS"
 license = "MIT OR Apache-2.0"
-edition = "2021"
+edition = "2024"
 repository = "https://github.com/zheylmun/stl9961"
 readme = "README.md"
 

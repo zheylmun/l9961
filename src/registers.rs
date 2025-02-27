@@ -1,5 +1,6 @@
 //! # Registers
-//! Definitions and read/write functions for the registers of the L9961 chip
+//!
+//! Definitions and read/write functions for the registers of the L9961 chip.
 
 mod cc_acc_lsb_cntr;
 mod cfg1_filters_cycles;

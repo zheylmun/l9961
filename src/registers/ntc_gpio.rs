@@ -14,7 +14,7 @@ impl NtcGpio {
 
     /// Get the converted NTC_MEAS value in mV
     pub const fn get_ntc_meas_mv(&self) -> u16 {
-        806 * self.get_ntc_meas() / 1000
+        ((806 * self.get_ntc_meas() as u32) / 1000) as u16
     }
 }
 

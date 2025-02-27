@@ -1,4 +1,9 @@
 //! # L9961 Industrial BMS Driver
+//!
+//! This driver aims to provide a robust API for building battery packs utilizing the [STMicro L9961 BMS Chip](https://www.st.com/en/power-management/l9961.html).
+//! The crate is built on top of the [`embedded-hal`](https://github.com/rust-embedded/embedded-hal) and [`embedded-hal-async`](https://github.com/rust-embedded/embedded-hal/tree/master/embedded-hal-async)  traits.
+//! The driver requires an async runtime to function, and has been tested with both [Embassy](https://embassy.dev) as well as [RTIC 2.x](https://rtic.rs).
+
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]
 #![no_std]
