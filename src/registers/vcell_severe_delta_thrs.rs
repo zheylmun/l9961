@@ -11,8 +11,7 @@ impl VCellSevereDeltaThrs {
         cell_severe_under_voltage_delta_threshold: u8,
     ) -> Self {
         VCellSevereDeltaThrs(
-            (cell_severe_under_voltage_delta_threshold as u16) << 8
-                | cell_severe_over_voltage_delta_threshold as u16,
+            ((cell_severe_under_voltage_delta_threshold as u16) << 8) | cell_severe_over_voltage_delta_threshold as u16,
         )
     }
 

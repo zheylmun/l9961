@@ -195,10 +195,7 @@ impl Cfg1FiltersCycles {
         t_meas_cycle: TMeasCycle,
     ) -> Self {
         Self(
-            tcell_filter as u16 & TCELL_FILTER_MASK << TCELL_FILTER_SHIFT
-                | (t_sc_filter as u16 & T_SC_FILTER_MASK) << T_SC_FILTER_SHIFT
-                | (t_cur_filter as u16 & T_CUR_FILTER_MASK) << T_CUR_FILTER_SHIFT
-                | (t_meas_cycle.0 as u16 & T_MEAS_CYCLE_MASK) << T_MEAS_CYCLE_SHIFT,
+            tcell_filter as u16 & (TCELL_FILTER_MASK << TCELL_FILTER_SHIFT) | ((t_sc_filter as u16 & T_SC_FILTER_MASK) << T_SC_FILTER_SHIFT) | ((t_cur_filter as u16 & T_CUR_FILTER_MASK) << T_CUR_FILTER_SHIFT) | ((t_meas_cycle.0 as u16 & T_MEAS_CYCLE_MASK) << T_MEAS_CYCLE_SHIFT),
         )
     }
 
@@ -224,8 +221,7 @@ impl Cfg1FiltersCycles {
 
     /// Set a new cell voltage conversion time
     pub const fn set_t_cell_filter(&mut self, filter: TCellFilter) {
-        self.0 = self.0 & !(TCELL_FILTER_MASK << TCELL_FILTER_SHIFT)
-            | (filter as u16) << TCELL_FILTER_SHIFT;
+        self.0 = self.0 & !(TCELL_FILTER_MASK << TCELL_FILTER_SHIFT) | ((filter as u16) << TCELL_FILTER_SHIFT);
     }
 
     /// Get the current short circuit measurement time
@@ -235,8 +231,7 @@ impl Cfg1FiltersCycles {
 
     /// Set a new short circuit measurement time
     pub const fn set_t_sc_filter(&mut self, filter: TSCFilter) {
-        self.0 = self.0 & !(T_SC_FILTER_MASK << T_SC_FILTER_SHIFT)
-            | (filter as u16) << T_SC_FILTER_SHIFT;
+        self.0 = self.0 & !(T_SC_FILTER_MASK << T_SC_FILTER_SHIFT) | ((filter as u16) << T_SC_FILTER_SHIFT);
     }
 
     /// Get the current current sense acquisition time
@@ -246,8 +241,7 @@ impl Cfg1FiltersCycles {
 
     /// Set a new current sense acquisition time
     pub const fn set_t_curr_filter(&mut self, filter: TCurFilter) {
-        self.0 = self.0 & !(T_CUR_FILTER_MASK << T_CUR_FILTER_SHIFT)
-            | (filter as u16) << T_CUR_FILTER_SHIFT;
+        self.0 = self.0 & !(T_CUR_FILTER_MASK << T_CUR_FILTER_SHIFT) | ((filter as u16) << T_CUR_FILTER_SHIFT);
     }
 
     /// Get the current measurement cycle period
@@ -257,8 +251,7 @@ impl Cfg1FiltersCycles {
 
     /// Set a new measurement cycle period
     pub fn set_t_meas_cycle(&mut self, filter: TMeasCycle) {
-        self.0 = self.0 & !(T_MEAS_CYCLE_MASK << T_MEAS_CYCLE_SHIFT)
-            | (filter.0 as u16) << T_MEAS_CYCLE_SHIFT;
+        self.0 = self.0 & !(T_MEAS_CYCLE_MASK << T_MEAS_CYCLE_SHIFT) | ((filter.0 as u16) << T_MEAS_CYCLE_SHIFT);
     }
 }
 

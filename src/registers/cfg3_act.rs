@@ -27,12 +27,12 @@ impl Cfg3Act {
     ) -> Self {
         Self(
             (cell_1_bal_en as u16)
-                | (cell_2_bal_en as u16) << 1
-                | (cell_3_bal_en as u16) << 2
-                | (cell_4_bal_en as u16) << 3
-                | (cell_5_bal_en as u16) << 4
-                | (chg_en as u16) << 5
-                | (dischg_en as u16) << 6,
+                | ((cell_2_bal_en as u16) << 1)
+                | ((cell_3_bal_en as u16) << 2)
+                | ((cell_4_bal_en as u16) << 3)
+                | ((cell_5_bal_en as u16) << 4)
+                | ((chg_en as u16) << 5)
+                | ((dischg_en as u16) << 6),
         )
     }
 

@@ -73,19 +73,19 @@ impl Cfg2Enables {
     ) -> Self {
         Self(
             (vcell_en_1 as u16)
-                | (vcell_en_2 as u16) << 1
-                | (vcell_en_3 as u16) << 2
-                | (vcell_en_4 as u16) << 3
-                | (vcell_en_5 as u16) << 4
-                | (vb_en as u16) << 5
-                | (ntc_en as u16) << 6
-                | (csa_en as u16) << 7
-                | (cc_acc_en as u16) << 8
-                | (ovc_en as u16) << 9
-                | (sc_en as u16) << 10
-                | (dchg_hs_ls as u16) << 11
-                | (chg_hs_ls as u16) << 12
-                | (crc_en as u16) << 13,
+                | ((vcell_en_2 as u16) << 1)
+                | ((vcell_en_3 as u16) << 2)
+                | ((vcell_en_4 as u16) << 3)
+                | ((vcell_en_5 as u16) << 4)
+                | ((vb_en as u16) << 5)
+                | ((ntc_en as u16) << 6)
+                | ((csa_en as u16) << 7)
+                | ((cc_acc_en as u16) << 8)
+                | ((ovc_en as u16) << 9)
+                | ((sc_en as u16) << 10)
+                | ((dchg_hs_ls as u16) << 11)
+                | ((chg_hs_ls as u16) << 12)
+                | ((crc_en as u16) << 13),
         )
     }
 

@@ -1,8 +1,8 @@
 use crate::{
+    L9961,
     config::CounterThreshold,
     conversions::ntc_voltage_code_from_mv,
     registers::{VNTCOTTh, VNTCSevereOTTh, VNTCUTTh},
-    L9961,
 };
 
 /// Temperature threshold configuration struct
@@ -17,9 +17,16 @@ pub struct NtcThresholds {
     pub fault_counter_threshold: CounterThreshold,
 }
 
+impl Default for NtcThresholds {
+    fn default() -> Self {
+        Self::default()
+    }
+}
+
 impl NtcThresholds {
-    /// Create a new CellThresholds struct with the default values.
-    pub const fn new() -> Self {
+    /// Create a new CellThresholds struct with default values
+    // TODO: select default values based on some reasonable NTC resistor values
+    pub const fn default() -> Self {
         Self {
             over_temp_threshold_mv: 0,
             severe_over_temp_delta_threshold_mv: 3300,

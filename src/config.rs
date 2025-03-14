@@ -13,8 +13,8 @@ pub use ntc_thresholds::NtcThresholds;
 pub use voltage_thresholds::VoltageThresholds;
 
 use crate::{
-    registers::{Cfg1FiltersCycles, DevAddr},
     L9961,
+    registers::{Cfg1FiltersCycles, DevAddr},
 };
 
 /// Configuration struct for the L9961
@@ -38,7 +38,7 @@ impl Config {
             address: 0x49,
             voltage_thresholds: VoltageThresholds::default(),
             #[cfg(feature = "ntc")]
-            ntc_thresholds: NtcThresholds::new(),
+            ntc_thresholds: NtcThresholds::default(),
             measurement_cycles: Cfg1FiltersCycles::default(),
         }
     }

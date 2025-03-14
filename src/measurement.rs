@@ -191,7 +191,7 @@ where
             let cc_acc_msb = cc_registers[1];
             let lsb_cntr = CCAccLsbCntr::from(cc_registers[2]);
             measurement.cc_acc =
-                ((cc_acc_msb as u32) << 8 | lsb_cntr.get_cc_acc_lsb() as u32) as i32;
+                (((cc_acc_msb as u32) << 8) | lsb_cntr.get_cc_acc_lsb() as u32) as i32;
             measurement.cc_samples = lsb_cntr.get_cc_sample_cnt();
         }
         Ok(())

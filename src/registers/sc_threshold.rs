@@ -19,7 +19,7 @@ impl SCThreshold {
 
     /// Get the programmable persistent short circuit threshold (4 bit)
     pub const fn get_sc_persist_th(&self) -> u8 {
-        (self.0 & 0x00F0 >> 4) as u8
+        (self.0 & (0x00F0 >> 4)) as u8
     }
 
     /// Set the the programmable persistent short circuit threshold (4 bit)

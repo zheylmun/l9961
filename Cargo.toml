@@ -25,7 +25,7 @@ defmt = ["dep:defmt"]
 # "default" is 3 cells
 4_cells = []
 5_cells = ["4_cells"]
-# Add NTC temperature sensing functionality to ll9961
+# Enable NTC temperature sensing functionality to ll9961
 ntc = []
 # Enable coulomb counting
 coulomb_counting = []
