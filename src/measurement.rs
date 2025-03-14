@@ -7,10 +7,10 @@ use crate::registers::CCAccLsbCntr;
 use crate::registers::NtcGpio;
 
 use crate::{
+    L9961, Registers,
     conversions::{cell_voltage_measurement_mv_from_code, pack_voltage_measurement_mv_from_code},
     faults::{CellFaults, PackFaults},
-    registers::{DieTemp, VCell, VCellSum, VB},
-    Registers, L9961,
+    registers::{DieTemp, VB, VCell, VCellSum},
 };
 
 use defmt::info;

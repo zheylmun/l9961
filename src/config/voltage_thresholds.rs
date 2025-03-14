@@ -1,4 +1,5 @@
 use crate::{
+    L9961,
     conversions::{
         cell_voltage_threshold_code_from_mv, pack_voltage_threshold_code_from_mv,
         round_trip_cell_voltage_threshold, round_trip_pack_voltage_threshold,
@@ -7,7 +8,6 @@ use crate::{
         VBOvTh, VBSumMaxDiffTh, VBUvTh, VCellBalUvDeltaTh, VCellOvTh, VCellSevereDeltaThrs,
         VCellUvTh,
     },
-    L9961,
 };
 
 use super::CounterThreshold;
@@ -199,7 +199,7 @@ where
         )
         .await?;
         // Program the cell severe under/over-voltage threshold register
-        self.write_vcell_severe_delta_thrs(
+        self.write_vcell_severe_delta_threshold(
             self.config
                 .voltage_thresholds
                 .cell_severe_voltage_threshold_delta_configuration(),

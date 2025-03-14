@@ -94,17 +94,17 @@ pub enum Registers {
     Cfg2Enables = 0x04,
     /// Configuration register for the CSA gain factor
     CsaGainFactor = 0x05,
-    /// Configuration register for the VCELL overvoltage threshold
+    /// Configuration register for the VCELL over-voltage threshold
     VCellOvTh = 0x06,
-    /// Configuration register for the VCELL undervoltage threshold
+    /// Configuration register for the VCELL under-voltage threshold
     VCellUvTh = 0x07,
-    /// Configuration register for the VCELL severe undervoltage and overvoltage thresholds
+    /// Configuration register for the VCELL severe under-voltage and over-voltage thresholds
     VCellSevereDeltaThrs = 0x08,
-    /// Configuration register for the VCELL balancing undervoltage delta threshold
+    /// Configuration register for the VCELL balancing under-voltage delta threshold
     VCellBalUvDeltaTh = 0x09,
-    /// Configuration register for the VBAT overvoltage threshold
+    /// Configuration register for the VBAT over-voltage threshold
     VBOvTh = 0x0A,
-    /// Configuration register for the VBAT undervoltage threshold
+    /// Configuration register for the VBAT under-voltage threshold
     VBUvTh = 0x0B,
     /// Configuration register for the VBAT sum max diff threshold
     VBSumMaxDiffTh = 0x0C,
@@ -112,11 +112,11 @@ pub enum Registers {
     VNTCOTTh = 0x0D,
     /// Configuration register for the VNTC under temperature threshold
     VNTCUTTh = 0x0E,
-    /// Configuration register for the VNTC severe overtemperature threshold
+    /// Configuration register for the VNTC severe over-temperature threshold
     VNTCSevereOTTh = 0x0F,
-    /// Configuration register for overcurrent protection
+    /// Configuration register for over-current protection
     OvCThresholds = 0x10,
-    /// Configuration register for persistent overcurrent protection
+    /// Configuration register for persistent over-current protection
     PersistentOvCThresholds = 0x11,
     /// Configuration register for short circuit threshold protection
     SCThreshold = 0x12,
@@ -330,7 +330,7 @@ where
         self.write_register(Registers::VCellUvTh, *new_config).await
     }
 
-    /// Read the VCellSevereDeltaThrs register
+    /// Read the VCellSevereDeltaThreshold register
     pub async fn read_vcell_severe_delta_thrs(
         &mut self,
     ) -> Result<VCellSevereDeltaThrs, I2C::Error> {
@@ -341,7 +341,7 @@ where
     }
 
     /// Write a new value to the VCellSevereDeltaThrs register
-    pub async fn write_vcell_severe_delta_thrs(
+    pub async fn write_vcell_severe_delta_threshold(
         &mut self,
         new_config: VCellSevereDeltaThrs,
     ) -> Result<(), I2C::Error> {

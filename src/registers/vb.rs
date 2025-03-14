@@ -4,7 +4,7 @@ use defmt::debug_assert;
 
 use crate::conversions::pack_voltage_measurement_mv_from_code;
 
-/// VB Measurement Register
+/// Battery Pack Voltage Measurement Register
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct VB(u16);
 

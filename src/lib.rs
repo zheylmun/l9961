@@ -48,12 +48,12 @@ where
     O: OutputPin,
 {
     /// Create a new instance of the ST L9961 driver for the given blocking I2C bus and address.
-    pub fn new(i2c: I2C, ready: I, fault: I, wakeup: O, config: Config) -> Self {
+    pub fn new(i2c: I2C, ready: I, fault: I, wake: O, config: Config) -> Self {
         Self {
             i2c,
             ready,
             fault,
-            wake: wakeup,
+            wake,
             config,
             i2c_scratch_buffer: [0; 30],
             i2c_results: [0; 9],

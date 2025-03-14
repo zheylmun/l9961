@@ -1,3 +1,20 @@
 {
-  "words": ["defmt", "ncell", "vcell"]
+  "words": [
+    "defmt",
+    "ncell",
+    "vcell",
+    "STEVAL",
+    "Nucleo",
+    "codegen",
+    "prdrv",
+    "faultn",
+    "bitflags",
+    "DCHG",
+    "MOHM",
+    "VBAT",
+    "VNTC",
+    "VNTCOT",
+    "VNTCUT",
+    "VCELLSUM"
+  ]
 }
