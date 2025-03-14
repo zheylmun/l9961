@@ -11,7 +11,7 @@ pub struct VB(u16);
 impl VB {
     /// Get the measurement code of the battery pack
     pub const fn get_vb_meas_code(&self) -> u16 {
-        (self.0 & 0x7FFF) as u16
+        self.0 & 0x7FFF
     }
 }
 

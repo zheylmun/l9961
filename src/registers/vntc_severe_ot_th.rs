@@ -16,7 +16,7 @@ impl VNTCSevereOTTh {
 
     /// Get the programmable severe over temp delta threshold (12bit)
     pub const fn get_ntc_severe_ot_th(&self) -> u16 {
-        (self.0 & 0x0FFF) as u16
+        self.0 & 0x0FFF
     }
 
     /// Set the the programmable severe over temp delta threshold (12bit)
@@ -25,7 +25,7 @@ impl VNTCSevereOTTh {
             ntc_ot_th & 0x0FFF == ntc_ot_th,
             "Invalid ntc severe over-temp threshold value"
         );
-        self.0 = self.0 & 0xF000 | (ntc_ot_th as u16);
+        self.0 = self.0 & 0xF000 | ntc_ot_th;
     }
 }
 

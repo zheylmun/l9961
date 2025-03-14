@@ -72,7 +72,7 @@ impl Cfg2Enables {
         crc_en: bool,
     ) -> Self {
         Self(
-            (vcell_en_1 as u16) << 0
+            (vcell_en_1 as u16)
                 | (vcell_en_2 as u16) << 1
                 | (vcell_en_3 as u16) << 2
                 | (vcell_en_4 as u16) << 3
@@ -96,7 +96,7 @@ impl Cfg2Enables {
 
     /// Set the VCELL_EN_1 flag
     pub const fn set_vcell_en_1(&mut self, value: bool) {
-        self.0 = self.0 & !VCELL_EN_1_MASK | ((value as u16) << 0);
+        self.0 = self.0 & !VCELL_EN_1_MASK | value as u16;
     }
 
     /// Get the VCELL_EN_2 flag

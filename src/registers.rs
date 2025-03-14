@@ -221,7 +221,7 @@ where
     /// Convenience function to read a single register from the l9961
     #[inline]
     pub async fn read_register(&mut self, register: Registers) -> Result<u16, I2C::Error> {
-        Ok(self.read_registers(register, 1).await?[0].into())
+        Ok(self.read_registers(register, 1).await?[0])
     }
 
     /// Write a new value to a register on the l9961

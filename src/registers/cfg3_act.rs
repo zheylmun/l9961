@@ -26,7 +26,7 @@ impl Cfg3Act {
         dischg_en: bool,
     ) -> Self {
         Self(
-            (cell_1_bal_en as u16) << 0
+            (cell_1_bal_en as u16)
                 | (cell_2_bal_en as u16) << 1
                 | (cell_3_bal_en as u16) << 2
                 | (cell_4_bal_en as u16) << 3

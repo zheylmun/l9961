@@ -19,7 +19,7 @@ impl VNTCUTTh {
     }
     /// Get the programmable under temp fault threshold (12bit)
     pub const fn get_ntc_ut_th(&self) -> u16 {
-        (self.0 & 0x0FFF) as u16
+        self.0 & 0x0FFF
     }
 
     /// Set the the programmable under temp fault threshold (12bit)

@@ -1,4 +1,4 @@
-use core::{ops::Deref, u16};
+use core::ops::Deref;
 
 use defmt::Format;
 
@@ -143,10 +143,7 @@ impl TMeasCycle {
 
     /// Whether the cycle represents the disabled state
     pub fn is_disabled(&self) -> bool {
-        match self.0 {
-            0 => true,
-            _ => false,
-        }
+        matches!(self.0, 0)
     }
 
     /// Get the period in milliseconds

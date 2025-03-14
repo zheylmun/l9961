@@ -20,7 +20,7 @@ impl VNTCOTTh {
 
     /// Get the programmable over temp fault threshold (12bit)
     pub const fn get_ntc_ot_th(&self) -> u16 {
-        (self.0 & 0x0FFF) as u16
+        self.0 & 0x0FFF
     }
 
     /// Set the the programmable over temp fault threshold (12bit)
@@ -29,7 +29,7 @@ impl VNTCOTTh {
             ntc_ot_th & 0x0FFF == ntc_ot_th,
             "Invalid ntc overtemp threshold value"
         );
-        self.0 = self.0 & 0xF000 | (ntc_ot_th as u16);
+        self.0 = self.0 & 0xF000 | ntc_ot_th;
     }
 
     /// Get the programmable over temp event counter threshold (4 bit)

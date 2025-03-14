@@ -9,7 +9,7 @@ pub struct DieTemp(u16);
 impl DieTemp {
     /// Get the measurement code of the DIE_TEMP_MEAS value
     pub const fn get_die_temp(&self) -> u16 {
-        (self.0 & 0x0FFF) as u16
+        self.0 & 0x0FFF
     }
     //TODO: move conversion function to conversions module
     /// Get the temperature of the l9961 in Celsius

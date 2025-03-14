@@ -9,7 +9,7 @@ pub struct NtcGpio(u16);
 impl NtcGpio {
     /// Get the measurement code of the NTC_MEAS value
     pub const fn get_ntc_meas(&self) -> u16 {
-        (self.0 & 0x0FFF) as u16
+        self.0 & 0x0FFF
     }
 
     /// Get the converted NTC_MEAS value in mV
