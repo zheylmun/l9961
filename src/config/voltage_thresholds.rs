@@ -11,7 +11,8 @@ use crate::{
 };
 
 use super::CounterThreshold;
-
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
 /// Voltage threshold configuration struct
 pub struct VoltageThresholds {
     /// # Cell over-voltage threshold in mV

@@ -6,6 +6,8 @@ use crate::{
 };
 
 /// Temperature threshold configuration struct
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct NtcThresholds {
     /// NTC over temperature threshold in mV
     pub over_temp_threshold_mv: u16,

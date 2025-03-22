@@ -19,7 +19,7 @@ use embedded_hal::digital::OutputPin;
 use embedded_hal_async::{delay::DelayNs, digital::Wait, i2c::I2c};
 
 /// A single cell measurement
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct CellMeasurement {
     /// Cell voltage in mV
@@ -37,6 +37,7 @@ impl Default for CellMeasurement {
     }
 }
 
+#[derive(Clone, Copy, Debug)]
 /// Struct representing data collected from a single measurement cycle
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct Measurement {

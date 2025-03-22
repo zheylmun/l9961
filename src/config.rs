@@ -17,6 +17,7 @@ use crate::{
     registers::{Cfg1FiltersCycles, DevAddr},
 };
 
+#[derive(Clone, Debug)]
 /// Configuration struct for the L9961
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct Config {
@@ -53,6 +54,7 @@ impl Default for Config {
 /// Newtype for the counter threshold value to ensure a valid range.
 /// The counter threshold is a 4-bit value used to determine how many times a fault condition must occur before the fault is triggered.
 /// Default value is 10.
+#[derive(Clone, Copy, Debug)]
 pub struct CounterThreshold(u8);
 
 impl CounterThreshold {
