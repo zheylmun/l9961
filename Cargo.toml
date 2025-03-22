@@ -15,12 +15,14 @@ defmt = { version = "0.3", optional = true }
 embassy-futures = "0.1"
 embedded-hal = "1"
 embedded-hal-async = "1"
+serde = { version = "1", features = ["derive"], optional = true }
 
 [dev-dependencies]
 
 [features]
 default = ["defmt", "5_cells", "ntc", "coulomb_counting"]
 defmt = ["dep:defmt"]
+serde = ["dep:serde"]
 #Hardware features
 # "default" is 3 cells
 4_cells = []

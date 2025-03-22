@@ -55,6 +55,7 @@ impl Default for Config {
 /// The counter threshold is a 4-bit value used to determine how many times a fault condition must occur before the fault is triggered.
 /// Default value is 10.
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
 pub struct CounterThreshold(u8);
 
 impl CounterThreshold {
@@ -81,6 +82,11 @@ where
     I: embedded_hal_async::digital::Wait,
     O: embedded_hal::digital::OutputPin,
 {
+    /// Set a new configuration for the L9961,
+    pub fn set_config(&mut self, config: Config) {
+        self.config = config;
+    }
+
     /// Apply the given configuration to the L9961
     pub async fn apply_config(&mut self) -> Result<(), I2C::Error> {
         self.write_device_address(DevAddr::from(self.config.address as u16))
