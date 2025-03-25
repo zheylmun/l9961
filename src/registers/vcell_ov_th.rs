@@ -1,5 +1,5 @@
 use core::ops::Deref;
-use defmt::{write, Format, Formatter};
+use defmt::{Format, Formatter, write};
 
 /// Cell over-voltage monitoring threshold configuration register
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -12,12 +12,12 @@ impl VCellOvTh {
         VCellOvTh((vcell_ov_th as u16) | ((ncell_ov_cnt_th as u16) << 8))
     }
 
-    /// Get the Programmable cell over-voltage fault threshold (8bit)
+    /// Get the Programmable cell over-voltage fault threshold code (8bit)
     pub const fn get_vcell_ov_th(&self) -> u8 {
         (self.0 & 0x00FF) as u8
     }
 
-    /// Set the Programmable cell overvoltage fault threshold (8bit)
+    /// Set the Programmable cell overvoltage fault threshold code (8bit)
     pub const fn set_vcell_ov_th(&mut self, vcell_ov_th: u8) {
         self.0 = self.0 & 0xFF00 | (vcell_ov_th as u16);
     }

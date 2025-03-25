@@ -5,14 +5,13 @@ use core::ops::Deref;
 pub struct VBSumMaxDiffTh(u16);
 
 impl VBSumMaxDiffTh {
-    /// Get the programmable plausibility check threshold between VB and sum of cells in volts (8 bit)
-    pub const fn get_vb_sum_max_diff_th_volts(&self) -> u8 {
+    /// Get the programmable plausibility check threshold between VB and sum of cells (8 bit)
+    pub const fn get_vb_sum_max_diff_th(&self) -> u8 {
         (self.0 & 0x00FF) as u8
     }
 
-    /// Set the the Get the programmable VB OV fault threshold (8 bit)
-    pub const fn set_vb_sum_max_diff_th_volts(&mut self, vb_sum_max_diff: u8) {
-        debug_assert!(vb_sum_max_diff < 25, "Invalid VB_SUM_MAX_DIFF_TH value");
+    /// Set the the max allowed delta between vb and the sum of cells (8 bit)
+    pub const fn set_vb_sum_max_diff_th(&mut self, vb_sum_max_diff: u8) {
         self.0 = self.0 & 0xFF00 | (vb_sum_max_diff as u16);
     }
 }
@@ -34,10 +33,6 @@ impl From<u16> for VBSumMaxDiffTh {
 #[cfg(feature = "defmt")]
 impl defmt::Format for VBSumMaxDiffTh {
     fn format(&self, f: defmt::Formatter) {
-        defmt::write!(
-            f,
-            "VB_SUM_MAX_DIFF_TH: {}",
-            self.get_vb_sum_max_diff_th_volts(),
-        )
+        defmt::write!(f, "VB_SUM_MAX_DIFF_TH: {}", self.get_vb_sum_max_diff_th(),)
     }
 }

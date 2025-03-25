@@ -1,7 +1,8 @@
 use crate::{
     L9961,
     conversions::{
-        cell_voltage_threshold_code_from_mv, pack_voltage_threshold_code_from_mv,
+        cell_voltage_threshold_code_from_mv, cell_voltage_threshold_mv_from_code,
+        pack_voltage_threshold_code_from_mv, pack_voltage_threshold_mv_from_code,
         round_trip_cell_voltage_threshold, round_trip_pack_voltage_threshold,
     },
     registers::{
@@ -176,22 +177,49 @@ where
     I: embedded_hal_async::digital::Wait,
     O: embedded_hal::digital::OutputPin,
 {
-    /*
     /// Read the voltage threshold configuration from the L9961
     pub async fn read_voltage_threshold_configuration(
         &mut self,
     ) -> Result<VoltageThresholds, I2C::Error> {
         let vcell_ov_th = self.read_vcell_ov_th().await?;
+        let cell_over_voltage_threshold_mv =
+            cell_voltage_threshold_mv_from_code(vcell_ov_th.get_vcell_ov_th());
+        let fault_counter_threshold = CounterThreshold::new(vcell_ov_th.get_ncell_ov_cnt_th());
         let vcell_uv_th = self.read_vcell_uv_th().await?;
+        let cell_under_voltage_threshold_mv =
+            cell_voltage_threshold_mv_from_code(vcell_uv_th.get_vcell_uv_th());
         let vcell_bal_uv_delta_th = self.read_vcell_bal_uv_delta_th().await?;
+        let cell_balancing_under_voltage_delta_threshold_mv =
+            cell_voltage_threshold_mv_from_code(vcell_bal_uv_delta_th.get_vcell_bal_uv_delta_th());
         let vcell_severe_delta_th = self.read_vcell_severe_delta_th().await?;
+        let cell_severe_over_voltage_delta_threshold_mv = cell_voltage_threshold_mv_from_code(
+            vcell_severe_delta_th.get_vcell_severe_ov_delta_th(),
+        );
+        let cell_severe_under_voltage_delta_threshold_mv = cell_voltage_threshold_mv_from_code(
+            vcell_severe_delta_th.get_vcell_severe_uv_delta_th(),
+        );
         let vb_ov_th = self.read_vb_ov_th().await?;
+        let pack_over_voltage_threshold_mv =
+            pack_voltage_threshold_mv_from_code(vb_ov_th.get_vb_ov_th());
         let vb_uv_th = self.read_vb_uv_th().await?;
+        let pack_under_voltage_threshold_mv =
+            pack_voltage_threshold_mv_from_code(vb_uv_th.get_vb_uv_th());
         let vb_sum_max_diff = self.read_vb_sum_max_diff_th().await?;
+        let max_pack_cell_sum_delta_mv =
+            pack_voltage_threshold_mv_from_code(vb_sum_max_diff.get_vb_sum_max_diff_th());
         self.config.voltage_thresholds = VoltageThresholds {
-            cell_over_voltage_threshold_mv: vcell_ov_th.ge,
-        }
-    }*/
+            cell_over_voltage_threshold_mv,
+            cell_severe_over_voltage_delta_threshold_mv,
+            cell_under_voltage_threshold_mv,
+            cell_severe_under_voltage_delta_threshold_mv,
+            cell_balancing_under_voltage_delta_threshold_mv,
+            pack_over_voltage_threshold_mv,
+            pack_under_voltage_threshold_mv,
+            max_pack_cell_sum_delta_mv,
+            fault_counter_threshold,
+        };
+        Ok(self.config.voltage_thresholds.clone())
+    }
 
     /// Configure the voltage thresholds set on the L9961
     pub async fn apply_voltage_threshold_configuration(&mut self) -> Result<(), I2C::Error> {
