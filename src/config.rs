@@ -54,7 +54,7 @@ impl Default for Config {
 /// Newtype for the counter threshold value to ensure a valid range.
 /// The counter threshold is a 4-bit value used to determine how many times a fault condition must occur before the fault is triggered.
 /// Default value is 10.
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
 pub struct CounterThreshold(u8);
 
@@ -85,6 +85,20 @@ where
     /// Set a new configuration for the L9961,
     pub fn set_config(&mut self, config: Config) {
         self.config = config;
+    }
+
+    /// Read the configuration from the L9961 device into the in-memory representation
+    pub async fn read_config_from_device(&mut self) -> Result<Config, I2C::Error> {
+        self.config.address = self.read_device_address().await?.get_device_address();
+        //self.config.voltage_thresholds = self.read_voltage_threshold_configuration().await?;
+        Ok(self.config.clone())
+    }
+
+    /// Load the configuration from the L9961's NVM and update the in-memory representation of the config
+    /// On success returns the updated configuration
+    pub async fn load_config_from_nvm(&mut self) -> Result<Config, I2C::Error> {
+        self.download_configuration_from_nvm().await?;
+        self.read_config_from_device().await
     }
 
     /// Apply the given configuration to the L9961

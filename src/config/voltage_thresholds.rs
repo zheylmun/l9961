@@ -11,7 +11,7 @@ use crate::{
 };
 
 use super::CounterThreshold;
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
 /// Voltage threshold configuration struct
 pub struct VoltageThresholds {
@@ -176,7 +176,24 @@ where
     I: embedded_hal_async::digital::Wait,
     O: embedded_hal::digital::OutputPin,
 {
-    /// Configure the cell voltage thresholds
+    /*
+    /// Read the voltage threshold configuration from the L9961
+    pub async fn read_voltage_threshold_configuration(
+        &mut self,
+    ) -> Result<VoltageThresholds, I2C::Error> {
+        let vcell_ov_th = self.read_vcell_ov_th().await?;
+        let vcell_uv_th = self.read_vcell_uv_th().await?;
+        let vcell_bal_uv_delta_th = self.read_vcell_bal_uv_delta_th().await?;
+        let vcell_severe_delta_th = self.read_vcell_severe_delta_th().await?;
+        let vb_ov_th = self.read_vb_ov_th().await?;
+        let vb_uv_th = self.read_vb_uv_th().await?;
+        let vb_sum_max_diff = self.read_vb_sum_max_diff_th().await?;
+        self.config.voltage_thresholds = VoltageThresholds {
+            cell_over_voltage_threshold_mv: vcell_ov_th.ge,
+        }
+    }*/
+
+    /// Configure the voltage thresholds set on the L9961
     pub async fn apply_voltage_threshold_configuration(&mut self) -> Result<(), I2C::Error> {
         // Program the cell over-voltage threshold and counter threshold register
         self.write_vcell_ov_th(

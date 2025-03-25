@@ -331,9 +331,7 @@ where
     }
 
     /// Read the VCellSevereDeltaThreshold register
-    pub async fn read_vcell_severe_delta_thrs(
-        &mut self,
-    ) -> Result<VCellSevereDeltaThrs, I2C::Error> {
+    pub async fn read_vcell_severe_delta_th(&mut self) -> Result<VCellSevereDeltaThrs, I2C::Error> {
         Ok(self
             .read_register(Registers::VCellSevereDeltaThrs)
             .await?

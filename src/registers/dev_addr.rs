@@ -2,6 +2,8 @@ use core::ops::Deref;
 
 use defmt::debug_assert;
 
+const DEFAULT_DEV_ADDR: u16 = 0x49;
+
 /// The device address register
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct DevAddr(u16);
@@ -19,6 +21,10 @@ impl DevAddr {
             "Invalid device address"
         );
         self.0 = device_address as u16;
+    }
+    /// Create a new DevAddr struct with the reset value
+    pub fn reset_value() -> Self {
+        Self(DEFAULT_DEV_ADDR)
     }
 }
 
